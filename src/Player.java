@@ -10,13 +10,13 @@ public class Player {
      int c;
      public Player(BufferedImage f){
           face = f;
-          bodies.add();
-          bodies.add();
-          bodies.add();
+//          bodies.add();
+//          bodies.add();
+//          bodies.add();
      }
-     int move(int dirx, int diry){
+     public void move(int dirx, int diry){
           r+=diry;
           c+=dirx;
      }
-     
+
 }
