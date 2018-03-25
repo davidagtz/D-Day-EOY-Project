@@ -10,10 +10,8 @@ public class Player {
      ArrayList<ArrayList<Rectangle>> body = new ArrayList<>();
      HashMap<Integer, BufferedImage> faces;
      HashMap<Integer, BufferedImage> bodies;
-     int r;
-     int c;
-     int dir = 0;
-     int leg = 1;
+     int r, c;
+     int dir = 0, leg = 1;
      int dc  = -12904;
      int dc2 = -1590900;
      public Player(BufferedImage f) throws IOException{
@@ -31,7 +29,6 @@ public class Player {
           bodies.put(-1, Main.reverse(match(ImageIO.read(new File("res/body/bodyright.png")), faces.get(0))));
           bodies.put(-2, Main.reverse(match(ImageIO.read(new File("res/body/bodyleft.png")), faces.get(0))));
      }
-
      public BufferedImage match(BufferedImage body, BufferedImage face){
           int tf = face.getRGB( face.getWidth() / 2, face.getHeight()-1);
           int tf2 = face .getRGB( face.getWidth() / 2, face.getHeight() / 2);
@@ -44,22 +41,24 @@ public class Player {
                }
           return body;
      }
-
      public void move(int dirx, int diry){
           r+=diry;
           c+=dirx;
           change();
      }
-
      public void change(){
           leg++;
           leg %= 2;
      }
-
+     public BufferedImage faces(int i){
+          return faces.get(i);
+     }
+     public HashMap<Integer, BufferedImage> faces(){
+          return faces;
+     }
      public void setRunning(int running) {
           dir = running;
      }
-
      public void draw(Graphics g){
           BufferedImage face = faces.get(dir);
           BufferedImage body = bodies.get((int) (Math.signum(dir) * (Math.abs(dir) + leg)));

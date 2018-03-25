@@ -2,59 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e44f34c-ffc5-42ea-95a8-fe5c6b5e1d69" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Faces.xcf" afterPath="$PROJECT_DIR$/Faces.xcf" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/M.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/a.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/b.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/c.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/d.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/e.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/f.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/g.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/h.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/i.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/j.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/k.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/l.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/n.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/o.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/p.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/q.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/r.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/s.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/t.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/u.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/v.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/w.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/y.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/GIMP files/z.xcf" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/M.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/a.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/b.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/c.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/d.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/e.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/f.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/g.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/h.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/i.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/j.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/k.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/l.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/n.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/o.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/p.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/q.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/r.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/s.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/t.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/u.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/v.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/w.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/x.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/y.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/font/z.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/EOYCS3/Main.class" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
       <change beforePath="$PROJECT_DIR$/src/Player.java" afterPath="$PROJECT_DIR$/src/Player.java" />
     </list>
@@ -71,15 +19,19 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="100" column="33" lean-forward="false" selection-start-line="100" selection-start-column="33" selection-end-line="100" selection-end-column="33" />
+            <state relative-caret-position="238">
+              <caret line="14" column="14" lean-forward="false" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#921#930#0" expanded="true" />
+                <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
                 <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
                 <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
                 <element signature="method#keyTyped#0;class#Main#0" expanded="false" />
+                <element signature="method#keyPressed#0;class#Main#0" expanded="false" />
+                <element signature="method#main#0;class#Main#0" expanded="false" />
                 <element signature="method#drawString#0;class#Main#0" expanded="false" />
+                <element signature="e#5119#5120#0" expanded="true" />
+                <element signature="e#5147#5148#0" expanded="true" />
                 <element signature="method#reverse#0;class#Main#0" expanded="false" />
                 <element signature="method#copy#0;class#Main#0" expanded="false" />
               </folding>
@@ -90,13 +42,14 @@
       <file leaf-file-name="Player.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-10">
-              <caret line="19" column="2" lean-forward="false" selection-start-line="19" selection-start-column="2" selection-end-line="19" selection-end-column="2" />
+            <state relative-caret-position="408">
+              <caret line="56" column="23" lean-forward="false" selection-start-line="56" selection-start-column="23" selection-end-line="56" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#Player#0;class#Player#0" expanded="false" />
+                <element signature="method#match#0;class#Player#0" expanded="false" />
                 <element signature="method#move#0;class#Player#0" expanded="false" />
-                <element signature="e#2264#2265#0" expanded="true" />
-                <element signature="e#2296#2297#0" expanded="true" />
+                <element signature="method#draw#0;class#Player#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -110,6 +63,11 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>face</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -128,7 +86,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="120" />
     <option name="y" value="183" />
     <option name="width" value="697" />
@@ -343,8 +301,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -352,10 +309,10 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3296355" sideWeight="0.50292826" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3296355" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296355" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3296355" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -365,7 +322,7 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39936608" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -407,35 +364,40 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="6" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10">
-          <caret line="19" column="2" lean-forward="false" selection-start-line="19" selection-start-column="2" selection-end-line="19" selection-end-column="2" />
+        <state relative-caret-position="408">
+          <caret line="56" column="23" lean-forward="false" selection-start-line="56" selection-start-column="23" selection-end-line="56" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#Player#0;class#Player#0" expanded="false" />
+            <element signature="method#match#0;class#Player#0" expanded="false" />
             <element signature="method#move#0;class#Player#0" expanded="false" />
-            <element signature="e#2264#2265#0" expanded="true" />
-            <element signature="e#2296#2297#0" expanded="true" />
+            <element signature="method#draw#0;class#Player#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="100" column="33" lean-forward="false" selection-start-line="100" selection-start-column="33" selection-end-line="100" selection-end-column="33" />
+        <state relative-caret-position="238">
+          <caret line="14" column="14" lean-forward="false" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#921#930#0" expanded="true" />
+            <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
             <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
             <element signature="method#keyTyped#0;class#Main#0" expanded="false" />
+            <element signature="method#keyPressed#0;class#Main#0" expanded="false" />
+            <element signature="method#main#0;class#Main#0" expanded="false" />
             <element signature="method#drawString#0;class#Main#0" expanded="false" />
+            <element signature="e#5119#5120#0" expanded="true" />
+            <element signature="e#5147#5148#0" expanded="true" />
             <element signature="method#reverse#0;class#Main#0" expanded="false" />
             <element signature="method#copy#0;class#Main#0" expanded="false" />
           </folding>

@@ -1,31 +1,27 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.PixelGrabber;
-import java.io.BufferedReader;
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+/*@davidagtz*/
 public class Main extends JPanel implements ActionListener, KeyListener{
-     public static long serialVersionUID = 0l;
+     public static long serialVersionUID = 0L;
      static JFrame frame;
-     static final int WIDTH = 798;
-     static final int HEIGHT = 600;
+     static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
-     static final int PIXEL = 6;
      static Timer timer;
-     static Player david;
-     static Player diego;
-     static Player jakob;
-     static double ang = 0;
+     static Player david, diego, jakob;
      static BufferedImage background;
-     static final Set<Integer> pressed = new HashSet<Integer>();
+     static final Set<Integer> pressed = new HashSet<>();
      public void paintComponent(Graphics g){
           paintBackground(g);
           diego.draw(g);
@@ -49,7 +45,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
                david = new Player(ImageIO.read(new File("res/faces/david.png")));
                diego = new Player(ImageIO.read(new File("res/faces/diego.png")));
                jakob = new Player(ImageIO.read(new File("res/faces/jakob.png")));
-               david.move(0,david.faces.get(0).getHeight());
+               david.move(0,david.faces(0).getHeight());
           } catch(IOException e) {
                e.printStackTrace();
                System.exit(0);
@@ -66,7 +62,14 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 
           //make frame and set up
           frame = new JFrame(title);
-          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+          try {
+               BufferedImage ico = ImageIO.read(new File("res/icon.png"));
+//               ico = ico.getSubimage(0,0, ico.getWidth(), ico.getHeight() / 2);
+               frame.setIconImage(ico);
+          } catch (IOException e){
+               e.printStackTrace();
+          }
+          frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
           frame.setResizable(false);
           this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
           frame.add(this);
@@ -116,6 +119,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           }
      }
      public static void main(String[] a){
+          //Create the Frame and Panel
           new Main("D-Day");
      }
      public void drawString(Graphics g, int x, int y, int h, String str) {
