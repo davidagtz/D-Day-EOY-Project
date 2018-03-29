@@ -1,16 +1,17 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /*@davidagtz*/
 public class Main extends JPanel implements ActionListener, KeyListener{
@@ -20,13 +21,17 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static Timer timer;
      static Player david, diego, jakob;
-     static BufferedImage background;
+     static BufferedImage background, ground, topGround;
      static final Set<Integer> pressed = new HashSet<>();
+     static ArrayList<ImageRect> stage = new ArrayList<>();
      public void paintComponent(Graphics g){
           paintBackground(g);
           diego.draw(g);
           david.draw(g);
           jakob.draw(g);
+          for(ImageRect img : stage) {
+			img.draw(g);
+          }
      }
      public void paintBackground(Graphics g){
           g.setColor(Color.CYAN);
@@ -35,7 +40,41 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      public Main(String title){
           //get Background
           try{
-               background = ImageIO.read(new File("res/background.png"));
+//               background = ImageIO.read(new File("res/background.png"));
+               //get ground
+			ground = ImageIO.read(new File("res/ground.png"));
+			topGround = copy(ground);
+
+			//add blocks
+			BufferedReader in = new BufferedReader(new FileReader("res/levels/first.level"));
+			for(int i = 0; in.ready(); i+=0){
+				StringTokenizer line = new StringTokenizer(in.readLine());
+				int x = 0;
+				int addy = 1;
+				while (line.hasMoreTokens()){
+					int amount = Integer.parseInt(line.nextToken());
+					if(line.hasMoreTokens()) {
+						String mod = line.nextToken();
+						if (mod.matches("_\\+?")) {
+							for (int j = 0; j < amount; j++) {
+								stage.add(new ImageRect(x, i, copy(ground)));
+								x += ground.getWidth();
+								System.out.println(x + " " + i);
+							}
+							if (mod.endsWith("+"))
+								addy = Math.max(addy, ground.getHeight());
+						}
+					} else {
+						addy = amount;
+					}
+				}
+				i += addy;
+			}
+
+			//draw top layer
+			for(int i = 0; i < topGround.getWidth(); i++)
+				topGround.setRGB(i, 0, topGround.getRGB(0,0));
+
           } catch(IOException e){
                e.printStackTrace();
           }
@@ -119,7 +158,17 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           }
      }
      public static void main(String[] a){
-          //Create the Frame and Panel
+//          SortedList<Integer> list = new SortedList<>();
+//          list.add(2);
+//          list.add(1);
+//          list.add(3);
+//          list.add(9);
+//          list.add(2);
+//          list.add(23);
+//          list.add(4);
+//          list.add(1);
+//          System.out.println(list + " "+list.add(2));
+     	//Create the Frame and Panel
           new Main("D-Day");
      }
      public void drawString(Graphics g, int x, int y, int h, String str) {
