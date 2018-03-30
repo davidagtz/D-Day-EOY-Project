@@ -11,13 +11,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.Key;
 import java.util.*;
 
 /*@davidagtz*/
 public class Main extends JPanel implements ActionListener, KeyListener{
      public static long serialVersionUID = 0L;
      static JFrame frame;
-     static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6;
+     static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6, gravity = 1, PixHEIGHT = HEIGHT/PIXEL;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static Timer timer;
      static Player david, diego, jakob;
@@ -27,12 +28,35 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      public void paintComponent(Graphics g){
           paintBackground(g);
           diego.draw(g);
+          gravity(diego);
           david.draw(g);
+          gravity(david);
           jakob.draw(g);
           for(ImageRect img : stage) {
 			img.draw(g);
           }
      }
+     public void gravity(Player p){
+		for(ImageRect img : stage)
+			if(img.inside(p.getX(), p.getBotCornerY() + p.getVely()) || img.insidez(p.getX(), p.getBotCornerY())) {
+				p.setY(img.getBounds().y - (p.getBotCornerY() - p.getY()));
+				p.setVely(0);
+				return;
+			}
+		if(p.getY() > HEIGHT) {
+			p.setY(PixHEIGHT-2);
+			p.setVely(-1);
+		}
+		p.changeY();
+		p.changeVely(gravity);
+		System.out.println(p.getY());
+	}
+	public boolean inside(int x, int y, ArrayList<ImageRect> s){
+     	for(ImageRect img : s)
+     		if(img.inside(x, y))
+     			return true;
+     	return false;
+	}
      public void paintBackground(Graphics g){
           g.setColor(Color.CYAN);
           g.fillRect( 0, 0, WIDTH, HEIGHT);
@@ -85,6 +109,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
                diego = new Player(ImageIO.read(new File("res/faces/diego.png")));
                jakob = new Player(ImageIO.read(new File("res/faces/jakob.png")));
                david.move(0,david.faces(0).getHeight());
+               diego.move(0, 50);
           } catch(IOException e) {
                e.printStackTrace();
                System.exit(0);
@@ -140,21 +165,26 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           pressed.add(e.getKeyCode());
           for(int code : pressed) {
                if (code == KeyEvent.VK_LEFT) {
-                    diego.move(-1, 0);
+                    diego.move(-1);
                     diego.setRunning(-1);
                }
                else if (code == KeyEvent.VK_RIGHT) {
-                    diego.move(1, 0);
+                    diego.move(1);
                     diego.setRunning(1);
                }
+               else if(code == KeyEvent.VK_UP && diego.getVely() == 0){
+               	diego.setVely(-9);
+			}
                if (code == KeyEvent.VK_A) {
-                    david.move(-1, 0);
+                    david.move(-1);
                     david.setRunning(-1);
                }
                else if (code == KeyEvent.VK_D) {
-                    david.move(1, 0);
+                    david.move(1);
                     david.setRunning(1);
                }
+               else if (code == KeyEvent.VK_W && david.getVely() == 0)
+               	david.setVely(-9);
           }
      }
      public static void main(String[] a){

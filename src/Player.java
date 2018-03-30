@@ -14,6 +14,8 @@ public class Player {
      int dir = 0, leg = 1;
      int dc  = -12904;
      int dc2 = -1590900;
+     int vely;
+     int runspeed;
      public Player(BufferedImage f) throws IOException{
           //Makes faces for a dir
           faces = new HashMap<>();
@@ -28,6 +30,9 @@ public class Player {
           bodies.put( 2, match(ImageIO.read(new File("res/body/bodyleft.png")), faces.get(0)));
           bodies.put(-1, Main.reverse(match(ImageIO.read(new File("res/body/bodyright.png")), faces.get(0))));
           bodies.put(-2, Main.reverse(match(ImageIO.read(new File("res/body/bodyleft.png")), faces.get(0))));
+
+          //set run speed
+		runspeed = 3;
      }
      public BufferedImage match(BufferedImage body, BufferedImage face){
           int tf = face.getRGB( face.getWidth() / 2, face.getHeight()-1);
@@ -41,6 +46,12 @@ public class Player {
                }
           return body;
      }
+     public void move(int dir){
+     	if(dir > 0)
+     		move(runspeed, 0);
+     	else if(dir < 0)
+     		move(-runspeed, 0);
+	}
      public void move(int dirx, int diry){
           r+=diry;
           c+=dirx;
@@ -65,4 +76,31 @@ public class Player {
           g.drawImage(body, (c + face.getWidth()/2 - body .getWidth() / 2) * Main.PIXEL,  (r + face.getHeight() - 2) * Main.PIXEL, body.getWidth() * Main.PIXEL, body.getHeight() * Main.PIXEL, null);
           g.drawImage(face, c * Main.PIXEL, r * Main.PIXEL, face.getWidth() * Main.PIXEL, face.getHeight() * Main.PIXEL, null);
      }
+	public void changeY(int dy){
+     	this.c += dy;
+	}
+	public void changeY(){
+		this.r += vely;
+	}
+	public void setVely(int vely) {
+		this.vely = vely;
+	}
+	public int getY(){
+     	return r;
+	}
+	public void setY(int y){
+     	r = y;
+	}
+	public int getX(){
+     	return c;
+	}
+	public int getVely(){
+		return vely;
+	}
+	public void changeVely(int vely) {
+		this.vely += vely;
+	}
+	public int getBotCornerY(){
+     	return bodies.get(0).getHeight() + r + faces(0).getHeight() - 2;
+	}
 }
