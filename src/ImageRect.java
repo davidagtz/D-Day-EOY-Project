@@ -42,10 +42,13 @@ public class ImageRect  implements Comparable<ImageRect>{
 	}
 	public int compareTo(ImageRect r){
 		if(r.x == this.x)
-			return this.y - r.x;
+			return this.y - r.y;
 		return this.x - r.x;
 	}
 	public int getX(){
 		return x;
+	}
+	public void setImg(BufferedImage img){
+		this.img = img;
 	}
 }

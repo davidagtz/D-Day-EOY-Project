@@ -45,14 +45,12 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           gravity(david);
           jakob.draw(g, xoff);
           gravity(jakob);
-          System.out.println(xoff);
           for(ImageRect img : stagecut) {
 			img.draw(g, xoff);
           }
           if(!timer.isRunning()){
           	g.setColor(pause);
           	g.fillRect(0, 0, WIDTH, HEIGHT);
-          	System.out.println("dasd");
 		}
      }
 	public ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
@@ -131,7 +129,6 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 							for (int j = 0; j < amount; j++) {
 								stage.add(new ImageRect(x, i, copy(ground)));
 								x += ground.getWidth();
-								System.out.println(x + " " + i);
 							}
 							if (mod.endsWith("+"))
 								addy = Math.max(addy, ground.getHeight());
@@ -152,6 +149,11 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 			//draw top layer
 			for(int i = 0; i < topGround.getWidth(); i++)
 				topGround.setRGB(i, 0, topGround.getRGB(0,0));
+			if(stage.size() > 0)
+				stage.get(0).setImg(copy(topGround));
+			for(int i = 1; i < stage.size(); i++)
+				if(stage.get(i - 1).getX() != stage.get(i).getX())
+					stage.get(i).setImg(copy(topGround));
 
           } catch(IOException e){
                e.printStackTrace();
