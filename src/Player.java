@@ -81,6 +81,12 @@ public class Player {
           g.drawImage(body, (c + face.getWidth()/2 - body .getWidth() / 2) * Main.PIXEL,  (r + face.getHeight() - 2) * Main.PIXEL, body.getWidth() * Main.PIXEL, body.getHeight() * Main.PIXEL, null);
           g.drawImage(face, c * Main.PIXEL, r * Main.PIXEL, face.getWidth() * Main.PIXEL, face.getHeight() * Main.PIXEL, null);
      }
+	public void draw(Graphics g, int xoff){
+		BufferedImage face = faces.get(dir);
+		BufferedImage body = bodies.get((int) (Math.signum(dir) * (Math.abs(dir) + leg)));
+		g.drawImage(body, (c - xoff + face.getWidth()/2 - body .getWidth() / 2) * Main.PIXEL,  (r + face.getHeight() - 2) * Main.PIXEL, body.getWidth() * Main.PIXEL, body.getHeight() * Main.PIXEL, null);
+		g.drawImage(face, (c - xoff) * Main.PIXEL, r * Main.PIXEL, face.getWidth() * Main.PIXEL, face.getHeight() * Main.PIXEL, null);
+	}
 	public void changeY(int dy){
      	this.c += dy;
 	}

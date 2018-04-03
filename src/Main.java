@@ -19,29 +19,52 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      public static long serialVersionUID = 0L;
      static JFrame frame;
      static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6, PixHEIGHT = HEIGHT/PIXEL;
-     static final double gravity = .5;
+     static int xoff = 0;
+     static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static Timer timer;
      static Player david, diego, jakob;
+     static final Color pause = new Color(255, 0, 0, 127);
      static BufferedImage background, ground, topGround;
      static final Set<Integer> pressed = new HashSet<>();
      static ArrayList<ImageRect> stage = new ArrayList<>();
+	static ArrayList<ImageRect> stagecut;
      public void paintComponent(Graphics g){
-          paintBackground(g);
-          diego.draw(g);
+     	stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
+     	int xofft = Math.min(david.c, diego.c);
+     	xoff = xofft;
+//     	xoff = Math.max(xoff, xofft);
+          paintBackground(g, xoff);
+          diego.draw(g, xoff);
 //		g.setColor(Color.red);
 //		g.drawRect(diego.getBounds().x* PIXEL, diego.getBounds().y* PIXEL, diego.getBounds().width* PIXEL, diego.getBounds().height * PIXEL);
 //		g.drawLine(diego.getX() * PIXEL, diego.getBotCornerY() * PIXEL, diego.getX()* PIXEL, diego.getY()* PIXEL);
 //		System.out.println(diego.getBounds());
           gravity(diego);
-          david.draw(g);
+          david.draw(g, xoff);
           gravity(david);
-          jakob.draw(g);
+          jakob.draw(g, xoff);
           gravity(jakob);
-          for(ImageRect img : stage) {
-			img.draw(g);
+          System.out.println(xoff);
+          for(ImageRect img : stagecut) {
+			img.draw(g, xoff);
           }
+          if(!timer.isRunning()){
+          	g.setColor(pause);
+          	g.fillRect(0, 0, WIDTH, HEIGHT);
+          	System.out.println("dasd");
+		}
      }
+	public ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
+     	ArrayList<ImageRect> newL = new ArrayList<>();
+     	for(int i = 0; i < list.size(); i++){
+     		if(list.get(i).getX() > end)
+     			break;
+     		if(list.get(i).getX() + list.get(i).getBounds().getWidth() >= beg)
+     			newL.add(list.get(i));
+		}
+		return newL;
+	}
      public boolean touching(Player p){
      	boolean inter = false;
 		for(ImageRect img : stage) {
@@ -78,10 +101,14 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      			return true;
      	return false;
 	}
-     public void paintBackground(Graphics g){
-          g.setColor(Color.CYAN);
-          g.fillRect( 0, 0, WIDTH, HEIGHT);
-     }
+	public void paintBackground(Graphics g){
+		g.setColor(Color.CYAN);
+		g.fillRect( 0, 0, WIDTH, HEIGHT);
+	}
+	public void paintBackground(Graphics g, int xoff){
+		g.setColor(Color.CYAN);
+		g.fillRect( 0, 0, WIDTH, HEIGHT);
+	}
      public Main(String title){
           //get Background
           try{
@@ -135,8 +162,8 @@ public class Main extends JPanel implements ActionListener, KeyListener{
                david = new Player(ImageIO.read(new File("res/faces/david.png")));
                diego = new Player(ImageIO.read(new File("res/faces/diego.png")));
                jakob = new Player(ImageIO.read(new File("res/faces/jakob.png")));
-               david.move( 11,david.faces(0).getHeight());
-               diego.move(11, 50);
+               david.move( 0,  david.faces(0).getHeight());
+               diego.move(0, 50);
           } catch(IOException e) {
                e.printStackTrace();
                System.exit(0);
@@ -191,8 +218,10 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           pressed.add(e.getKeyCode());
           for(int code : pressed) {
           	if(code == 32){
-          		if(timer.isRunning())
-          		timer.stop();
+          		if(timer.isRunning()) {
+					timer.stop();
+					repaint();
+          		}
           		else
           			timer.start();
 			}

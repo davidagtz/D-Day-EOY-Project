@@ -17,6 +17,9 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public void draw(Graphics g){
 		g.drawImage(img, x * Main.PIXEL, y * Main.PIXEL, img.getWidth() * Main.PIXEL, img.getHeight() * Main.PIXEL, null);
 	}
+	public void draw(Graphics g, int xoff){
+		g.drawImage(img, (x - xoff) * Main.PIXEL, y * Main.PIXEL, img.getWidth() * Main.PIXEL, img.getHeight() * Main.PIXEL, null);
+	}
 	public boolean inside(int x, int range, int y){
 		boolean f = false;
 		for(int i = x; i < x + range; i++)
@@ -41,5 +44,8 @@ public class ImageRect  implements Comparable<ImageRect>{
 		if(r.x == this.x)
 			return this.y - r.x;
 		return this.x - r.x;
+	}
+	public int getX(){
+		return x;
 	}
 }
