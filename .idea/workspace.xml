@@ -3,6 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="6e44f34c-ffc5-42ea-95a8-fe5c6b5e1d69" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/out/production/EOYCS3/Main.class" afterPath="$PROJECT_DIR$/out/production/EOYCS3/Main.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/EOYCS3/Player.class" afterPath="$PROJECT_DIR$/out/production/EOYCS3/Player.class" />
+      <change beforePath="$PROJECT_DIR$/res/icon.png" afterPath="$PROJECT_DIR$/res/icon.png" />
+      <change beforePath="$PROJECT_DIR$/res/levels/first.level" afterPath="$PROJECT_DIR$/res/levels/first.level" />
       <change beforePath="$PROJECT_DIR$/src/ImageRect.java" afterPath="$PROJECT_DIR$/src/ImageRect.java" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
       <change beforePath="$PROJECT_DIR$/src/Player.java" afterPath="$PROJECT_DIR$/src/Player.java" />
@@ -20,19 +24,19 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="181" column="48" lean-forward="true" selection-start-line="181" selection-start-column="48" selection-end-line="181" selection-end-column="48" />
+            <state relative-caret-position="68">
+              <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
               <folding>
                 <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
-                <element signature="method#gravity#0;class#Main#0" expanded="false" />
                 <element signature="method#inside#0;class#Main#0" expanded="false" />
                 <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
                 <element signature="method#Main#0;class#Main#0" expanded="false" />
-                <element signature="e#2060#2135#0" expanded="false" />
+                <element signature="e#2696#2771#0" expanded="false" />
                 <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
                 <element signature="method#keyTyped#0;class#Main#0" expanded="false" />
+                <element signature="method#keyPressed#0;class#Main#0" expanded="false" />
                 <element signature="method#main#0;class#Main#0" expanded="false" />
-                <element signature="e#6186#6244#0" expanded="false" />
+                <element signature="e#6957#7015#0" expanded="false" />
                 <element signature="method#drawString#0;class#Main#0" expanded="false" />
                 <element signature="method#reverse#0;class#Main#0" expanded="false" />
                 <element signature="method#copy#0;class#Main#0" expanded="false" />
@@ -44,13 +48,15 @@
       <file leaf-file-name="ImageRect.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ImageRect.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="22" column="27" lean-forward="false" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
+            <state relative-caret-position="221">
+              <caret line="39" column="14" lean-forward="false" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
               <folding>
-                <element signature="e#327#328#0" expanded="true" />
-                <element signature="e#347#348#0" expanded="true" />
-                <element signature="e#536#537#0" expanded="true" />
-                <element signature="e#571#572#0" expanded="true" />
+                <element signature="e#360#361#0" expanded="true" />
+                <element signature="e#380#381#0" expanded="true" />
+                <element signature="e#734#735#0" expanded="true" />
+                <element signature="e#769#770#0" expanded="true" />
+                <element signature="e#808#809#0" expanded="true" />
+                <element signature="e#860#861#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -59,13 +65,18 @@
       <file leaf-file-name="Player.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="78">
-              <caret line="34" column="22" lean-forward="false" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="22" />
+            <state relative-caret-position="731">
+              <caret line="87" column="24" lean-forward="false" selection-start-line="87" selection-start-column="20" selection-end-line="87" selection-end-column="24" />
               <folding>
                 <element signature="method#match#0;class#Player#0" expanded="false" />
+                <element signature="method#move#0;class#Player#0" expanded="false" />
                 <element signature="method#move#1;class#Player#0" expanded="false" />
                 <element signature="method#change#0;class#Player#0" expanded="false" />
                 <element signature="method#draw#0;class#Player#0" expanded="false" />
+                <element signature="e#3462#3463#0" expanded="true" />
+                <element signature="e#3483#3484#0" expanded="true" />
+                <element signature="e#3519#3520#0" expanded="true" />
+                <element signature="e#3542#3543#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -354,7 +365,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="12" />
+      <option name="time" value="15" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -376,45 +387,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="34" column="22" lean-forward="false" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="22" />
+        <state relative-caret-position="731">
+          <caret line="87" column="24" lean-forward="false" selection-start-line="87" selection-start-column="20" selection-end-line="87" selection-end-column="24" />
           <folding>
             <element signature="method#match#0;class#Player#0" expanded="false" />
+            <element signature="method#move#0;class#Player#0" expanded="false" />
             <element signature="method#move#1;class#Player#0" expanded="false" />
             <element signature="method#change#0;class#Player#0" expanded="false" />
             <element signature="method#draw#0;class#Player#0" expanded="false" />
+            <element signature="e#3462#3463#0" expanded="true" />
+            <element signature="e#3483#3484#0" expanded="true" />
+            <element signature="e#3519#3520#0" expanded="true" />
+            <element signature="e#3542#3543#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageRect.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="22" column="27" lean-forward="false" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
+        <state relative-caret-position="221">
+          <caret line="39" column="14" lean-forward="false" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
           <folding>
-            <element signature="e#327#328#0" expanded="true" />
-            <element signature="e#347#348#0" expanded="true" />
-            <element signature="e#536#537#0" expanded="true" />
-            <element signature="e#571#572#0" expanded="true" />
+            <element signature="e#360#361#0" expanded="true" />
+            <element signature="e#380#381#0" expanded="true" />
+            <element signature="e#734#735#0" expanded="true" />
+            <element signature="e#769#770#0" expanded="true" />
+            <element signature="e#808#809#0" expanded="true" />
+            <element signature="e#860#861#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="181" column="48" lean-forward="true" selection-start-line="181" selection-start-column="48" selection-end-line="181" selection-end-column="48" />
+        <state relative-caret-position="68">
+          <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
           <folding>
             <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
-            <element signature="method#gravity#0;class#Main#0" expanded="false" />
             <element signature="method#inside#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
             <element signature="method#Main#0;class#Main#0" expanded="false" />
-            <element signature="e#2060#2135#0" expanded="false" />
+            <element signature="e#2696#2771#0" expanded="false" />
             <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
             <element signature="method#keyTyped#0;class#Main#0" expanded="false" />
+            <element signature="method#keyPressed#0;class#Main#0" expanded="false" />
             <element signature="method#main#0;class#Main#0" expanded="false" />
-            <element signature="e#6186#6244#0" expanded="false" />
+            <element signature="e#6957#7015#0" expanded="false" />
             <element signature="method#drawString#0;class#Main#0" expanded="false" />
             <element signature="method#reverse#0;class#Main#0" expanded="false" />
             <element signature="method#copy#0;class#Main#0" expanded="false" />

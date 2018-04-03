@@ -18,7 +18,8 @@ import java.util.*;
 public class Main extends JPanel implements ActionListener, KeyListener{
      public static long serialVersionUID = 0L;
      static JFrame frame;
-     static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6, gravity = 1, PixHEIGHT = HEIGHT/PIXEL;
+     static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6, PixHEIGHT = HEIGHT/PIXEL;
+     static final double gravity = .5;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static Timer timer;
      static Player david, diego, jakob;
@@ -28,28 +29,48 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      public void paintComponent(Graphics g){
           paintBackground(g);
           diego.draw(g);
+//		g.setColor(Color.red);
+//		g.drawRect(diego.getBounds().x* PIXEL, diego.getBounds().y* PIXEL, diego.getBounds().width* PIXEL, diego.getBounds().height * PIXEL);
+//		g.drawLine(diego.getX() * PIXEL, diego.getBotCornerY() * PIXEL, diego.getX()* PIXEL, diego.getY()* PIXEL);
+//		System.out.println(diego.getBounds());
           gravity(diego);
           david.draw(g);
           gravity(david);
           jakob.draw(g);
+          gravity(jakob);
           for(ImageRect img : stage) {
 			img.draw(g);
           }
      }
-     public void gravity(Player p){
-		for(ImageRect img : stage)
-			if(img.inside(p.getX(), p.getBotCornerY() + p.getVely()) || img.insidez(p.getX(), p.getBotCornerY())) {
-				p.setY(img.getBounds().y - (p.getBotCornerY() - p.getY()));
+     public boolean touching(Player p){
+     	boolean inter = false;
+		for(ImageRect img : stage) {
+			Rectangle tr = (Rectangle) p.getBounds().clone();
+			if(img.getBounds().intersects(tr)){
+				p.setY(img.getBounds().y - p.getBounds().height);
 				p.setVely(0);
-				return;
+				inter = true;
 			}
+			tr.y += p.getVely();
+			if(img.getBounds().intersects(tr)){
+				p.setY(img.getBounds().y - p.getBounds().height);
+				p.setVely(0);
+				inter = true;
+			}
+		}
+		return inter;
+	}
+     public void gravity(Player p){
+     	boolean inter = touching(p);
+		if(inter) {
+			return;
+		}
 		if(p.getY() > HEIGHT) {
 			p.setY(PixHEIGHT-2);
 			p.setVely(-1);
 		}
 		p.changeY();
 		p.changeVely(gravity);
-		System.out.println(p.getY());
 	}
 	public boolean inside(int x, int y, ArrayList<ImageRect> s){
      	for(ImageRect img : s)
@@ -88,12 +109,18 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 							if (mod.endsWith("+"))
 								addy = Math.max(addy, ground.getHeight());
 						}
+						if(mod.matches("-")){
+							x += amount;
+						}
 					} else {
 						addy = amount;
 					}
 				}
 				i += addy;
 			}
+
+			//sort ground by x
+			Collections.sort(stage);
 
 			//draw top layer
 			for(int i = 0; i < topGround.getWidth(); i++)
@@ -108,8 +135,8 @@ public class Main extends JPanel implements ActionListener, KeyListener{
                david = new Player(ImageIO.read(new File("res/faces/david.png")));
                diego = new Player(ImageIO.read(new File("res/faces/diego.png")));
                jakob = new Player(ImageIO.read(new File("res/faces/jakob.png")));
-               david.move(0,david.faces(0).getHeight());
-               diego.move(0, 50);
+               david.move( 11,david.faces(0).getHeight());
+               diego.move(11, 50);
           } catch(IOException e) {
                e.printStackTrace();
                System.exit(0);
@@ -128,7 +155,6 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           frame = new JFrame(title);
           try {
                BufferedImage ico = ImageIO.read(new File("res/icon.png"));
-//               ico = ico.getSubimage(0,0, ico.getWidth(), ico.getHeight() / 2);
                frame.setIconImage(ico);
           } catch (IOException e){
                e.printStackTrace();
@@ -164,26 +190,32 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      public void keyPressed(KeyEvent e){
           pressed.add(e.getKeyCode());
           for(int code : pressed) {
+          	if(code == 32){
+          		if(timer.isRunning())
+          		timer.stop();
+          		else
+          			timer.start();
+			}
                if (code == KeyEvent.VK_LEFT) {
                     diego.move(-1);
                     diego.setRunning(-1);
                }
-               else if (code == KeyEvent.VK_RIGHT) {
+               if (code == KeyEvent.VK_RIGHT) {
                     diego.move(1);
                     diego.setRunning(1);
                }
-               else if(code == KeyEvent.VK_UP && diego.getVely() == 0){
+               if(code == KeyEvent.VK_UP && touching(diego)){
                	diego.setVely(-9);
 			}
                if (code == KeyEvent.VK_A) {
                     david.move(-1);
                     david.setRunning(-1);
                }
-               else if (code == KeyEvent.VK_D) {
+               if (code == KeyEvent.VK_D) {
                     david.move(1);
                     david.setRunning(1);
                }
-               else if (code == KeyEvent.VK_W && david.getVely() == 0)
+               if (code == KeyEvent.VK_W && touching(david))
                	david.setVely(-9);
           }
      }

@@ -14,7 +14,7 @@ public class Player {
      int dir = 0, leg = 1;
      int dc  = -12904;
      int dc2 = -1590900;
-     int vely;
+     double vely;
      int runspeed;
      public Player(BufferedImage f) throws IOException{
           //Makes faces for a dir
@@ -34,6 +34,9 @@ public class Player {
           //set run speed
 		runspeed = 3;
      }
+     public Rectangle getBounds(){
+		return new Rectangle(c + faces(0).getWidth()/2 - bodies.get(0).getWidth()/2, r, bodies.get(0).getWidth(), faces(0).getHeight() - 2 + bodies.get(0).getHeight());
+	}
      public BufferedImage match(BufferedImage body, BufferedImage face){
           int tf = face.getRGB( face.getWidth() / 2, face.getHeight()-1);
           int tf2 = face .getRGB( face.getWidth() / 2, face.getHeight() / 2);
@@ -55,7 +58,9 @@ public class Player {
      public void move(int dirx, int diry){
           r+=diry;
           c+=dirx;
-          change();
+          if(c < 0)
+          	c = 0;
+		change();
      }
      public void change(){
           leg++;
@@ -82,7 +87,7 @@ public class Player {
 	public void changeY(){
 		this.r += vely;
 	}
-	public void setVely(int vely) {
+	public void setVely(double vely) {
 		this.vely = vely;
 	}
 	public int getY(){
@@ -94,10 +99,10 @@ public class Player {
 	public int getX(){
      	return c;
 	}
-	public int getVely(){
+	public double getVely(){
 		return vely;
 	}
-	public void changeVely(int vely) {
+	public void changeVely(double vely) {
 		this.vely += vely;
 	}
 	public int getBotCornerY(){
