@@ -9,7 +9,8 @@
 
 This game is still in development so there are several things to do
 
-- Gravity
 - Scrolling Pane
 - Multiple Levels
+  - More Villains
 - Add Story Explanation
+  - Animations
