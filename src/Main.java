@@ -219,7 +219,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 
      }
      public void keyPressed(KeyEvent e){
-     	boolean isClose = Math.abs(diego.getXR() - david.getXR() + diego.getWidth()) < WIDTH / PIXEL;
+     	boolean isClose = Math.abs(diego.getXR() - david.getXR()) + diego.getWidth() < WIDTH / PIXEL;
      	boolean daveInFront = diego.getX() - david.getX() > 0;
      	if(pressed.contains((int) KeyEvent.VK_SEMICOLON) || pressed.contains((int) KeyEvent.VK_Q))
      		System.exit(0);
@@ -248,14 +248,13 @@ public class Main extends JPanel implements ActionListener, KeyListener{
                     david.move(-1);
                     david.setRunning(-1);
                }
-               if (code == KeyEvent.VK_D && (isClose || daveInFront)) {
+			if (code == KeyEvent.VK_D && (isClose || daveInFront)) {
                     david.move(1);
                     david.setRunning(1);
                }
                if (code == KeyEvent.VK_W && touching(david))
                	david.setVely(-9);
           }
-//          System.out.println();
      }
      public static void main(String[] a){
      	//Create the Frame and Panel

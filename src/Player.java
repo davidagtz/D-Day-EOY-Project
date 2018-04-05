@@ -83,8 +83,8 @@ public class Player {
      public void move(int dirx, int diry){
           r+=diry;
           c+=dirx;
-          if(c < 0)
-          	c = 0;
+          if(getXR() < 0)
+          	c = (bodies.get(0).getWidth() / 2 - faces(0).getWidth() / 2);
 		change();
      }
      public void change(){
