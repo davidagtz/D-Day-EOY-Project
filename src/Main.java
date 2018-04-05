@@ -31,7 +31,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 	static ArrayList<ImageRect> stagecut;
      public void paintComponent(Graphics g){
      	stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
-     	int xofft = Math.min(david.c, diego.c);
+     	int xofft = Math.min(david.getXR(), diego.getXR());
      	xoff = xofft;
 //     	xoff = Math.max(xoff, xofft);
           paintBackground(g, xoff);
@@ -45,12 +45,13 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           gravity(david);
           jakob.draw(g, xoff);
           gravity(jakob);
-          for(ImageRect img : stagecut) {
+          for(ImageRect img : stagecut)
 			img.draw(g, xoff);
-          }
           if(!timer.isRunning()){
           	g.setColor(pause);
           	g.fillRect(0, 0, WIDTH, HEIGHT);
+          	g.setColor(Color.WHITE);
+          	drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "PAUSED");
 		}
      }
 	public ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
@@ -164,8 +165,9 @@ public class Main extends JPanel implements ActionListener, KeyListener{
                david = new Player(ImageIO.read(new File("res/faces/david.png")));
                diego = new Player(ImageIO.read(new File("res/faces/diego.png")));
                jakob = new Player(ImageIO.read(new File("res/faces/jakob.png")));
-               david.move( 0,  david.faces(0).getHeight());
-               diego.move(0, 50);
+               david.move( 5,  david.faces(0).getHeight());
+               david.setCrown(true);
+               diego.move(5, 50);
           } catch(IOException e) {
                e.printStackTrace();
                System.exit(0);
@@ -217,6 +219,10 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 
      }
      public void keyPressed(KeyEvent e){
+     	boolean isClose = Math.abs(diego.getXR() - david.getXR() + diego.getWidth()) < WIDTH / PIXEL;
+     	boolean daveInFront = diego.getX() - david.getX() > 0;
+     	if(pressed.contains((int) KeyEvent.VK_SEMICOLON) || pressed.contains((int) KeyEvent.VK_Q))
+     		System.exit(0);
           pressed.add(e.getKeyCode());
           for(int code : pressed) {
           	if(code == 32){
@@ -227,40 +233,31 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           		else
           			timer.start();
 			}
-               if (code == KeyEvent.VK_LEFT) {
+               if (code == KeyEvent.VK_LEFT && (isClose || daveInFront)) {
                     diego.move(-1);
                     diego.setRunning(-1);
                }
-               if (code == KeyEvent.VK_RIGHT) {
+               if (code == KeyEvent.VK_RIGHT && (isClose || !daveInFront)) {
                     diego.move(1);
                     diego.setRunning(1);
                }
                if(code == KeyEvent.VK_UP && touching(diego)){
                	diego.setVely(-9);
 			}
-               if (code == KeyEvent.VK_A) {
+               if (code == KeyEvent.VK_A && (isClose || !daveInFront)) {
                     david.move(-1);
                     david.setRunning(-1);
                }
-               if (code == KeyEvent.VK_D) {
+               if (code == KeyEvent.VK_D && (isClose || daveInFront)) {
                     david.move(1);
                     david.setRunning(1);
                }
                if (code == KeyEvent.VK_W && touching(david))
                	david.setVely(-9);
           }
+//          System.out.println();
      }
      public static void main(String[] a){
-//          SortedList<Integer> list = new SortedList<>();
-//          list.add(2);
-//          list.add(1);
-//          list.add(3);
-//          list.add(9);
-//          list.add(2);
-//          list.add(23);
-//          list.add(4);
-//          list.add(1);
-//          System.out.println(list + " "+list.add(2));
      	//Create the Frame and Panel
           new Main("D-Day");
      }

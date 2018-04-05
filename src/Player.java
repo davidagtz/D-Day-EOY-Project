@@ -7,15 +7,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player {
-     ArrayList<ArrayList<Rectangle>> body = new ArrayList<>();
+//     ArrayList<ArrayList<Rectangle>> body = new ArrayList<>();
      HashMap<Integer, BufferedImage> faces;
      HashMap<Integer, BufferedImage> bodies;
+     HashMap<Integer, BufferedImage> real;
      int r, c;
      int dir = 0, leg = 1;
      int dc  = -12904;
      int dc2 = -1590900;
      double vely;
      int runspeed;
+     BufferedImage crown;
      public Player(BufferedImage f) throws IOException{
           //Makes faces for a dir
           faces = new HashMap<>();
@@ -30,12 +32,35 @@ public class Player {
           bodies.put( 2, match(ImageIO.read(new File("res/body/bodyleft.png")), faces.get(0)));
           bodies.put(-1, Main.reverse(match(ImageIO.read(new File("res/body/bodyright.png")), faces.get(0))));
           bodies.put(-2, Main.reverse(match(ImageIO.read(new File("res/body/bodyleft.png")), faces.get(0))));
+          real = new HashMap<>();
+          real.put( 0, match(ImageIO.read(new File("res/body/reybody.png")), faces.get(0)));
+          real.put( 1, match(ImageIO.read(new File("res/body/reybodyright.png")), faces.get(0)));
+          real.put( 2, match(ImageIO.read(new File("res/body/reybodyleft.png")), faces.get(0)));
+          real.put(-1, Main.reverse(match(ImageIO.read(new File("res/body/reybodyright.png")), faces.get(0))));
+          real.put(-2, Main.reverse(match(ImageIO.read(new File("res/body/reybodyleft.png")), faces.get(0))));
 
-          //set run speed
+
+		//set run speed
 		runspeed = 3;
      }
+     public void setCrown(boolean crownShow){
+     	if(crownShow)
+     		try{
+     			crown = ImageIO.read(new File("res/Faces/crown.png"));
+			}catch (IOException e){
+     			e.printStackTrace();
+     		}
+     	else
+     		crown = null;
+	}
      public Rectangle getBounds(){
 		return new Rectangle(c + faces(0).getWidth()/2 - bodies.get(0).getWidth()/2, r, bodies.get(0).getWidth(), faces(0).getHeight() - 2 + bodies.get(0).getHeight());
+	}
+	public int getWidth(){
+     	return bodies.get(0).getWidth();
+	}
+	public int getXR(){
+		return c + faces(0).getWidth()/2 - bodies.get(0).getWidth()/2;
 	}
      public BufferedImage match(BufferedImage body, BufferedImage face){
           int tf = face.getRGB( face.getWidth() / 2, face.getHeight()-1);
@@ -76,16 +101,19 @@ public class Player {
           dir = running;
      }
      public void draw(Graphics g){
-          BufferedImage face = faces.get(dir);
-          BufferedImage body = bodies.get((int) (Math.signum(dir) * (Math.abs(dir) + leg)));
-          g.drawImage(body, (c + face.getWidth()/2 - body .getWidth() / 2) * Main.PIXEL,  (r + face.getHeight() - 2) * Main.PIXEL, body.getWidth() * Main.PIXEL, body.getHeight() * Main.PIXEL, null);
-          g.drawImage(face, c * Main.PIXEL, r * Main.PIXEL, face.getWidth() * Main.PIXEL, face.getHeight() * Main.PIXEL, null);
+          draw(g, 0);
      }
 	public void draw(Graphics g, int xoff){
 		BufferedImage face = faces.get(dir);
-		BufferedImage body = bodies.get((int) (Math.signum(dir) * (Math.abs(dir) + leg)));
+		BufferedImage body;
+		if(crown == null)
+			body = bodies.get((int) (Math.signum(dir) * (Math.abs(dir) + leg)));
+		else
+			body = real.get((int) (Math.signum(dir) * (Math.abs(dir) + leg)));
 		g.drawImage(body, (c - xoff + face.getWidth()/2 - body .getWidth() / 2) * Main.PIXEL,  (r + face.getHeight() - 2) * Main.PIXEL, body.getWidth() * Main.PIXEL, body.getHeight() * Main.PIXEL, null);
 		g.drawImage(face, (c - xoff) * Main.PIXEL, r * Main.PIXEL, face.getWidth() * Main.PIXEL, face.getHeight() * Main.PIXEL, null);
+		if(crown != null)
+			g.drawImage(crown, (c - xoff) * Main.PIXEL, (r - 5) * Main.PIXEL, crown.getWidth() * Main.PIXEL, crown.getHeight() * Main.PIXEL, null);
 	}
 	public void changeY(int dy){
      	this.c += dy;
