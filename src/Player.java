@@ -17,7 +17,11 @@ public class Player {
      int dc2 = -1590900;
      double vely;
      int runspeed;
+     int lives = 3;
      BufferedImage crown;
+     public boolean isDead(){
+     	return lives <= 0;
+	}
      public Player(BufferedImage f) throws IOException{
           //Makes faces for a dir
           faces = new HashMap<>();
@@ -141,5 +145,8 @@ public class Player {
 	}
 	public int getBotCornerY(){
      	return bodies.get(0).getHeight() + r + faces(0).getHeight() - 2;
+	}
+	public boolean touching(Player p){
+     	return this.getBounds().intersects(p.getBounds());
 	}
 }

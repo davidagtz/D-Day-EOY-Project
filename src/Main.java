@@ -1,4 +1,7 @@
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
@@ -23,35 +26,40 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static Timer timer;
-     static Player david, diego, jakob;
+     static Player david, diego, jakob, richard;
+     static HashMap<String, Player> players = new HashMap<>();
      static final Color pause = new Color(255, 0, 0, 127);
      static BufferedImage background, ground, topGround;
      static final Set<Integer> pressed = new HashSet<>();
      static ArrayList<ImageRect> stage = new ArrayList<>();
 	static ArrayList<ImageRect> stagecut;
-     public void paintComponent(Graphics g){
+	static Clip sound;
+    public void paintComponent(Graphics g){
      	stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
      	int xofft = Math.min(david.getXR(), diego.getXR());
      	xoff = xofft;
-//     	xoff = Math.max(xoff, xofft);
           paintBackground(g, xoff);
-          diego.draw(g, xoff);
 //		g.setColor(Color.red);
 //		g.drawRect(diego.getBounds().x* PIXEL, diego.getBounds().y* PIXEL, diego.getBounds().width* PIXEL, diego.getBounds().height * PIXEL);
 //		g.drawLine(diego.getX() * PIXEL, diego.getBotCornerY() * PIXEL, diego.getX()* PIXEL, diego.getY()* PIXEL);
 //		System.out.println(diego.getBounds());
-          gravity(diego);
-          david.draw(g, xoff);
-          gravity(david);
-          jakob.draw(g, xoff);
-          gravity(jakob);
+		for(Player p: players.values()){
+			gravity(p);
+			p.draw(g, xoff);
+		}
+          richard.setRunning(1);
+          richard.move(2,0);
           for(ImageRect img : stagecut)
 			img.draw(g, xoff);
           if(!timer.isRunning()){
           	g.setColor(pause);
           	g.fillRect(0, 0, WIDTH, HEIGHT);
-          	g.setColor(Color.WHITE);
           	drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "PAUSED");
+		}
+		if(richard.touching(david) || richard.touching(diego)){
+			g.setColor(pause);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU LOST");
 		}
      }
 	public ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
@@ -109,8 +117,13 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		g.fillRect( 0, 0, WIDTH, HEIGHT);
 	}
      public Main(String title){
-          //get Background
           try{
+          	//play music
+			AudioInputStream inp = AudioSystem.getAudioInputStream(new File("res/audio/music.wav"));
+			sound = AudioSystem.getClip();
+			sound.open(inp);
+			sound.loop(Clip.LOOP_CONTINUOUSLY);
+			//get Background
 //               background = ImageIO.read(new File("res/background.png"));
                //get ground
 			ground = ImageIO.read(new File("res/ground.png"));
@@ -134,8 +147,11 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 							if (mod.endsWith("+"))
 								addy = Math.max(addy, ground.getHeight());
 						}
-						if(mod.matches("-")){
-							x += amount;
+						if(mod.matches("-\\+?")){
+							if(!mod.matches("-\\+"))
+								x += amount;
+							else
+								x += amount * ground.getWidth();
 						}
 					} else {
 						addy = amount;
@@ -156,18 +172,24 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 				if(stage.get(i - 1).getX() != stage.get(i).getX())
 					stage.get(i).setImg(copy(topGround));
 
-          } catch(IOException e){
+          } catch(Exception e){
                e.printStackTrace();
           }
 
           //Make Players
           try{
-               david = new Player(ImageIO.read(new File("res/faces/david.png")));
-               diego = new Player(ImageIO.read(new File("res/faces/diego.png")));
-               jakob = new Player(ImageIO.read(new File("res/faces/jakob.png")));
-               david.move( 5,  david.faces(0).getHeight());
-               david.setCrown(true);
-               diego.move(5, 50);
+               players.put("david", new Player(ImageIO.read(new File("res/faces/david.png"))));
+			players.put("diego", new Player(ImageIO.read(new File("res/faces/diego.png"))));
+			players.put("jakob", new Player(ImageIO.read(new File("res/faces/jakob.png"))));
+			players.put("richard", new Player(ImageIO.read(new File("res/faces/richard.png"))));
+               p("richard").move(10, 0);
+			p("david").move( 5, p("david").faces(0).getHeight());
+			p("david").setCrown(true);
+			p("diego").move(5, 50);
+			richard = p("richard");
+			david = p("david");
+			jakob = p("jakob");
+			diego = p("diego");
           } catch(IOException e) {
                e.printStackTrace();
                System.exit(0);
@@ -203,6 +225,9 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           timer.start();
 
      }
+     public Player p(String p){
+     	return players.get(p);
+	}
      public void keyReleased(KeyEvent e){
           if(pressed.remove(e.getKeyCode())){
                int c = e.getKeyCode();
