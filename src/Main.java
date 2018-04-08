@@ -1,7 +1,5 @@
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
@@ -21,7 +19,7 @@ import java.util.*;
 public class Main extends JPanel implements ActionListener, KeyListener{
      public static long serialVersionUID = 0L;
      static JFrame frame;
-     static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6, PixHEIGHT = HEIGHT/PIXEL;
+     static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6, PixHEIGHT = HEIGHT / PIXEL, PixWIDTH = WIDTH / PIXEL, sideAmount = 1;
      static int xoff = 0;
      static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
@@ -34,9 +32,9 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      static ArrayList<ImageRect> stage = new ArrayList<>();
 	static ArrayList<ImageRect> stagecut;
 	static Clip sound;
-    public void paintComponent(Graphics g){
+     public void paintComponent(Graphics g){
      	stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
-     	int xofft = Math.min(david.getXR(), diego.getXR());
+     	int xofft = Math.min(david.getXR(), diego.getXR()) - sideAmount;
      	xoff = xofft;
           paintBackground(g, xoff);
 //		g.setColor(Color.red);
@@ -73,7 +71,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		return newL;
 	}
      public boolean touching(Player p){
-     	boolean inter = false;
+		boolean inter = false;
 		for(ImageRect img : stage) {
 			Rectangle tr = (Rectangle) p.getBounds().clone();
 			if(img.getBounds().intersects(tr)){
@@ -86,6 +84,25 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 				p.setY(img.getBounds().y - p.getBounds().height);
 				p.setVely(0);
 				inter = true;
+			}
+		}
+		return inter;
+	}
+	public int[] touching(Player p, int vel){
+     	// first int is 0 if not intersecting and 1 if
+		// it is touching. If they are touching then
+		// second int is the dist between them
+		int[] inter = { 0, 0 };
+		Rectangle tr = (Rectangle) p.getBounds().clone();
+		tr.x += vel;
+		for(ImageRect img : stage) {
+			Rectangle r = img.getBounds();
+			if(r.intersects(tr)) {
+				inter[0] = 1;
+				if(vel < 0)
+					inter[1] = r.x + r.width - p.getXR();
+				else
+					inter[1] = r.x - p.getXR() - p.getWidth();
 			}
 		}
 		return inter;
@@ -118,11 +135,20 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 	}
      public Main(String title){
           try{
-          	//play music
+			//play music
 			AudioInputStream inp = AudioSystem.getAudioInputStream(new File("res/audio/music.wav"));
 			sound = AudioSystem.getClip();
 			sound.open(inp);
 			sound.loop(Clip.LOOP_CONTINUOUSLY);
+		} catch (IOException e) {
+          	e.printStackTrace();
+		} catch (LineUnavailableException e){
+          	e.printStackTrace();
+		} catch (UnsupportedAudioFileException e) {
+          	e.printStackTrace();
+		}
+
+    		try{
 			//get Background
 //               background = ImageIO.read(new File("res/background.png"));
                //get ground
@@ -172,7 +198,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 				if(stage.get(i - 1).getX() != stage.get(i).getX())
 					stage.get(i).setImg(copy(topGround));
 
-          } catch(Exception e){
+          } catch(IOException e){
                e.printStackTrace();
           }
 
@@ -244,7 +270,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 
      }
      public void keyPressed(KeyEvent e){
-     	boolean isClose = Math.abs(diego.getXR() - david.getXR()) + diego.getWidth() < WIDTH / PIXEL;
+     	int close = Math.abs(diego.getXR() - david.getXR()) + diego.getWidth();
      	boolean daveInFront = diego.getX() - david.getX() > 0;
      	if(pressed.contains((int) KeyEvent.VK_SEMICOLON) || pressed.contains((int) KeyEvent.VK_Q))
      		System.exit(0);
@@ -258,27 +284,57 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           		else
           			timer.start();
 			}
-               if (code == KeyEvent.VK_LEFT && (isClose || daveInFront)) {
-                    diego.move(-1);
+
+			// Diego's controls
+			boolean isClose = close + diego.runspeed < PixWIDTH;
+               if (code == KeyEvent.VK_LEFT && (isClose || daveInFront)){
+          		int[] touch = touching(diego, -diego.runspeed);
+				if (touch[0] == 1)
+                    	diego.move(touch[1], 0);
+          		else
+          			diego.move(-1);
                     diego.setRunning(-1);
                }
                if (code == KeyEvent.VK_RIGHT && (isClose || !daveInFront)) {
-                    diego.move(1);
+          		int[] touch = touching(diego, diego.runspeed);
+				if (touch[0] == 1)
+					diego.move(touch[1], 0);
+				else
+          			diego.move(1);
                     diego.setRunning(1);
                }
                if(code == KeyEvent.VK_UP && touching(diego)){
                	diego.setVely(-9);
 			}
-               if (code == KeyEvent.VK_A && (isClose || !daveInFront)) {
-                    david.move(-1);
+
+			// david's controls
+			isClose = close + david.runspeed < PixWIDTH;
+			if (code == KeyEvent.VK_A && (isClose || !daveInFront)) {
+          		int[] touch = touching(david, -david.runspeed);
+				if (touch[0] == 1)
+					david.move(touch[1], 0);
+				else
+          			david.move(-1);
                     david.setRunning(-1);
                }
 			if (code == KeyEvent.VK_D && (isClose || daveInFront)) {
-                    david.move(1);
+          		int[] touch = touching(david, david.runspeed);
+				if (touch[0] == 1)
+					david.move(touch[1], 0);
+				else
+                    	david.move(1);
                     david.setRunning(1);
                }
                if (code == KeyEvent.VK_W && touching(david))
                	david.setVely(-9);
+
+
+          	if(code == KeyEvent.VK_M){
+          		if(sound.isRunning())
+          			sound.stop();
+          		else
+          			sound.start();
+			}
           }
      }
      public static void main(String[] a){
