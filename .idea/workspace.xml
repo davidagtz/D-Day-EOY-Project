@@ -4,6 +4,7 @@
     <list default="true" id="6e44f34c-ffc5-42ea-95a8-fe5c6b5e1d69" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/out/production/EOYCS3/Main.class" afterPath="$PROJECT_DIR$/out/production/EOYCS3/Main.class" />
+      <change beforePath="$PROJECT_DIR$/res/levels/first.level" afterPath="$PROJECT_DIR$/res/levels/first.level" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -19,24 +20,39 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="218" column="0" lean-forward="false" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
+            <state relative-caret-position="793">
+              <caret line="64" column="70" lean-forward="true" selection-start-line="64" selection-start-column="70" selection-end-line="64" selection-end-column="70" />
               <folding>
                 <element signature="method#get#0;class#Main#0" expanded="false" />
                 <element signature="method#touching#0;class#Main#0" expanded="false" />
                 <element signature="method#touching#1;class#Main#0" expanded="false" />
-                <element signature="e#3300#3346#0" expanded="false" />
+                <element signature="e#3507#3553#0" expanded="false" />
                 <element signature="method#gravity#0;class#Main#0" expanded="false" />
                 <element signature="method#inside#0;class#Main#0" expanded="false" />
                 <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
                 <element signature="method#paintBackground#1;class#Main#0" expanded="false" />
+                <element signature="method#Main#0;class#Main#0" expanded="false" />
+                <element signature="e#8515#8516#0" expanded="true" />
+                <element signature="e#8547#8548#0" expanded="true" />
                 <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
                 <element signature="method#keyTyped#0;class#Main#0" expanded="false" />
                 <element signature="method#main#0;class#Main#0" expanded="false" />
                 <element signature="method#drawString#0;class#Main#0" expanded="false" />
+                <element signature="e#12358#12359#0" expanded="true" />
+                <element signature="e#12386#12387#0" expanded="true" />
                 <element signature="method#reverse#0;class#Main#0" expanded="false" />
                 <element signature="method#copy#0;class#Main#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="first.level" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/res/levels/first.level">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -114,6 +130,7 @@
         <option value="$PROJECT_DIR$/src/SortedList.java" />
         <option value="$PROJECT_DIR$/src/ImageRect.java" />
         <option value="$PROJECT_DIR$/src/Player.java" />
+        <option value="$PROJECT_DIR$/res/levels/first.level" />
         <option value="$PROJECT_DIR$/src/Main.java" />
       </list>
     </option>
@@ -228,7 +245,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="Errors" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Eclipse Workspace/Snake" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/res/levels/first.level" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -485,23 +502,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/res/levels/first.level">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="218" column="0" lean-forward="false" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
+        <state relative-caret-position="793">
+          <caret line="64" column="70" lean-forward="true" selection-start-line="64" selection-start-column="70" selection-end-line="64" selection-end-column="70" />
           <folding>
             <element signature="method#get#0;class#Main#0" expanded="false" />
             <element signature="method#touching#0;class#Main#0" expanded="false" />
             <element signature="method#touching#1;class#Main#0" expanded="false" />
-            <element signature="e#3300#3346#0" expanded="false" />
+            <element signature="e#3507#3553#0" expanded="false" />
             <element signature="method#gravity#0;class#Main#0" expanded="false" />
             <element signature="method#inside#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#1;class#Main#0" expanded="false" />
+            <element signature="method#Main#0;class#Main#0" expanded="false" />
+            <element signature="e#8515#8516#0" expanded="true" />
+            <element signature="e#8547#8548#0" expanded="true" />
             <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
             <element signature="method#keyTyped#0;class#Main#0" expanded="false" />
             <element signature="method#main#0;class#Main#0" expanded="false" />
             <element signature="method#drawString#0;class#Main#0" expanded="false" />
+            <element signature="e#12358#12359#0" expanded="true" />
+            <element signature="e#12386#12387#0" expanded="true" />
             <element signature="method#reverse#0;class#Main#0" expanded="false" />
             <element signature="method#copy#0;class#Main#0" expanded="false" />
           </folding>

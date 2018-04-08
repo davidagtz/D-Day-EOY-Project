@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileSystemNotFoundException;
 import java.security.Key;
 import java.util.*;
 
@@ -27,37 +28,48 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      static Player david, diego, jakob, richard;
      static HashMap<String, Player> players = new HashMap<>();
      static final Color pause = new Color(255, 0, 0, 127);
-     static BufferedImage background, ground, topGround;
+     static BufferedImage background, ground, topGround, speaker, mute;
      static final Set<Integer> pressed = new HashSet<>();
      static ArrayList<ImageRect> stage = new ArrayList<>();
 	static ArrayList<ImageRect> stagecut;
 	static Clip sound;
+	static boolean forMute = false;
      public void paintComponent(Graphics g){
-     	stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
-     	int xofft = Math.min(david.getXR(), diego.getXR()) - sideAmount;
-     	xoff = xofft;
-          paintBackground(g, xoff);
-//		g.setColor(Color.red);
-//		g.drawRect(diego.getBounds().x* PIXEL, diego.getBounds().y* PIXEL, diego.getBounds().width* PIXEL, diego.getBounds().height * PIXEL);
-//		g.drawLine(diego.getX() * PIXEL, diego.getBotCornerY() * PIXEL, diego.getX()* PIXEL, diego.getY()* PIXEL);
-//		System.out.println(diego.getBounds());
-		for(Player p: players.values()){
-			gravity(p);
+		stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
+		xoff = Math.min(david.getXR(), diego.getXR()) - sideAmount;
+		paintBackground(g, xoff);
+		for (Player p : players.values()) {
+			if(timer.isRunning())
+				gravity(p);
 			p.draw(g, xoff);
 		}
-          richard.setRunning(1);
-          richard.move(2,0);
-          for(ImageRect img : stagecut)
-			img.draw(g, xoff);
-          if(!timer.isRunning()){
-          	g.setColor(pause);
-          	g.fillRect(0, 0, WIDTH, HEIGHT);
-          	drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "PAUSED");
+
+		if(timer.isRunning()) {
+			richard.setRunning(1);
+			richard.move(2, 0);
 		}
-		if(richard.touching(david) || richard.touching(diego)){
+
+		for (ImageRect img : stagecut)
+			img.draw(g, xoff);
+
+		if (richard.touching(david) || richard.touching(diego)) {
 			g.setColor(pause);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU LOST");
+		}
+
+		if(!timer.isRunning()){
+			System.out.println(forMute + "\n");
+			g.setColor(pause);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "PAUSED");
+		}
+
+		if (sound != null) {
+			g.drawImage(speaker, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
+			if (!sound.isActive())
+				g.drawImage(mute, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
+			forMute = false;
 		}
      }
 	public ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
@@ -72,16 +84,18 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 	}
      public boolean touching(Player p){
 		boolean inter = false;
-		for(ImageRect img : stage) {
+		ArrayList<ImageRect> partStage = get(stage, p.getXR(), p.getXR() + p.getWidth());
+		for(ImageRect img : partStage) {
 			Rectangle tr = (Rectangle) p.getBounds().clone();
-			if(img.getBounds().intersects(tr)){
-				p.setY(img.getBounds().y - p.getBounds().height);
+			Rectangle ir = img.getBounds();
+			if(ir.intersects(tr)){
+				p.setY(ir.y - p.getBounds().height);
 				p.setVely(0);
 				inter = true;
 			}
 			tr.y += p.getVely();
-			if(img.getBounds().intersects(tr)){
-				p.setY(img.getBounds().y - p.getBounds().height);
+			if(ir.intersects(tr)){
+				p.setY(ir.y - p.getBounds().height);
 				p.setVely(0);
 				inter = true;
 			}
@@ -110,6 +124,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      public void gravity(Player p){
      	boolean inter = touching(p);
 		if(inter) {
+			p.setVely(0);
 			return;
 		}
 		if(p.getY() > HEIGHT) {
@@ -140,6 +155,10 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 			sound = AudioSystem.getClip();
 			sound.open(inp);
 			sound.loop(Clip.LOOP_CONTINUOUSLY);
+
+			//load speaker icon
+			speaker = ImageIO.read(new File("res/speaker/speaker.png"));
+			mute = ImageIO.read(new File("res/speaker/mute.png"));
 		} catch (IOException e) {
           	e.printStackTrace();
 		} catch (LineUnavailableException e){
@@ -208,8 +227,8 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 			players.put("diego", new Player(ImageIO.read(new File("res/faces/diego.png"))));
 			players.put("jakob", new Player(ImageIO.read(new File("res/faces/jakob.png"))));
 			players.put("richard", new Player(ImageIO.read(new File("res/faces/richard.png"))));
-               p("richard").move(10, 0);
-			p("david").move( 5, p("david").faces(0).getHeight());
+               p("richard").move(10, 10);
+			p("david").move( 5, 10);
 			p("david").setCrown(true);
 			p("diego").move(5, 50);
 			richard = p("richard");
@@ -334,6 +353,9 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           			sound.stop();
           		else
           			sound.start();
+          		forMute = true;
+          		System.out.println(forMute);
+          		repaint();
 			}
           }
      }
