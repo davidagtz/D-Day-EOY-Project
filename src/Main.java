@@ -304,6 +304,9 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           			timer.start();
 			}
 
+			if(!timer.isRunning())
+				continue;
+          	
 			// Diego's controls
 			boolean isClose = close + diego.runspeed < PixWIDTH;
                if (code == KeyEvent.VK_LEFT && (isClose || daveInFront)){
@@ -327,6 +330,8 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 			}
 
 			// david's controls
+			if(code == KeyEvent.VK_C)
+				david.setCrown(david.crown==null?true:false);
 			isClose = close + david.runspeed < PixWIDTH;
 			if (code == KeyEvent.VK_A && (isClose || !daveInFront)) {
           		int[] touch = touching(david, -david.runspeed);

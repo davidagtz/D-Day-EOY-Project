@@ -3,7 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="6e44f34c-ffc5-42ea-95a8-fe5c6b5e1d69" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/out/production/EOYCS3/Main.class" afterPath="$PROJECT_DIR$/out/production/EOYCS3/Main.class" />
+      <change beforePath="$PROJECT_DIR$/res/Body/GIMP Images/bodyleft.xcf" afterPath="$PROJECT_DIR$/res/Body/GIMP Images/bodyleft.xcf" />
+      <change beforePath="$PROJECT_DIR$/res/Body/GIMP Images/bodyright.xcf" afterPath="$PROJECT_DIR$/res/Body/GIMP Images/bodyright.xcf" />
+      <change beforePath="$PROJECT_DIR$/res/Body/GIMP Images/reybodyledt.xcf" afterPath="$PROJECT_DIR$/res/Body/GIMP Images/reybodyledt.xcf" />
+      <change beforePath="$PROJECT_DIR$/res/Body/GIMP Images/reybodyright.xcf" afterPath="$PROJECT_DIR$/res/Body/GIMP Images/reybodyright.xcf" />
+      <change beforePath="$PROJECT_DIR$/res/Body/bodyleft.png" afterPath="$PROJECT_DIR$/res/Body/bodyleft.png" />
+      <change beforePath="$PROJECT_DIR$/res/Body/bodyright.png" afterPath="$PROJECT_DIR$/res/Body/bodyright.png" />
+      <change beforePath="$PROJECT_DIR$/res/Body/reybodyleft.png" afterPath="$PROJECT_DIR$/res/Body/reybodyleft.png" />
+      <change beforePath="$PROJECT_DIR$/res/Body/reybodyright.png" afterPath="$PROJECT_DIR$/res/Body/reybodyright.png" />
       <change beforePath="$PROJECT_DIR$/res/levels/first.level" afterPath="$PROJECT_DIR$/res/levels/first.level" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
     </list>
@@ -20,9 +27,10 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="793">
-              <caret line="64" column="70" lean-forward="true" selection-start-line="64" selection-start-column="70" selection-end-line="64" selection-end-column="70" />
+            <state relative-caret-position="304">
+              <caret line="308" column="15" lean-forward="false" selection-start-line="308" selection-start-column="15" selection-end-line="308" selection-end-column="15" />
               <folding>
+                <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
                 <element signature="method#get#0;class#Main#0" expanded="false" />
                 <element signature="method#touching#0;class#Main#0" expanded="false" />
                 <element signature="method#touching#1;class#Main#0" expanded="false" />
@@ -31,15 +39,10 @@
                 <element signature="method#inside#0;class#Main#0" expanded="false" />
                 <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
                 <element signature="method#paintBackground#1;class#Main#0" expanded="false" />
-                <element signature="method#Main#0;class#Main#0" expanded="false" />
-                <element signature="e#8515#8516#0" expanded="true" />
-                <element signature="e#8547#8548#0" expanded="true" />
                 <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
                 <element signature="method#keyTyped#0;class#Main#0" expanded="false" />
                 <element signature="method#main#0;class#Main#0" expanded="false" />
                 <element signature="method#drawString#0;class#Main#0" expanded="false" />
-                <element signature="e#12358#12359#0" expanded="true" />
-                <element signature="e#12386#12387#0" expanded="true" />
                 <element signature="method#reverse#0;class#Main#0" expanded="false" />
                 <element signature="method#copy#0;class#Main#0" expanded="false" />
               </folding>
@@ -512,9 +515,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="793">
-          <caret line="64" column="70" lean-forward="true" selection-start-line="64" selection-start-column="70" selection-end-line="64" selection-end-column="70" />
+        <state relative-caret-position="304">
+          <caret line="308" column="15" lean-forward="false" selection-start-line="308" selection-start-column="15" selection-end-line="308" selection-end-column="15" />
           <folding>
+            <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
             <element signature="method#get#0;class#Main#0" expanded="false" />
             <element signature="method#touching#0;class#Main#0" expanded="false" />
             <element signature="method#touching#1;class#Main#0" expanded="false" />
@@ -523,15 +527,10 @@
             <element signature="method#inside#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#1;class#Main#0" expanded="false" />
-            <element signature="method#Main#0;class#Main#0" expanded="false" />
-            <element signature="e#8515#8516#0" expanded="true" />
-            <element signature="e#8547#8548#0" expanded="true" />
             <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
             <element signature="method#keyTyped#0;class#Main#0" expanded="false" />
             <element signature="method#main#0;class#Main#0" expanded="false" />
             <element signature="method#drawString#0;class#Main#0" expanded="false" />
-            <element signature="e#12358#12359#0" expanded="true" />
-            <element signature="e#12386#12387#0" expanded="true" />
             <element signature="method#reverse#0;class#Main#0" expanded="false" />
             <element signature="method#copy#0;class#Main#0" expanded="false" />
           </folding>
