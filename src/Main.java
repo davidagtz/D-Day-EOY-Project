@@ -37,9 +37,9 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      public void paintComponent(Graphics g){
 		xoff = Math.min(david.getXR(), diego.getXR()) - sideAmount;
 		if(diego.isDead())
-			xoff = david.getXR() + 1;
-		else if (david.isDead())
-			xoff = diego.getXR() + 1;
+			xoff = david.getXR() - 1;
+		if (david.isDead())
+			xoff = diego.getXR() - 1;
 
 		stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
 		paintBackground(g, xoff);
@@ -140,9 +140,10 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 			p.setVely(0);
 			return;
 		}
-		if(p.getY() > HEIGHT) {
-			p.setY(PixHEIGHT-2);
-			p.setVely(-1);
+		if(p.getY() > HEIGHT && !p.equals(richard)) {
+			p.takeLife(1);
+			p.setX(stagecut.get(0).x + 1);
+			p.setY(stagecut.get(0).y - p.getBounds().height);
 		}
 		p.changeY();
 		p.changeVely(gravity);

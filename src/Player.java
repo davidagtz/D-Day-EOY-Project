@@ -163,6 +163,9 @@ public class Player {
 	public int getX(){
      	return c;
 	}
+	public void setX(int c){
+     	this.c = c;
+	}
 	public double getVely(){
 		return vely;
 	}
