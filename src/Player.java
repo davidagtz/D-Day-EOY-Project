@@ -19,9 +19,12 @@ public class Player {
      int runspeed;
      int lives = 3;
      final int PIXEL = Main.PIXEL;
-     BufferedImage crown, heart;
+     BufferedImage crown, heart, dead;
      public boolean isDead(){
      	return lives <= 0;
+	}
+	public boolean isAlive() {
+     	return lives > 0;
 	}
      public Player(BufferedImage f) throws IOException{
           //Makes faces for a dir
@@ -47,6 +50,7 @@ public class Player {
 		//make heart
 		try{
 			heart = ImageIO.read(new File("res/lives/heart.png"));
+			dead = ImageIO.read(new File("res/lives/dead.png"));
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -129,6 +133,8 @@ public class Player {
 	public void drawLives(Graphics g, int x, int y){
      	int w = heart.getWidth() * PIXEL * faces(0).getWidth() / faces(0).getHeight();
      	g.drawImage(faces(0), x * PIXEL, y * PIXEL, w, heart.getHeight() * PIXEL, null);
+     	if(isDead())
+     		g.drawImage(dead, x * PIXEL, y * PIXEL, w, heart.getHeight() * PIXEL, null);
      	x += w / PIXEL;
      	for (int i = 0; i < lives; i++){
      		x += 1;
@@ -168,5 +174,8 @@ public class Player {
 	}
 	public boolean touching(Player p){
      	return this.getBounds().intersects(p.getBounds());
+	}
+	public void takeLife(int i){
+     	lives -= i;
 	}
 }

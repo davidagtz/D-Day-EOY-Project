@@ -35,13 +35,19 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 	static Clip sound;
 	static boolean forMute = false;
      public void paintComponent(Graphics g){
-		stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
 		xoff = Math.min(david.getXR(), diego.getXR()) - sideAmount;
+		if(diego.isDead())
+			xoff = david.getXR() + 1;
+		else if (david.isDead())
+			xoff = diego.getXR() + 1;
+
+		stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
 		paintBackground(g, xoff);
 		for (Player p : players.values()) {
 			if(timer.isRunning())
 				gravity(p);
-			p.draw(g, xoff);
+			if(p.isAlive())
+				p.draw(g, xoff);
 		}
 
 		if(timer.isRunning()) {
@@ -55,17 +61,21 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		david.drawLives(g, 1, 1);
 		diego.drawLives(g, 1, david.getHeart().getHeight() + 2);
 
-		if (richard.touching(david) || richard.touching(diego)) {
-			g.setColor(pause);
-			g.fillRect(0, 0, WIDTH, HEIGHT);
-			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU LOST");
-		}
+		if(richard.touching(david) && david.isAlive())
+			david.takeLife(1);
+		else
+			diego.takeLife(1);
 
 		if(!timer.isRunning()){
-			System.out.println(forMute + "\n");
 			g.setColor(pause);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "PAUSED");
+		}
+
+		if(david.isDead() && diego.isDead()){
+			g.setColor(pause);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU LOST");
 		}
 
 		if (sound != null) {
@@ -230,7 +240,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 			players.put("diego", new Player(ImageIO.read(new File("res/faces/diego.png"))));
 			players.put("jakob", new Player(ImageIO.read(new File("res/faces/jakob.png"))));
 			players.put("richard", new Player(ImageIO.read(new File("res/faces/richard.png"))));
-               p("richard").move(10, 10);
+               p("richard").move(35, 0);
 			p("david").move( 5, 10);
 			p("david").setCrown(true);
 			p("diego").move(5, 50);
@@ -311,50 +321,53 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 				continue;
 
 			// Diego's controls
-			boolean isClose = close + diego.runspeed < PixWIDTH;
-               if (code == KeyEvent.VK_LEFT && (isClose || daveInFront)){
-          		int[] touch = touching(diego, -diego.runspeed);
-				if (touch[0] == 1)
-                    	diego.move(touch[1], 0);
-          		else
-          			diego.move(-1);
-                    diego.setRunning(-1);
-               }
-               if (code == KeyEvent.VK_RIGHT && (isClose || !daveInFront)) {
-          		int[] touch = touching(diego, diego.runspeed);
-				if (touch[0] == 1)
-					diego.move(touch[1], 0);
-				else
-          			diego.move(1);
-                    diego.setRunning(1);
-               }
-               if(code == KeyEvent.VK_UP && touching(diego)){
-               	diego.setVely(-9);
+			if(diego.isAlive()) {
+				boolean isClose = close + diego.runspeed < PixWIDTH;
+				if (code == KeyEvent.VK_LEFT && (isClose || daveInFront || david.isDead())) {
+					int[] touch = touching(diego, -diego.runspeed);
+					if (touch[0] == 1)
+						diego.move(touch[1], 0);
+					else
+						diego.move(-1);
+					diego.setRunning(-1);
+				}
+				if (code == KeyEvent.VK_RIGHT && (isClose || !daveInFront || david.isDead())) {
+					int[] touch = touching(diego, diego.runspeed);
+					if (touch[0] == 1)
+						diego.move(touch[1], 0);
+					else
+						diego.move(1);
+					diego.setRunning(1);
+				}
+				if (code == KeyEvent.VK_UP && touching(diego)) {
+					diego.setVely(-9);
+				}
 			}
 
 			// david's controls
-			if(code == KeyEvent.VK_C)
-				david.setCrown(david.crown==null?true:false);
-			isClose = close + david.runspeed < PixWIDTH;
-			if (code == KeyEvent.VK_A && (isClose || !daveInFront)) {
-          		int[] touch = touching(david, -david.runspeed);
-				if (touch[0] == 1)
-					david.move(touch[1], 0);
-				else
-          			david.move(-1);
-                    david.setRunning(-1);
-               }
-			if (code == KeyEvent.VK_D && (isClose || daveInFront)) {
-          		int[] touch = touching(david, david.runspeed);
-				if (touch[0] == 1)
-					david.move(touch[1], 0);
-				else
-                    	david.move(1);
-                    david.setRunning(1);
-               }
-               if (code == KeyEvent.VK_W && touching(david))
-               	david.setVely(-9);
-
+			if(david.isAlive()) {
+				if (code == KeyEvent.VK_C)
+					david.setCrown(david.crown == null ? true : false);
+				boolean isClose = close + david.runspeed < PixWIDTH;
+				if (code == KeyEvent.VK_A && (isClose || !daveInFront || diego.isDead())) {
+					int[] touch = touching(david, -david.runspeed);
+					if (touch[0] == 1)
+						david.move(touch[1], 0);
+					else
+						david.move(-1);
+					david.setRunning(-1);
+				}
+				if (code == KeyEvent.VK_D && (isClose || daveInFront || diego.isDead())) {
+					int[] touch = touching(david, david.runspeed);
+					if (touch[0] == 1)
+						david.move(touch[1], 0);
+					else
+						david.move(1);
+					david.setRunning(1);
+				}
+				if (code == KeyEvent.VK_W && touching(david))
+					david.setVely(-9);
+			}
 
           	if(code == KeyEvent.VK_M){
           		if(sound.isRunning())
