@@ -63,7 +63,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 
 		if(richard.touching(david) && david.isAlive())
 			david.takeLife(1);
-		else
+		if(richard.touching(diego) && diego.isAlive())
 			diego.takeLife(1);
 
 		if(!timer.isRunning()){
@@ -240,7 +240,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 			players.put("diego", new Player(ImageIO.read(new File("res/faces/diego.png"))));
 			players.put("jakob", new Player(ImageIO.read(new File("res/faces/jakob.png"))));
 			players.put("richard", new Player(ImageIO.read(new File("res/faces/richard.png"))));
-               p("richard").move(35, 0);
+               p("richard").move(8 * 5, 0);
 			p("david").move( 5, 10);
 			p("david").setCrown(true);
 			p("diego").move(5, 50);

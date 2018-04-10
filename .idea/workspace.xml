@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6e44f34c-ffc5-42ea-95a8-fe5c6b5e1d69" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
-      <change beforePath="$PROJECT_DIR$/src/Player.java" afterPath="$PROJECT_DIR$/src/Player.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,14 +17,13 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="303" column="39" lean-forward="false" selection-start-line="303" selection-start-column="39" selection-end-line="303" selection-end-column="39" />
+            <state relative-caret-position="225">
+              <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
               <folding>
-                <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
                 <element signature="method#get#0;class#Main#0" expanded="false" />
                 <element signature="method#touching#0;class#Main#0" expanded="false" />
                 <element signature="method#touching#1;class#Main#0" expanded="false" />
-                <element signature="e#3764#3810#0" expanded="false" />
+                <element signature="e#3806#3852#0" expanded="false" />
                 <element signature="method#gravity#0;class#Main#0" expanded="false" />
                 <element signature="method#inside#0;class#Main#0" expanded="false" />
                 <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
@@ -430,7 +428,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="27" />
+      <option name="time" value="28" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -496,14 +494,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="303" column="39" lean-forward="false" selection-start-line="303" selection-start-column="39" selection-end-line="303" selection-end-column="39" />
+        <state relative-caret-position="225">
+          <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
           <folding>
-            <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
             <element signature="method#get#0;class#Main#0" expanded="false" />
             <element signature="method#touching#0;class#Main#0" expanded="false" />
             <element signature="method#touching#1;class#Main#0" expanded="false" />
-            <element signature="e#3764#3810#0" expanded="false" />
+            <element signature="e#3806#3852#0" expanded="false" />
             <element signature="method#gravity#0;class#Main#0" expanded="false" />
             <element signature="method#inside#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
