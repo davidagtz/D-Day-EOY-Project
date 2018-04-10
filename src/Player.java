@@ -18,7 +18,8 @@ public class Player {
      double vely;
      int runspeed;
      int lives = 3;
-     BufferedImage crown;
+     final int PIXEL = Main.PIXEL;
+     BufferedImage crown, heart;
      public boolean isDead(){
      	return lives <= 0;
 	}
@@ -43,6 +44,12 @@ public class Player {
           real.put(-1, Main.reverse(match(ImageIO.read(new File("res/body/reybodyright.png")), faces.get(0))));
           real.put(-2, Main.reverse(match(ImageIO.read(new File("res/body/reybodyleft.png")), faces.get(0))));
 
+		//make heart
+		try{
+			heart = ImageIO.read(new File("res/lives/heart.png"));
+		} catch(IOException e){
+			e.printStackTrace();
+		}
 
 		//set run speed
 		runspeed = 3;
@@ -114,10 +121,23 @@ public class Player {
 			body = bodies.get((int) (Math.signum(dir) * (Math.abs(dir) + leg)));
 		else
 			body = real.get((int) (Math.signum(dir) * (Math.abs(dir) + leg)));
-		g.drawImage(body, (c - xoff + face.getWidth()/2 - body .getWidth() / 2) * Main.PIXEL,  (r + face.getHeight() - 2) * Main.PIXEL, body.getWidth() * Main.PIXEL, body.getHeight() * Main.PIXEL, null);
-		g.drawImage(face, (c - xoff) * Main.PIXEL, r * Main.PIXEL, face.getWidth() * Main.PIXEL, face.getHeight() * Main.PIXEL, null);
+		g.drawImage(body, (c - xoff + face.getWidth()/2 - body .getWidth() / 2) * PIXEL,  (r + face.getHeight() - 2) * PIXEL, body.getWidth() * PIXEL, body.getHeight() * PIXEL, null);
+		g.drawImage(face, (c - xoff) * PIXEL, r * PIXEL, face.getWidth() * PIXEL, face.getHeight() * PIXEL, null);
 		if(crown != null)
-			g.drawImage(crown, (c - xoff) * Main.PIXEL, (r - 5) * Main.PIXEL, crown.getWidth() * Main.PIXEL, crown.getHeight() * Main.PIXEL, null);
+			g.drawImage(crown, (c - xoff) * PIXEL, (r - 5) * PIXEL, crown.getWidth() * PIXEL, crown.getHeight() * PIXEL, null);
+	}
+	public void drawLives(Graphics g, int x, int y){
+     	int w = heart.getWidth() * PIXEL * faces(0).getWidth() / faces(0).getHeight();
+     	g.drawImage(faces(0), x * PIXEL, y * PIXEL, w, heart.getHeight() * PIXEL, null);
+     	x += w / PIXEL;
+     	for (int i = 0; i < lives; i++){
+     		x += 1;
+     		g.drawImage(heart, x * PIXEL, y * PIXEL, heart.getWidth() * PIXEL, heart.getHeight() * PIXEL, null);
+     		x += heart.getWidth();
+		}
+	}
+	public BufferedImage getHeart(){
+     	return heart;
 	}
 	public void changeY(int dy){
      	this.c += dy;

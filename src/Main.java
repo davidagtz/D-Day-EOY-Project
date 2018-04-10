@@ -52,6 +52,9 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		for (ImageRect img : stagecut)
 			img.draw(g, xoff);
 
+		david.drawLives(g, 1, 1);
+		diego.drawLives(g, 1, david.getHeart().getHeight() + 2);
+
 		if (richard.touching(david) || richard.touching(diego)) {
 			g.setColor(pause);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -306,7 +309,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 
 			if(!timer.isRunning())
 				continue;
-          	
+
 			// Diego's controls
 			boolean isClose = close + diego.runspeed < PixWIDTH;
                if (code == KeyEvent.VK_LEFT && (isClose || daveInFront)){
