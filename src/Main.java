@@ -21,20 +21,30 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      public static long serialVersionUID = 0L;
      static JFrame frame;
      static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6, PixHEIGHT = HEIGHT / PIXEL, PixWIDTH = WIDTH / PIXEL, sideAmount = 1;
-     static int xoff = 0;
+     static int xoff = 0, level = 1;
      static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static Timer timer;
      static Player david, diego, jakob, richard;
      static HashMap<String, Player> players = new HashMap<>();
      static final Color pause = new Color(255, 0, 0, 127);
-     static BufferedImage background, ground, topGround, speaker, mute;
+     static BufferedImage background, ground, topGround, speaker, mute, menu;
      static final Set<Integer> pressed = new HashSet<>();
      static ArrayList<ImageRect> stage = new ArrayList<>();
 	static ArrayList<ImageRect> stagecut;
 	static Clip sound;
 	static boolean forMute = false;
      public void paintComponent(Graphics g){
+     	switch(level){
+			case 0: mainMenu(g); break;
+			case 1: levelOne(g); break;
+		}
+     }
+     public void mainMenu(Graphics g){
+     	g.drawImage(menu, 0, 0, WIDTH, HEIGHT, null);
+	}
+     public void levelOne(Graphics g){
+		//see how much to offset
 		xoff = Math.min(david.getXR(), diego.getXR()) - sideAmount;
 		if(diego.isDead())
 			xoff = david.getXR() - 1;
@@ -84,7 +94,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 				g.drawImage(mute, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
 			forMute = false;
 		}
-     }
+	}
 	public ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
      	ArrayList<ImageRect> newL = new ArrayList<>();
      	for(int i = 0; i < list.size(); i++){
@@ -101,12 +111,16 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		for(ImageRect img : partStage) {
 			Rectangle tr = (Rectangle) p.getBounds().clone();
 			Rectangle ir = img.getBounds();
+			if(tr.y == ir.height + ir.y)
+				p.setVely(0);
 			if(ir.intersects(tr)){
 				p.setY(ir.y - p.getBounds().height);
 				p.setVely(0);
 				inter = true;
 			}
 			tr.y += p.getVely();
+			if(tr.y == ir.height + ir.y)
+				p.setVely(0);
 			if(ir.intersects(tr)){
 				p.setY(ir.y - p.getBounds().height);
 				p.setVely(0);
@@ -114,6 +128,19 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 			}
 		}
 		return inter;
+	}
+	//Tells if the sprite is touching
+	public boolean isTouching(Player p){
+		ArrayList<ImageRect> partStage = get(stage, p.getXR(), p.getXR() + p.getWidth());
+		for(ImageRect img : partStage) {
+			Rectangle tr = (Rectangle) p.getBounds().clone();
+			Rectangle ir = img.getBounds();
+			if(tr.y + tr.height == ir.y)
+				return true;
+			else if(tr.y == ir.height + ir.y)
+				return true;
+		}
+		return false;
 	}
 	public int[] touching(Player p, int vel){
      	// first int is 0 if not intersecting and 1 if
@@ -142,8 +169,13 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		}
 		if(p.getY() > HEIGHT && !p.equals(richard)) {
 			p.takeLife(1);
-			p.setX(stagecut.get(0).x + 1);
-			p.setY(stagecut.get(0).y - p.getBounds().height);
+			if (stagecut.size() == 0) {
+				p.setX(stage.get(stage.size() - 1).x);
+				p.setY(stage.get(stage.size() - 1).y - p.getBounds().height);
+			} else {
+				p.setX(stagecut.get(0).x + 1);
+				p.setY(stagecut.get(0).y - p.getBounds().height);
+			}
 		}
 		p.changeY();
 		p.changeVely(gravity);
@@ -182,8 +214,9 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		}
 
     		try{
-			//get Background
-//               background = ImageIO.read(new File("res/background.png"));
+			//get Backgrounds
+//               background = ImageIO.read(new File("res/background.png"));	tr
+//               menu = ImageIO.read(new File("res/Menu/menu.png"));
                //get ground
 			ground = ImageIO.read(new File("res/ground.png"));
 			topGround = copy(ground);
@@ -305,80 +338,78 @@ public class Main extends JPanel implements ActionListener, KeyListener{
      public void keyPressed(KeyEvent e){
      	int close = Math.abs(diego.getXR() - david.getXR()) + diego.getWidth();
      	boolean daveInFront = diego.getX() - david.getX() > 0;
-     	if(pressed.contains((int) KeyEvent.VK_SEMICOLON) || pressed.contains((int) KeyEvent.VK_Q))
+     	if(pressed.contains((Integer) KeyEvent.VK_SEMICOLON) || pressed.contains((Integer) KeyEvent.VK_Q))
      		System.exit(0);
           pressed.add(e.getKeyCode());
-          for(int code : pressed) {
-          	if(code == 32){
-          		if(timer.isRunning()) {
-					timer.stop();
-					repaint();
-          		}
-          		else
-          			timer.start();
+		if(pressed.contains(32)){
+			if(timer.isRunning()) {
+				timer.stop();
+				repaint();
 			}
+			else
+				timer.start();
+		}
 
-			if(!timer.isRunning())
-				continue;
+		if(!timer.isRunning())
+			return;
 
-			// Diego's controls
-			if(diego.isAlive()) {
-				boolean isClose = close + diego.runspeed < PixWIDTH;
-				if (code == KeyEvent.VK_LEFT && (isClose || daveInFront || david.isDead())) {
-					int[] touch = touching(diego, -diego.runspeed);
-					if (touch[0] == 1)
-						diego.move(touch[1], 0);
-					else
-						diego.move(-1);
-					diego.setRunning(-1);
-				}
-				if (code == KeyEvent.VK_RIGHT && (isClose || !daveInFront || david.isDead())) {
-					int[] touch = touching(diego, diego.runspeed);
-					if (touch[0] == 1)
-						diego.move(touch[1], 0);
-					else
-						diego.move(1);
-					diego.setRunning(1);
-				}
-				if (code == KeyEvent.VK_UP && touching(diego)) {
-					diego.setVely(-9);
-				}
+		// Diego's controls
+		if(diego.isAlive()) {
+			boolean isClose = close + diego.runspeed < PixWIDTH;
+			if (pressed.contains(KeyEvent.VK_LEFT) && (isClose || daveInFront || david.isDead())) {
+				int[] touch = touching(diego, -diego.runspeed);
+				if (touch[0] == 1)
+					diego.move(touch[1], 0);
+				else
+					diego.move(-1);
+				diego.setRunning(-1);
 			}
-
-			// david's controls
-			if(david.isAlive()) {
-				if (code == KeyEvent.VK_C)
-					david.setCrown(david.crown == null ? true : false);
-				boolean isClose = close + david.runspeed < PixWIDTH;
-				if (code == KeyEvent.VK_A && (isClose || !daveInFront || diego.isDead())) {
-					int[] touch = touching(david, -david.runspeed);
-					if (touch[0] == 1)
-						david.move(touch[1], 0);
-					else
-						david.move(-1);
-					david.setRunning(-1);
-				}
-				if (code == KeyEvent.VK_D && (isClose || daveInFront || diego.isDead())) {
-					int[] touch = touching(david, david.runspeed);
-					if (touch[0] == 1)
-						david.move(touch[1], 0);
-					else
-						david.move(1);
-					david.setRunning(1);
-				}
-				if (code == KeyEvent.VK_W && touching(david))
-					david.setVely(-9);
+			if (pressed.contains(KeyEvent.VK_RIGHT) && (isClose || !daveInFront || david.isDead())) {
+				int[] touch = touching(diego, diego.runspeed);
+				if (touch[0] == 1)
+					diego.move(touch[1], 0);
+				else
+					diego.move(1);
+				diego.setRunning(1);
 			}
-
-          	if(code == KeyEvent.VK_M){
-          		if(sound.isRunning())
-          			sound.stop();
-          		else
-          			sound.start();
-          		forMute = true;
-          		System.out.println(forMute);
-          		repaint();
+			if (pressed.contains(KeyEvent.VK_UP) && isTouching(diego)) {
+				diego.setVely(-9);
 			}
+		}
+
+		// david's controls
+		if(david.isAlive()) {
+			if (pressed.contains(KeyEvent.VK_C))
+				david.setCrown(david.crown == null ? true : false);
+			boolean isClose = close + david.runspeed < PixWIDTH;
+			if (pressed.contains(KeyEvent.VK_A) && (isClose || !daveInFront || diego.isDead())) {
+				int[] touch = touching(david, -david.runspeed);
+				if (touch[0] == 1)
+					david.move(touch[1], 0);
+				else
+					david.move(-1);
+				david.setRunning(-1);
+			}
+			if (pressed.contains(KeyEvent.VK_D) && (isClose || daveInFront || diego.isDead())) {
+				int[] touch = touching(david, david.runspeed);
+				if (touch[0] == 1)
+					david.move(touch[1], 0);
+				else
+					david.move(1);
+				david.setRunning(1);
+			}
+			if (pressed.contains(KeyEvent.VK_W) && isTouching(david)) {
+				david.setVely(-9);
+			}
+		}
+
+		if(pressed.contains(KeyEvent.VK_M)){
+			if(sound.isRunning())
+				sound.stop();
+			else
+				sound.start();
+			forMute = true;
+			repaint();
           }
      }
      public static void main(String[] a){
