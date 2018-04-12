@@ -1,10 +1,21 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class ImageRect  implements Comparable<ImageRect>{
 	BufferedImage img;
 	int x, y;
+	final int PIXEL = Main.PIXEL;
 	Rectangle bounds;
+	ArrayList<ImageRect> children = new ArrayList<>();
+	public ImageRect(int x, int y, int w, int h){
+		this.x = x;
+		this.y = y;
+		bounds = new Rectangle(x, y, w, h);
+	}
+	public boolean addChild(ImageRect iR){
+		return children.add(iR);
+	}
 	public ImageRect(int x, int y, BufferedImage img){
 		this.img = img;
 		this.x = x;
@@ -15,10 +26,20 @@ public class ImageRect  implements Comparable<ImageRect>{
 		return bounds;
 	}
 	public void draw(Graphics g){
-		g.drawImage(img, x * Main.PIXEL, y * Main.PIXEL, img.getWidth() * Main.PIXEL, img.getHeight() * Main.PIXEL, null);
+		drawOff(g, 0, 0);
+	}
+	public ArrayList<ImageRect> getChildren(){
+		return children;
+	}
+	protected void drawOff(Graphics g, int x, int y){
+		if(img != null)
+			g.drawImage(img, (x + this.x) * PIXEL, (y + this.y) * PIXEL, img.getWidth() * PIXEL, img.getHeight() * PIXEL, null);
+		for(ImageRect iR : children){
+			iR.drawOff(g, x + this.x, y + this.y);
+		}
 	}
 	public void draw(Graphics g, int xoff){
-		g.drawImage(img, (x - xoff) * Main.PIXEL, y * Main.PIXEL, img.getWidth() * Main.PIXEL, img.getHeight() * Main.PIXEL, null);
+		drawOff(g, -xoff, 0);
 	}
 	public boolean inside(int x, int range, int y){
 		boolean f = false;
@@ -48,7 +69,24 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public int getX(){
 		return x;
 	}
+	public void clickAction(){}
 	public void setImg(BufferedImage img){
 		this.img = img;
+	}
+	public void hover(int x, int y){
+		if(this instanceof HoverImage){
+			((HoverImage)this).change(x, y);
+		}
+		for(ImageRect iRc : getChildren()){
+			iRc.hover(x, y);
+		}
+	}
+	public void click(int x, int y){
+		if(bounds.contains(x, y)){
+			clickAction();
+		}
+		for(ImageRect iRc : getChildren()){
+			iRc.click(x, y);
+		}
 	}
 }

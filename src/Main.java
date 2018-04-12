@@ -3,10 +3,7 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,31 +14,44 @@ import java.security.Key;
 import java.util.*;
 
 /*@davidagtz*/
-public class Main extends JPanel implements ActionListener, KeyListener{
+public class Main extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener{
      public static long serialVersionUID = 0L;
      static JFrame frame;
      static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6, PixHEIGHT = HEIGHT / PIXEL, PixWIDTH = WIDTH / PIXEL, sideAmount = 1;
-     static int xoff = 0, level = 1;
+     // level 0 - Main Menu
+	// level 1 - Game
+	// level 2 - Controls
+	// level 3 - Editor
+     static int xoff = 0, level = 0;
      static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static Timer timer;
      static Player david, diego, jakob, richard;
      static HashMap<String, Player> players = new HashMap<>();
-     static final Color pause = new Color(255, 0, 0, 127);
-     static BufferedImage background, ground, topGround, speaker, mute, menu;
+     static final Color pause = new Color(255, 0, 0, 127), mainBack = new Color(26, 26, 26);
+     static BufferedImage background, ground, topGround, speaker, mute;
      static final Set<Integer> pressed = new HashSet<>();
      static ArrayList<ImageRect> stage = new ArrayList<>();
 	static ArrayList<ImageRect> stagecut;
 	static Clip sound;
 	static boolean forMute = false;
+	static ImageRect menu;
      public void paintComponent(Graphics g){
      	switch(level){
 			case 0: mainMenu(g); break;
 			case 1: levelOne(g); break;
 		}
+		if (sound != null) {
+			g.drawImage(speaker, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
+			if (!sound.isActive())
+				g.drawImage(mute, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
+			forMute = false;
+		}
      }
      public void mainMenu(Graphics g){
-     	g.drawImage(menu, 0, 0, WIDTH, HEIGHT, null);
+     	g.setColor(mainBack);
+     	g.fillRect(0, 0, WIDTH, HEIGHT);
+     	menu.draw(g);
 	}
      public void levelOne(Graphics g){
 		//see how much to offset
@@ -87,13 +97,6 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU LOST");
 		}
-
-		if (sound != null) {
-			g.drawImage(speaker, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
-			if (!sound.isActive())
-				g.drawImage(mute, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
-			forMute = false;
-		}
 	}
 	public ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
      	ArrayList<ImageRect> newL = new ArrayList<>();
@@ -111,17 +114,21 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		for(ImageRect img : partStage) {
 			Rectangle tr = (Rectangle) p.getBounds().clone();
 			Rectangle ir = img.getBounds();
-			if(tr.y == ir.height + ir.y)
+			if(tr.y == ir.height + ir.y) {
+				p.setVely(-p.getVely());
 				p.setVely(0);
-			if(ir.intersects(tr)){
+			}
+			else if(ir.intersects(tr)){
 				p.setY(ir.y - p.getBounds().height);
 				p.setVely(0);
 				inter = true;
 			}
 			tr.y += p.getVely();
-			if(tr.y == ir.height + ir.y)
-				p.setVely(0);
-			if(ir.intersects(tr)){
+			if(tr.y == ir.height + ir.y) {
+				p.setVely(-p.getVely());
+				p.setY(ir.height + ir.y);
+			}
+			else if(ir.intersects(tr)){
 				p.setY(ir.y - p.getBounds().height);
 				p.setVely(0);
 				inter = true;
@@ -169,16 +176,29 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		}
 		if(p.getY() > HEIGHT && !p.equals(richard)) {
 			p.takeLife(1);
-			if (stagecut.size() == 0) {
-				p.setX(stage.get(stage.size() - 1).x);
+			Player oth = other(p);
+			if(oth != null && oth.isAlive() && isTouching(oth)) {
+				p.setX(oth.getX());
+				p.setY(oth.getY());
+			}
+			else if (stagecut.size() == 0) {
+				p.setXR(stage.get(stage.size() - 1).x);
 				p.setY(stage.get(stage.size() - 1).y - p.getBounds().height);
 			} else {
-				p.setX(stagecut.get(0).x + 1);
+				p.setXR(stagecut.get(0).x);
 				p.setY(stagecut.get(0).y - p.getBounds().height);
 			}
 		}
 		p.changeY();
 		p.changeVely(gravity);
+	}
+	public Player other(Player p){
+     	if(p.equals(david))
+     		return diego;
+     	else if(p.equals(diego))
+     		return david;
+     	else
+     		return null;
 	}
 	public boolean inside(int x, int y, ArrayList<ImageRect> s){
      	for(ImageRect img : s)
@@ -195,6 +215,29 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		g.fillRect( 0, 0, WIDTH, HEIGHT);
 	}
      public Main(String title){
+     	//make a menu
+		menu = new ImageRect(0, 0, WIDTH, HEIGHT);
+		try {
+			menu.addChild(new ImageRect(7, 7, ImageIO.read(new File("res/menu/title.png"))));
+			menu.addChild(new HoverImage(14, 47, ImageIO.read(new File("res/menu/controls.png"))){
+				public void clickAction(){
+					Main.level = 2;
+				}
+			});
+			menu.addChild(new HoverImage(46, 29, ImageIO.read(new File("res/menu/start.png"))){
+				public void clickAction(){
+					Main.level = 1;
+				}
+			});
+			menu.addChild(new HoverImage(35, 65, ImageIO.read(new File("res/menu/editor.png"))){
+				public void clickAction(){
+					Main.level = 3;
+				}
+			});
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+
           try{
 			//play music
 			AudioInputStream inp = AudioSystem.getAudioInputStream(new File("res/audio/music.wav"));
@@ -309,6 +352,8 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
           frame.add(this);
           frame.addKeyListener(this);
+          frame.getContentPane().addMouseListener(this);
+          frame.getContentPane().addMouseMotionListener(this);
           frame.pack();
           frame.setVisible(true);
 
@@ -336,11 +381,24 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 
      }
      public void keyPressed(KeyEvent e){
-     	int close = Math.abs(diego.getXR() - david.getXR()) + diego.getWidth();
-     	boolean daveInFront = diego.getX() - david.getX() > 0;
      	if(pressed.contains((Integer) KeyEvent.VK_SEMICOLON) || pressed.contains((Integer) KeyEvent.VK_Q))
      		System.exit(0);
           pressed.add(e.getKeyCode());
+          switch(level){
+			case 1 : keyLevelOne(e); break;
+		}
+		if(pressed.contains(KeyEvent.VK_M)){
+			if(sound.isRunning())
+				sound.stop();
+			else
+				sound.start();
+			forMute = true;
+			repaint();
+          }
+     }
+     public void keyLevelOne(KeyEvent e){
+		int close = Math.abs(diego.getXR() - david.getXR()) + diego.getWidth();
+		boolean daveInFront = diego.getX() - david.getX() > 0;
 		if(pressed.contains(32)){
 			if(timer.isRunning()) {
 				timer.stop();
@@ -402,16 +460,7 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 				david.setVely(-9);
 			}
 		}
-
-		if(pressed.contains(KeyEvent.VK_M)){
-			if(sound.isRunning())
-				sound.stop();
-			else
-				sound.start();
-			forMute = true;
-			repaint();
-          }
-     }
+	}
      public static void main(String[] a){
      	//Create the Frame and Panel
           new Main("D-Day");
@@ -461,4 +510,23 @@ public class Main extends JPanel implements ActionListener, KeyListener{
           g.dispose();
           return b;
      }
+	public void mouseClicked(MouseEvent e) {
+     	int x = e.getX() / PIXEL;
+     	int y = e.getY() / PIXEL;
+		menu.click(x, y);
+	}
+	public void mousePressed(MouseEvent e) {
+	}
+	public void mouseReleased(MouseEvent e) {
+	}
+	public void mouseEntered(MouseEvent e) {
+	}
+	public void mouseExited(MouseEvent e) {
+	}
+	public void mouseDragged(MouseEvent e){}
+	public void mouseMoved(MouseEvent e){
+     	int x = e.getX() / PIXEL;
+     	int y = e.getY() / PIXEL;
+		menu.hover(x, y);
+	}
 }

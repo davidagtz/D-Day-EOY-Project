@@ -99,9 +99,12 @@ public class Player {
           r+=diry;
           c+=dirx;
           if(getXR() < 0)
-          	c = (bodies.get(0).getWidth() / 2 - faces(0).getWidth() / 2);
+          	c = (bodies.get(0).getWidth() / 2 - faces(0).getWidth() / 2) + 1;
 		change();
      }
+     public void setXR(int c){
+     	this.c = c + (bodies.get(0).getWidth() / 2 - faces(0).getWidth() / 2);
+	}
      public void change(){
           leg++;
           leg %= 2;
