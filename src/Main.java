@@ -369,7 +369,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				}
 			});
 			BufferedImage img = ImageIO.read(new File("res/editor/drag.png"));
-			editor.addChild(new ImageRect(PixWIDTH - 6, 0, img){
+			ImageRect drag = new ImageRect(PixWIDTH - 6, 0, img){
 				int dragW = 20;
 				Rectangle drag = new Rectangle(0, img.getHeight() / 2 - dragW / 2, 6, dragW);
 				boolean out = false;
@@ -384,12 +384,18 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 						out = !out;
 					}
 				}
-			}.addChild(new ImageRect(10, 4, copy(ground)){
+			};
+			editor.addChild(drag.addChild(new ImageRect(10, 4, copy(ground)){
 				public void clickAction(int x, int y){
-
-					Main.setCursor("ground");
+					if(Main.cursor == null)
+						Main.setCursor("ground");
 				}
-				}));
+				}).addChild(new ImageRect(10, 4 + ground.getHeight() + 2, copy(mute)){
+					public void clickAction(int x, int y){
+						if(Main.cursor == null)
+							Main.setCursor("erase");
+					}
+					}));
 		}catch (IOException e){
 			e.printStackTrace();
 		}
@@ -656,7 +662,24 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 		else if(level == 3){
 			if(cursor != null){
-				editor.addChild(cursor);
+				try {
+					if(cursor.getId().equals("ground")) {
+						editor.addChild(new HoverImage(cursor, ImageIO.read(new File("res/editor/groundRed.png"))) {
+							public void change(int x, int y) {
+								if (bounds.contains(x, y) && cursor != null && Main.cursor.getId().equals("erase")) {
+									onTop = true;
+								} else {
+									onTop = false;
+								}
+							}
+						});
+					}
+					else if(cursor.getId().equals("erase")){
+						editor.remove(x, y);
+					}
+				} catch(IOException ep){
+					ep.printStackTrace();
+				}
 				cursor = null;
 			}
 			editor.click(x, y);
@@ -692,9 +715,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      		cursor = null;
 		}
 		else if(str.equals("ground")){
-     		cursor = new ImageRect(lastX, lastY, ground){
-     			String id = "ground";
-			};
+     		cursor = new ImageRect(lastX, lastY, ground).setId("ground");
+		}
+		else if(str.equals("erase")){
+     		cursor = new ImageRect(0,0,0,0).setId("erase");
 		}
 		return cursor;
 	}

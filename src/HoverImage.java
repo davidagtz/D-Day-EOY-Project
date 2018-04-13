@@ -9,6 +9,22 @@ public class HoverImage extends ImageRect{
 		top = img.getSubimage(0, 0, img.getWidth(), img.getHeight() / 2);
 		bottom = img.getSubimage(0, img.getHeight() / 2, img.getWidth(), img.getHeight() / 2);
 	}
+	public HoverImage(ImageRect iR){
+		super(iR.x, iR.y, iR.getWidth(), iR.getHeight());
+		id = iR.id;
+		setText(iR.text, iR.h);
+		children = iR.getChildren();
+		if(iR.img != null)
+			bottom = iR.img;
+	}
+	public HoverImage(ImageRect iR, BufferedImage bot){
+		super(iR.x, iR.y, iR.getWidth(), iR.getHeight());
+		id = iR.id;
+		setText(iR.text, iR.h);
+		children = iR.getChildren();
+		bottom = iR.img;
+		top = bot;
+	}
 	public void drawOff(Graphics g, int x, int y){
 		if(onTop)
 			g.drawImage(top, (x + this.x) * PIXEL, (y + this.y) * PIXEL, top.getWidth() * PIXEL, top.getHeight() * PIXEL, null);

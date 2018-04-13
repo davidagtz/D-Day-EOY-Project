@@ -9,7 +9,6 @@ public class ImageRect  implements Comparable<ImageRect>{
 	final int PIXEL = Main.PIXEL;
 	Rectangle bounds;
 	ArrayList<ImageRect> children = new ArrayList<>();
-	ArrayList<ImageRect> other = new ArrayList<>();
 	public ImageRect(int x, int y, int w, int h){
 		this.x = x;
 		this.y = y;
@@ -18,6 +17,9 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public int getWidth(){
 		return bounds.width;
 	}
+	public int getHeight(){
+		return bounds.height;
+	}
 	public void setX(int x){
 		this.x = x;
 		bounds.x = x;
@@ -25,6 +27,13 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public void setY(int y){
 		this.y = y;
 		bounds.y = y;
+	}
+	public String getId() {
+		return id;
+	}
+	public ImageRect setId(String str){
+		id = str;
+		return this;
 	}
 	public void setPoint(int x, int y){
 		setX(x);
@@ -55,7 +64,8 @@ public class ImageRect  implements Comparable<ImageRect>{
 		if(text != null)
 			Main.drawStringW(g, x + this.x, y + this.y, h, text);
 		for(ImageRect iR : children){
-			iR.drawOff(g, x + this.x, y + this.y);
+			if(iR != null)
+				iR.drawOff(g, x + this.x, y + this.y);
 		}
 	}
 	public ImageRect setText(String t, int i){
@@ -112,6 +122,22 @@ public class ImageRect  implements Comparable<ImageRect>{
 		}
 		for(ImageRect iRc : getChildren()){
 			iRc.click(x - this.x, y - this.y);
+		}
+	}
+	public boolean contains(int x, int y){
+		if(bounds.contains(x, y)){
+			return true;
+		}
+		for(ImageRect iRc : getChildren()){
+			if(iRc.contains(x + this.x, y + this.y))
+				return true;
+		}
+		return false;
+	}
+	public void remove(int x, int y){
+		for(int i = children.size() - 1 ; i >= 0; i-- ){
+			if(children.get(i).contains(x, y))
+				children.remove(i);
 		}
 	}
 }
