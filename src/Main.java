@@ -24,7 +24,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	// level 1 - Game
 	// level 2 - Controls
 	// level 3 - Editor
-     static int xoff = 0, level = 0, arrX = 1, arrY = 1;
+     static int xoff = 0, level = 0, arrX = 1, arrY = 1, lastX, lastY;
      static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static HashMap<Character, BufferedImage> fontW = new HashMap<>();
@@ -38,7 +38,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	static ArrayList<ImageRect> stagecut;
 	static Clip sound;
 	static boolean forMute = false;
-	static ImageRect menu, controls, editor;
+	static ImageRect menu, controls, editor, cursor;
      public void paintComponent(Graphics g){
      	switch(level){
 			case 0: mainMenu(g); break;
@@ -234,6 +234,9 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      	g.setColor(Color.CYAN);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		editor.draw(g);
+		if(cursor != null) {
+			cursor.draw(g);
+		}
 	}
      public Main(String title){
           try{
@@ -357,7 +360,9 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 
 		//Initialize Editor
 		try {
-			editor = new ImageRect(0, 0, WIDTH, HEIGHT);
+			editor = new ImageRect(0, 0, WIDTH, HEIGHT){
+				ArrayList<ImageRect> stage = new ArrayList<>();
+			};
 			editor.addChild(new HoverImage(arrX, arrY, ImageIO.read(new File("res/menu/arrow.png"))) {
 				public void clickAction(int x, int y) {
 					Main.level = 0;
@@ -369,18 +374,22 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				Rectangle drag = new Rectangle(0, img.getHeight() / 2 - dragW / 2, 6, dragW);
 				boolean out = false;
 				public void clickAction(int x, int y){
-					System.out.println(x + " " + y);
 					if(drag.contains(x, y)){
 						if(out) {
 							setX(PixWIDTH - 6);
 						}
 						else {
-							setX(Main.PixWIDTH - img.getWidth());
+							setX(PixWIDTH - img.getWidth());
 						}
 						out = !out;
 					}
 				}
-			});
+			}.addChild(new ImageRect(10, 4, copy(ground)){
+				public void clickAction(int x, int y){
+
+					Main.setCursor("ground");
+				}
+				}));
 		}catch (IOException e){
 			e.printStackTrace();
 		}
@@ -468,7 +477,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 
      }
      public void keyPressed(KeyEvent e){
-     	if(pressed.contains((Integer) KeyEvent.VK_SEMICOLON) || pressed.contains((Integer) KeyEvent.VK_Q))
+     	if(pressed.contains(KeyEvent.VK_SEMICOLON) || pressed.contains(KeyEvent.VK_Q))
      		System.exit(0);
           pressed.add(e.getKeyCode());
           switch(level){
@@ -525,7 +534,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		// david's controls
 		if(david.isAlive()) {
 			if (pressed.contains(KeyEvent.VK_C))
-				david.setCrown(david.crown == null ? true : false);
+				david.setCrown(david.crown == null);
 			boolean isClose = close + david.runspeed < PixWIDTH;
 			if (pressed.contains(KeyEvent.VK_A) && (isClose || !daveInFront || diego.isDead())) {
 				int[] touch = touching(david, -david.runspeed);
@@ -637,6 +646,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	public void mouseClicked(MouseEvent e) {
      	int x = e.getX() / PIXEL;
      	int y = e.getY() / PIXEL;
+     	lastX = x;
+     	lastY = y;
      	if(level == 0) {
 			menu.click(x, y);
 		}
@@ -644,6 +655,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			controls.click(x, y);
 		}
 		else if(level == 3){
+			if(cursor != null){
+				editor.addChild(cursor);
+				cursor = null;
+			}
 			editor.click(x, y);
 		}
 	}
@@ -667,7 +682,21 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 		else if(level == 3){
 			editor.hover(x, y);
+			if(cursor != null)
+				cursor.setPoint(x, y);
 		}
+	}
+	public static ImageRect setCursor(String str){
+     	str = str.toLowerCase();
+     	if(str == null){
+     		cursor = null;
+		}
+		else if(str.equals("ground")){
+     		cursor = new ImageRect(lastX, lastY, ground){
+     			String id = "ground";
+			};
+		}
+		return cursor;
 	}
 	public BufferedImage white(BufferedImage img){
      	int black = 0xFF000000;

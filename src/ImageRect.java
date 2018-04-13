@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 public class ImageRect  implements Comparable<ImageRect>{
 	BufferedImage img;
-	String text;
+	String text, id;
 	int x, y, h;
 	final int PIXEL = Main.PIXEL;
 	Rectangle bounds;
 	ArrayList<ImageRect> children = new ArrayList<>();
+	ArrayList<ImageRect> other = new ArrayList<>();
 	public ImageRect(int x, int y, int w, int h){
 		this.x = x;
 		this.y = y;
@@ -21,8 +22,17 @@ public class ImageRect  implements Comparable<ImageRect>{
 		this.x = x;
 		bounds.x = x;
 	}
-	public boolean addChild(ImageRect iR){
-		return children.add(iR);
+	public void setY(int y){
+		this.y = y;
+		bounds.y = y;
+	}
+	public void setPoint(int x, int y){
+		setX(x);
+		setY(y);
+	}
+	public ImageRect addChild(ImageRect iR){
+		children.add(iR);
+		return this;
 	}
 	public ImageRect(int x, int y, BufferedImage img){
 		this.img = img;
@@ -101,7 +111,7 @@ public class ImageRect  implements Comparable<ImageRect>{
 			clickAction(x - bounds.x, y - bounds.y);
 		}
 		for(ImageRect iRc : getChildren()){
-			iRc.click(x, y);
+			iRc.click(x - this.x, y - this.y);
 		}
 	}
 }
