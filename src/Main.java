@@ -25,25 +25,30 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      static int xoff = 0, level = 0;
      static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
+     static HashMap<Character, BufferedImage> fontW = new HashMap<>();
      static Timer timer;
      static Player david, diego, jakob, richard;
      static HashMap<String, Player> players = new HashMap<>();
      static final Color pause = new Color(255, 0, 0, 127), mainBack = new Color(26, 26, 26);
-     static BufferedImage background, ground, topGround, speaker, mute;
+     static BufferedImage background, ground, topGround, speaker, mute, speakerW;
      static final Set<Integer> pressed = new HashSet<>();
      static ArrayList<ImageRect> stage = new ArrayList<>();
 	static ArrayList<ImageRect> stagecut;
 	static Clip sound;
 	static boolean forMute = false;
-	static ImageRect menu;
+	static ImageRect menu, controls, arrow;
      public void paintComponent(Graphics g){
      	switch(level){
 			case 0: mainMenu(g); break;
 			case 1: levelOne(g); break;
+			case 2: showControls(g); break;
 		}
 		if (sound != null) {
-			g.drawImage(speaker, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
-			if (!sound.isActive())
+     		if(level == 1)
+				g.drawImage(speaker, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
+			else
+				g.drawImage(speakerW, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
+     		if (!sound.isActive())
 				g.drawImage(mute, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
 			forMute = false;
 		}
@@ -214,30 +219,18 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		g.setColor(Color.CYAN);
 		g.fillRect( 0, 0, WIDTH, HEIGHT);
 	}
-     public Main(String title){
-     	//make a menu
-		menu = new ImageRect(0, 0, WIDTH, HEIGHT);
-		try {
-			menu.addChild(new ImageRect(7, 7, ImageIO.read(new File("res/menu/title.png"))));
-			menu.addChild(new HoverImage(14, 47, ImageIO.read(new File("res/menu/controls.png"))){
-				public void clickAction(){
-					Main.level = 2;
-				}
-			});
-			menu.addChild(new HoverImage(46, 29, ImageIO.read(new File("res/menu/start.png"))){
-				public void clickAction(){
-					Main.level = 1;
-				}
-			});
-			menu.addChild(new HoverImage(35, 65, ImageIO.read(new File("res/menu/editor.png"))){
-				public void clickAction(){
-					Main.level = 3;
-				}
-			});
-		} catch (IOException e){
-			e.printStackTrace();
-		}
+	public void showControls(Graphics g){
+     	g.setColor(mainBack);
+     	g.fillRect(0, 0, WIDTH, HEIGHT);
+     	int h = 10;
+		int wid = stringWidth("CONTROLS", h);
+		drawStringW(g, PixWIDTH / 2 - wid / 2, 3, h, "CONTROLS");
+		controls.draw(g);
+	}
+	public void paintEditor(Graphics g){
 
+	}
+     public Main(String title){
           try{
 			//play music
 			AudioInputStream inp = AudioSystem.getAudioInputStream(new File("res/audio/music.wav"));
@@ -248,6 +241,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			//load speaker icon
 			speaker = ImageIO.read(new File("res/speaker/speaker.png"));
 			mute = ImageIO.read(new File("res/speaker/mute.png"));
+			speakerW = white(copy(speaker));
 		} catch (IOException e) {
           	e.printStackTrace();
 		} catch (LineUnavailableException e){
@@ -330,14 +324,72 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
                System.exit(0);
           }
 
+		//make a menu
+		menu = new ImageRect(0, 0, WIDTH, HEIGHT);
+		try {
+			menu.addChild(new ImageRect(7, 7, ImageIO.read(new File("res/menu/title.png"))));
+			menu.addChild(new HoverImage(14, 47, ImageIO.read(new File("res/menu/controls.png"))){
+				public void clickAction(){
+					Main.level = 2;
+				}
+			});
+			menu.addChild(new HoverImage(46, 29, ImageIO.read(new File("res/menu/start.png"))){
+				public void clickAction(){
+					Main.level = 1;
+				}
+			});
+			menu.addChild(new HoverImage(35, 65, ImageIO.read(new File("res/menu/editor.png"))){
+				public void clickAction(){
+					Main.level = 3;
+				}
+			});
+			menu.addChild(new ImageRect(16, 65, jakob.faces(0)));
+			menu.addChild(new ImageRect(18, 31, david.faces(0)));
+			menu.addChild(new ImageRect(76, 47, diego.faces(0)));
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+
           //Initialize Font
           try {
-               for (int i = 'a'; i <= 'z'; i++)
-                    font.put((char) i, ImageIO.read(new File("res/font/"+(char) i + ".png")));
+               for (int i = 'a'; i <= 'z'; i++) {
+				font.put((char) i, ImageIO.read(new File("res/font/" + (char) i + ".png")));
+				fontW.put((char) i, white(copy(font.get((char) i))));
+               }
+               font.put('-', ImageIO.read(new File("res/font/dash.png")));
+               fontW.put('-', white(copy(font.get('-'))));
+               font.put('\'', ImageIO.read(new File("res/font/apos.png")));
+               fontW.put('\'', white(copy(font.get('\''))));
           } catch (IOException e){
                e.printStackTrace();
                System.exit(0);
           }
+
+          //Controls
+		try {
+			controls = new ImageRect(0, 0, WIDTH, HEIGHT);
+			controls.addChild(new HoverImage(1, 1, ImageIO.read(new File("res/menu/arrow.png"))){
+				public void clickAction(){
+					Main.level = 0;
+				}
+			});
+			ImageRect diegoControls = new ImageRect(10, 20, PixWIDTH - 10, PixHEIGHT / 2 - 16);
+			int h = 5;
+			int off = 10;
+			diegoControls.setText("- Diego's Controls", h);
+			diegoControls.addChild(new ImageRect(off, h + 1, diegoControls.getWidth() - off, h).setText("- Up Arrow - Jump", h));
+			diegoControls.addChild(new ImageRect(off, (h + 1) * 2, diegoControls.getWidth() - off, h).setText("- Left Arrow - Left", h));
+			diegoControls.addChild(new ImageRect(off, (h + 1) * 3, diegoControls.getWidth() - off, h).setText("- Right Arrow - Right", h));
+			controls.addChild(diegoControls);
+			ImageRect davidControls = new ImageRect(10, PixHEIGHT / 2, PixWIDTH - 10, PixHEIGHT / 2 - 16);
+			davidControls.setText("- David's Controls", 5);
+			davidControls.addChild(new ImageRect(off, h + 1, diegoControls.getWidth() - off, h).setText("- W - Jump", h));
+			davidControls.addChild(new ImageRect(off, (h + 1) * 2, diegoControls.getWidth() - off, h).setText("- A - Left", h));
+			davidControls.addChild(new ImageRect(off, (h + 1) * 3, diegoControls.getWidth() - off, h).setText("- D - Right", h));
+			controls.addChild(davidControls);
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 
           //make frame and set up
           frame = new JFrame(title);
@@ -465,24 +517,61 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      	//Create the Frame and Panel
           new Main("D-Day");
      }
-     public void drawString(Graphics g, int x, int y, int h, String str) {
+     //NO NEW LINES
+     public int stringWidth(String str, int h){
+     	int w = 0;
+     	BufferedImage img = font.get('a');
+     	for(int i = 0; i < str.length(); i++){
+     		if(str.charAt(i) == ' ')
+     			w += 3 * PIXEL;
+     		else
+     			w += h * img.getWidth() / img.getHeight() + 1;
+		}
+		return w;
+	}
+	public void drawString(Graphics g, int x, int y, int h, String str) {
+		str = str.toLowerCase();
+		int xi = x;
+		for(int i = 0; i<str.length(); i++){
+			char a = str.charAt(i);
+			if(font.containsKey(a)){
+				BufferedImage img = font.get(a);
+				int w = PIXEL * h * img.getWidth() / img.getHeight();
+				g.drawImage( img, x, y,  w, h * PIXEL, this);
+				x += w + PIXEL;
+				continue;
+			}
+			if( a == ' ' ) {
+				x += 3 * PIXEL;
+				continue;
+			}
+			if( a == 10){
+				y+= h * PIXEL + PIXEL;
+				x = xi;
+				continue;
+			}
+			System.out.println("Not a valid character - drawString()");
+			System.exit(0);
+		}
+	}
+     public static void drawStringW(Graphics g, int x, int y, int h, String str) {
           str = str.toLowerCase();
           int xi = x;
           for(int i = 0; i<str.length(); i++){
                char a = str.charAt(i);
-               if(font.containsKey(a)){
-                    BufferedImage img = font.get(a);
+               if(fontW.containsKey(a)){
+                    BufferedImage img = fontW.get(a);
                     int w = PIXEL * h * img.getWidth() / img.getHeight();
-                    g.drawImage( img, x, y,  w, h * PIXEL, this);
-                    x += w + PIXEL;
+                    g.drawImage(img, x * PIXEL, y * PIXEL,  w, h * PIXEL, null);
+                    x += w / PIXEL + 1;
                     continue;
                }
                if( a == ' ' ) {
-                    x += 3 * PIXEL;
+                    x += 3;
                     continue;
                }
                if( a == 10){
-                    y+= h * PIXEL + PIXEL;
+                    y+= h + 1;
                     x = xi;
                     continue;
                }
@@ -513,7 +602,15 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	public void mouseClicked(MouseEvent e) {
      	int x = e.getX() / PIXEL;
      	int y = e.getY() / PIXEL;
-		menu.click(x, y);
+     	if(level == 0) {
+			menu.click(x, y);
+		}
+		else  if(level == 2){
+			controls.click(x, y);
+		}
+		else if(level == 3){
+
+		}
 	}
 	public void mousePressed(MouseEvent e) {
 	}
@@ -527,6 +624,26 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	public void mouseMoved(MouseEvent e){
      	int x = e.getX() / PIXEL;
      	int y = e.getY() / PIXEL;
-		menu.hover(x, y);
+     	if(level == 0) {
+			menu.hover(x, y);
+		}
+		else if(level == 2){
+			controls.hover(x, y);
+		}
+		else if(level == 3){
+
+		}
+	}
+	public BufferedImage white(BufferedImage img){
+     	int black = 0xFF000000;
+     	int white = 0xFFFFFFFF;
+     	for(int r = 0; r < img.getHeight(); r ++){
+     		for(int c = 0; c < img.getWidth(); c++ ){
+     			if(img.getRGB(c, r) == black) {
+					img.setRGB(c, r, white);
+     			}
+			}
+		}
+		return img;
 	}
 }

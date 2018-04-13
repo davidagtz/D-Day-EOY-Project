@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class ImageRect  implements Comparable<ImageRect>{
 	BufferedImage img;
-	int x, y;
+	String text;
+	int x, y, h;
 	final int PIXEL = Main.PIXEL;
 	Rectangle bounds;
 	ArrayList<ImageRect> children = new ArrayList<>();
@@ -12,6 +13,9 @@ public class ImageRect  implements Comparable<ImageRect>{
 		this.x = x;
 		this.y = y;
 		bounds = new Rectangle(x, y, w, h);
+	}
+	public int getWidth(){
+		return bounds.width;
 	}
 	public boolean addChild(ImageRect iR){
 		return children.add(iR);
@@ -34,9 +38,16 @@ public class ImageRect  implements Comparable<ImageRect>{
 	protected void drawOff(Graphics g, int x, int y){
 		if(img != null)
 			g.drawImage(img, (x + this.x) * PIXEL, (y + this.y) * PIXEL, img.getWidth() * PIXEL, img.getHeight() * PIXEL, null);
+		if(text != null)
+			Main.drawStringW(g, x + this.x, y + this.y, h, text);
 		for(ImageRect iR : children){
 			iR.drawOff(g, x + this.x, y + this.y);
 		}
+	}
+	public ImageRect setText(String t, int i){
+		text = t;
+		h = i;
+		return this;
 	}
 	public void draw(Graphics g, int xoff){
 		drawOff(g, -xoff, 0);

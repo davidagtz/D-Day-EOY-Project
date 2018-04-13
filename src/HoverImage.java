@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 
 public class HoverImage extends ImageRect{
 	BufferedImage top, bottom;
-	boolean onTop = true;
+	boolean onTop = false;
 	public HoverImage(int x, int y, BufferedImage img){
 		super(x, y, img.getWidth(), img.getHeight() / 2);
 		top = img.getSubimage(0, 0, img.getWidth(), img.getHeight() / 2);
