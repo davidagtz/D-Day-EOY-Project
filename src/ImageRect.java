@@ -17,6 +17,10 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public int getWidth(){
 		return bounds.width;
 	}
+	public void setX(int x){
+		this.x = x;
+		bounds.x = x;
+	}
 	public boolean addChild(ImageRect iR){
 		return children.add(iR);
 	}
@@ -80,7 +84,7 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public int getX(){
 		return x;
 	}
-	public void clickAction(){}
+	public void clickAction(int x, int y){}
 	public void setImg(BufferedImage img){
 		this.img = img;
 	}
@@ -94,7 +98,7 @@ public class ImageRect  implements Comparable<ImageRect>{
 	}
 	public void click(int x, int y){
 		if(bounds.contains(x, y)){
-			clickAction();
+			clickAction(x - bounds.x, y - bounds.y);
 		}
 		for(ImageRect iRc : getChildren()){
 			iRc.click(x, y);

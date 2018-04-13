@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -22,7 +24,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	// level 1 - Game
 	// level 2 - Controls
 	// level 3 - Editor
-     static int xoff = 0, level = 0;
+     static int xoff = 0, level = 0, arrX = 1, arrY = 1;
      static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static HashMap<Character, BufferedImage> fontW = new HashMap<>();
@@ -36,15 +38,16 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	static ArrayList<ImageRect> stagecut;
 	static Clip sound;
 	static boolean forMute = false;
-	static ImageRect menu, controls, arrow;
+	static ImageRect menu, controls, editor;
      public void paintComponent(Graphics g){
      	switch(level){
 			case 0: mainMenu(g); break;
 			case 1: levelOne(g); break;
 			case 2: showControls(g); break;
+			case 3: paintEditor(g); break;
 		}
 		if (sound != null) {
-     		if(level == 1)
+     		if(level == 1 || level == 3)
 				g.drawImage(speaker, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
 			else
 				g.drawImage(speakerW, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
@@ -228,7 +231,9 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		controls.draw(g);
 	}
 	public void paintEditor(Graphics g){
-
+     	g.setColor(Color.CYAN);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		editor.draw(g);
 	}
      public Main(String title){
           try{
@@ -329,17 +334,17 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		try {
 			menu.addChild(new ImageRect(7, 7, ImageIO.read(new File("res/menu/title.png"))));
 			menu.addChild(new HoverImage(14, 47, ImageIO.read(new File("res/menu/controls.png"))){
-				public void clickAction(){
+				public void clickAction(int x, int y){
 					Main.level = 2;
 				}
 			});
 			menu.addChild(new HoverImage(46, 29, ImageIO.read(new File("res/menu/start.png"))){
-				public void clickAction(){
+				public void clickAction(int x, int y){
 					Main.level = 1;
 				}
 			});
 			menu.addChild(new HoverImage(35, 65, ImageIO.read(new File("res/menu/editor.png"))){
-				public void clickAction(){
+				public void clickAction(int x, int y){
 					Main.level = 3;
 				}
 			});
@@ -347,6 +352,36 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			menu.addChild(new ImageRect(18, 31, david.faces(0)));
 			menu.addChild(new ImageRect(76, 47, diego.faces(0)));
 		} catch (IOException e){
+			e.printStackTrace();
+		}
+
+		//Initialize Editor
+		try {
+			editor = new ImageRect(0, 0, WIDTH, HEIGHT);
+			editor.addChild(new HoverImage(arrX, arrY, ImageIO.read(new File("res/menu/arrow.png"))) {
+				public void clickAction(int x, int y) {
+					Main.level = 0;
+				}
+			});
+			BufferedImage img = ImageIO.read(new File("res/editor/drag.png"));
+			editor.addChild(new ImageRect(PixWIDTH - 6, 0, img){
+				int dragW = 20;
+				Rectangle drag = new Rectangle(0, img.getHeight() / 2 - dragW / 2, 6, dragW);
+				boolean out = false;
+				public void clickAction(int x, int y){
+					System.out.println(x + " " + y);
+					if(drag.contains(x, y)){
+						if(out) {
+							setX(PixWIDTH - 6);
+						}
+						else {
+							setX(Main.PixWIDTH - img.getWidth());
+						}
+						out = !out;
+					}
+				}
+			});
+		}catch (IOException e){
 			e.printStackTrace();
 		}
 
@@ -368,8 +403,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
           //Controls
 		try {
 			controls = new ImageRect(0, 0, WIDTH, HEIGHT);
-			controls.addChild(new HoverImage(1, 1, ImageIO.read(new File("res/menu/arrow.png"))){
-				public void clickAction(){
+			controls.addChild(new HoverImage(arrX, arrY, ImageIO.read(new File("res/menu/arrow.png"))){
+				public void clickAction(int x, int y){
 					Main.level = 0;
 				}
 			});
@@ -609,7 +644,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			controls.click(x, y);
 		}
 		else if(level == 3){
-
+			editor.click(x, y);
 		}
 	}
 	public void mousePressed(MouseEvent e) {
@@ -631,7 +666,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			controls.hover(x, y);
 		}
 		else if(level == 3){
-
+			editor.hover(x, y);
 		}
 	}
 	public BufferedImage white(BufferedImage img){
