@@ -101,6 +101,9 @@ public class ImageRect  implements Comparable<ImageRect>{
 			return this.y - r.y;
 		return this.x - r.x;
 	}
+	public int getY(){
+		return y;
+	}
 	public int getX(){
 		return x;
 	}
@@ -113,7 +116,7 @@ public class ImageRect  implements Comparable<ImageRect>{
 			((HoverImage)this).change(x, y);
 		}
 		for(ImageRect iRc : getChildren()){
-			iRc.hover(x, y);
+			iRc.hover(x - this.x, y - this.y);
 		}
 	}
 	public void click(int x, int y){
@@ -139,5 +142,14 @@ public class ImageRect  implements Comparable<ImageRect>{
 			if(children.get(i).contains(x, y))
 				children.remove(i);
 		}
+	}
+	public void remove(int x, int y, String id){
+		for(int i = children.size() - 1 ; i >= 0; i-- ){
+			if(children.get(i).contains(x, y) && children.get(i).getId() != null &&children.get(i).getId().equals(id))
+				children.remove(i);
+		}
+	}
+	public String toString() {
+		return x + " " + y;
 	}
 }

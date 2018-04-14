@@ -1,16 +1,14 @@
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import javax.imageio.ImageIO;
+import javax.sound.midi.SysexMessage;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.FileSystemNotFoundException;
 import java.security.Key;
 import java.util.*;
@@ -24,7 +22,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	// level 1 - Game
 	// level 2 - Controls
 	// level 3 - Editor
-     static int xoff = 0, level = 0, arrX = 1, arrY = 1, lastX, lastY;
+     static int xoff = 0, level = 0, arrX = 1, arrY = 1, editOffX = 0, lastX, lastY, lastXD, lastYD;
      static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static HashMap<Character, BufferedImage> fontW = new HashMap<>();
@@ -236,6 +234,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		editor.draw(g);
 		if(cursor != null) {
 			cursor.draw(g);
+			if(cursor.getId().equals("erase")){
+				g.setColor(Color.RED);
+				g.fillRect(lastXD * PIXEL, lastYD * PIXEL, PIXEL, PIXEL);
+			}
 		}
 	}
      public Main(String title){
@@ -267,7 +269,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			topGround = copy(ground);
 
 			//add blocks
-			BufferedReader in = new BufferedReader(new FileReader("res/levels/first.level"));
+			BufferedReader in = new BufferedReader(new FileReader("res/levels/second.level"));
 			for(int i = 0; in.ready(); i+=0){
 				StringTokenizer line = new StringTokenizer(in.readLine());
 				int x = 0;
@@ -396,6 +398,44 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 							Main.setCursor("erase");
 					}
 					}));
+			BufferedImage img2 = ImageIO.read(new File("res/editor/save.png"));
+			drag.addChild(new HoverImage(8, drag.getHeight() - img2.getHeight() / 2 - 2, img2){
+				public void clickAction(int x, int y) {
+					try {
+						PrintWriter out = new PrintWriter(new FileWriter("res/levels/second.level"));
+						ArrayList<ImageRect> stage2 = ((ArrayList<ImageRect>) editor.getChildren().clone());
+						stage2.sort(new Comparator<ImageRect>() {
+							public int compare(ImageRect r, ImageRect r2) {
+								if (r.y == r2.y)
+									return r.x - r2.x;
+								return r.y - r2.y;
+							}
+						});
+						ImageRect prev = stage2.get(0);
+						out.print(prev.getY());
+						for (int i = 0; i < stage2.size(); i++) {
+							ImageRect r = stage2.get(i);
+							if (r.id == null || !r.getId().equals("ground"))
+								continue;
+							if (prev != null && prev.getY() != r.y) {
+								out.println();
+								out.println(r.getY() - prev.getY());
+								out.print(r.getX() + " - ");
+								out.print(1 + " _ ");
+							} else {
+								out.print(r.getX() - prev.getX() + " - ");
+								out.print(1 + " _ ");
+							}
+							prev = stage2.get(i);
+						}
+						out.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (IndexOutOfBoundsException e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		}catch (IOException e){
 			e.printStackTrace();
 		}
@@ -488,6 +528,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
           pressed.add(e.getKeyCode());
           switch(level){
 			case 1 : keyLevelOne(e); break;
+			case 3 : keyEditor(e); break;
 		}
 		if(pressed.contains(KeyEvent.VK_M)){
 			if(sound.isRunning())
@@ -498,6 +539,14 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			repaint();
           }
      }
+     public void keyEditor(KeyEvent e){
+     	if (pressed.contains(KeyEvent.VK_E)) {
+     		setCursor("erase");
+		}
+		else if(pressed.contains(KeyEvent.VK_G)){
+     		setCursor("ground");
+		}
+	}
      public void keyLevelOne(KeyEvent e){
 		int close = Math.abs(diego.getXR() - david.getXR()) + diego.getWidth();
 		boolean daveInFront = diego.getX() - david.getX() > 0;
@@ -672,10 +721,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 									onTop = false;
 								}
 							}
-						});
+						}.setId("ground"));
 					}
 					else if(cursor.getId().equals("erase")){
-						editor.remove(x, y);
+						editor.remove(x, y, "ground");
 					}
 				} catch(IOException ep){
 					ep.printStackTrace();
@@ -697,6 +746,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	public void mouseMoved(MouseEvent e){
      	int x = e.getX() / PIXEL;
      	int y = e.getY() / PIXEL;
+     	lastXD = x;
+     	lastYD = y;
      	if(level == 0) {
 			menu.hover(x, y);
 		}
