@@ -98,10 +98,15 @@ public class Player {
      public void move(int dirx, int diry){
           r+=diry;
           c+=dirx;
-          if(getXR() < 0)
-          	c = (bodies.get(0).getWidth() / 2 - faces(0).getWidth() / 2) + 1;
+//          if(getXR() < 0)
+//          	c = (bodies.get(0).getWidth() / 2 - faces(0).getWidth() / 2) + 1;
 		change();
      }
+	public void moveNR(int dirx, int diry){
+		r+=diry;
+		c+=dirx;
+		change();
+	}
      public void setXR(int c){
      	this.c = c + (bodies.get(0).getWidth() / 2 - faces(0).getWidth() / 2);
 	}

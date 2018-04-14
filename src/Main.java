@@ -22,7 +22,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	// level 1 - Game
 	// level 2 - Controls
 	// level 3 - Editor
-     static int xoff = 0, level = 0, arrX = 1, arrY = 1, editOffX = 0, lastX, lastY, lastXD, lastYD;
+     static int xoff = 0, level = 0, arrX = 1, arrY = 1, editOffX = 0, editOffXmax = 0, stageLength = 20, lastX, lastY, lastXD, lastYD;
      static final double gravity = .9;
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static HashMap<Character, BufferedImage> fontW = new HashMap<>();
@@ -78,7 +78,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 
 		if(timer.isRunning()) {
 			richard.setRunning(1);
-			richard.move(2, 0);
+			richard.moveNR(2, 0);
 		}
 
 		for (ImageRect img : stagecut)
@@ -231,6 +231,11 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	public void paintEditor(Graphics g){
      	g.setColor(Color.CYAN);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.setColor(Color.DARK_GRAY);
+		stageLength = Math.max(5 * editOffXmax / PixWIDTH + 1, stageLength);
+		g.fillRect((PixWIDTH / 2 - stageLength / 2) * PIXEL, 3 * PIXEL,  stageLength * PIXEL, PIXEL);
+		g.setColor(Color.red);
+		g.fillRect((PixWIDTH / 2 - stageLength / 2  + 5 * editOffX / PixWIDTH) * PIXEL, 3 * PIXEL, PIXEL, PIXEL );
 		editor.draw(g);
 		if(cursor != null) {
 			cursor.draw(g);
@@ -247,6 +252,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			sound = AudioSystem.getClip();
 			sound.open(inp);
 			sound.loop(Clip.LOOP_CONTINUOUSLY);
+			sound.stop();
 
 			//load speaker icon
 			speaker = ImageIO.read(new File("res/speaker/speaker.png"));
@@ -278,12 +284,15 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 					int amount = Integer.parseInt(line.nextToken());
 					if(line.hasMoreTokens()) {
 						String mod = line.nextToken();
-						if (mod.matches("_\\+?")) {
+						if (mod.matches("_[\\^\\+]*")) {
 							for (int j = 0; j < amount; j++) {
 								stage.add(new ImageRect(x, i, copy(ground)));
-								x += ground.getWidth();
+								if(!mod.contains("+"))
+									x += 1;
+								else
+									x += ground.getWidth();
 							}
-							if (mod.endsWith("+"))
+							if (mod.contains("^"))
 								addy = Math.max(addy, ground.getHeight());
 						}
 						if(mod.matches("-\\+?")){
@@ -321,7 +330,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			players.put("diego", new Player(ImageIO.read(new File("res/faces/diego.png"))));
 			players.put("jakob", new Player(ImageIO.read(new File("res/faces/jakob.png"))));
 			players.put("richard", new Player(ImageIO.read(new File("res/faces/richard.png"))));
-               p("richard").move(8 * 5, 0);
+               p("richard").moveNR( - 40 * PIXEL, 0);
 			p("david").move( 5, 10);
 			p("david").setCrown(true);
 			p("diego").move(5, 50);
@@ -363,7 +372,20 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		//Initialize Editor
 		try {
 			editor = new ImageRect(0, 0, WIDTH, HEIGHT){
-				ArrayList<ImageRect> stage = new ArrayList<>();
+				protected void drawOff(Graphics g, int x, int y){
+					if(img != null)
+						g.drawImage(img, (x + this.x) * PIXEL, (y + this.y) * PIXEL, img.getWidth() * PIXEL, img.getHeight() * PIXEL, null);
+					if(text != null)
+						Main.drawStringW(g, x + this.x, y + this.y, h, text);
+					for(ImageRect iR : children){
+						if(iR != null) {
+							if(iR.getId() != null && iR.getId().equals("ground"))
+								iR.drawOff(g, x + this.x - editOffX, y + this.y);
+							else
+								iR.drawOff(g, x + this.x, y + this.y);
+						}
+					}
+				}
 			};
 			editor.addChild(new HoverImage(arrX, arrY, ImageIO.read(new File("res/menu/arrow.png"))) {
 				public void clickAction(int x, int y) {
@@ -411,19 +433,27 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 								return r.y - r2.y;
 							}
 						});
-						ImageRect prev = stage2.get(0);
-						out.print(prev.getY());
+						ImageRect prev = null;
+						boolean hasSeenGround = false;
 						for (int i = 0; i < stage2.size(); i++) {
 							ImageRect r = stage2.get(i);
-							if (r.id == null || !r.getId().equals("ground"))
+							if (r.id == null || !r.getId().equals("ground")) {
 								continue;
-							if (prev != null && prev.getY() != r.y) {
+							}
+							if(!hasSeenGround) {
+								out.println(r.getY());
+								out.print("-40 -+ 40 _+ ");
+								out.print(r.getX() + " - ");
+								out.print(1 + " _ ");
+								hasSeenGround = true;
+							}
+							else if (prev != null && prev.getY() != r.y) {
 								out.println();
-								out.println(r.getY() - prev.getY());
+								out.println(r.getY() - prev.getY() - 1);
 								out.print(r.getX() + " - ");
 								out.print(1 + " _ ");
 							} else {
-								out.print(r.getX() - prev.getX() + " - ");
+								out.print(r.getX() - prev.getX() - 1 + " - ");
 								out.print(1 + " _ ");
 							}
 							prev = stage2.get(i);
@@ -546,6 +576,13 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		else if(pressed.contains(KeyEvent.VK_G)){
      		setCursor("ground");
 		}
+		if(pressed.contains(KeyEvent.VK_RIGHT)) {
+			editOffX += 1;
+			editOffXmax = Math.max(editOffX, editOffXmax);
+     	}
+     	if(pressed.contains(KeyEvent.VK_LEFT) && editOffX > 0)
+     		editOffX -= 1;
+     	editor.hover(lastXD, lastYD);
 	}
      public void keyLevelOne(KeyEvent e){
 		int close = Math.abs(diego.getXR() - david.getXR()) + diego.getWidth();
@@ -713,18 +750,18 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			if(cursor != null){
 				try {
 					if(cursor.getId().equals("ground")) {
-						editor.addChild(new HoverImage(cursor, ImageIO.read(new File("res/editor/groundRed.png"))) {
+						editor.addChild(0, new HoverImage(cursor, ImageIO.read(new File("res/editor/groundRed.png"))) {
 							public void change(int x, int y) {
-								if (bounds.contains(x, y) && cursor != null && Main.cursor.getId().equals("erase")) {
+								if (bounds.contains(x + editOffX, y) && cursor != null && Main.cursor.getId().equals("erase")) {
 									onTop = true;
 								} else {
 									onTop = false;
 								}
 							}
-						}.setId("ground"));
+						}.setId("ground").setX(editOffX + cursor.getX()));
 					}
 					else if(cursor.getId().equals("erase")){
-						editor.remove(x, y, "ground");
+						editor.remove(x + editOffX, y, "ground");
 					}
 				} catch(IOException ep){
 					ep.printStackTrace();
@@ -766,7 +803,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      		cursor = null;
 		}
 		else if(str.equals("ground")){
-     		cursor = new ImageRect(lastX, lastY, ground).setId("ground");
+     		cursor = new ImageRect(lastXD, lastYD, ground).setId("ground");
 		}
 		else if(str.equals("erase")){
      		cursor = new ImageRect(0,0,0,0).setId("erase");

@@ -20,13 +20,15 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public int getHeight(){
 		return bounds.height;
 	}
-	public void setX(int x){
+	public ImageRect setX(int x){
 		this.x = x;
 		bounds.x = x;
+		return this;
 	}
-	public void setY(int y){
+	public ImageRect setY(int y){
 		this.y = y;
 		bounds.y = y;
+		return this;
 	}
 	public String getId() {
 		return id;
@@ -35,12 +37,17 @@ public class ImageRect  implements Comparable<ImageRect>{
 		id = str;
 		return this;
 	}
-	public void setPoint(int x, int y){
+	public ImageRect setPoint(int x, int y){
 		setX(x);
 		setY(y);
+		return this;
 	}
 	public ImageRect addChild(ImageRect iR){
 		children.add(iR);
+		return this;
+	}
+	public ImageRect addChild(int i, ImageRect iR){
+		children.add(i, iR);
 		return this;
 	}
 	public ImageRect(int x, int y, BufferedImage img){
@@ -85,16 +92,6 @@ public class ImageRect  implements Comparable<ImageRect>{
 	}
 	public boolean inside(int x, int y){
 		return bounds.contains(x, y);
-	}
-	public boolean insidez(int x, int y){
-		return bounds.contains(x, y) && y != bounds.y;
-	}
-	public boolean insidez(int x, int range, int y){
-		boolean f = false;
-		for(int i = x; i < x + range; i++)
-			if(bounds.contains(i, y) && y != bounds.y)
-				f = true;
-		return f;
 	}
 	public int compareTo(ImageRect r){
 		if(r.x == this.x)
