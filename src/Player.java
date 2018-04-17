@@ -69,10 +69,13 @@ public class Player {
      		crown = null;
 	}
      public Rectangle getBounds(){
-		return new Rectangle(c + faces(0).getWidth()/2 - bodies.get(0).getWidth()/2, r, bodies.get(0).getWidth(), faces(0).getHeight() - 2 + bodies.get(0).getHeight());
+		return new Rectangle(getXR(), getY(), getWidth(), getHeight());
 	}
 	public int getWidth(){
      	return bodies.get(0).getWidth();
+	}
+	public int getHeight(){
+     	return faces(0).getHeight() - 2 + bodies.get(0).getHeight();
 	}
 	public int getXR(){
 		return c + faces(0).getWidth()/2 - bodies.get(0).getWidth()/2;
@@ -188,5 +191,12 @@ public class Player {
 	}
 	public void takeLife(int i){
      	lives -= i;
+	}
+	public boolean intersectsArray(ArrayList<ImageRect> arr){
+     	for(ImageRect iR : arr){
+     		if(getBounds().intersects(iR.getBounds()))
+     			return true;
+		}
+		return false;
 	}
 }

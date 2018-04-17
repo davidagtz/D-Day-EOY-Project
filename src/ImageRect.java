@@ -30,6 +30,9 @@ public class ImageRect  implements Comparable<ImageRect>{
 		bounds.y = y;
 		return this;
 	}
+	public BufferedImage getImg() {
+		return img;
+	}
 	public String getId() {
 		return id;
 	}
@@ -120,8 +123,8 @@ public class ImageRect  implements Comparable<ImageRect>{
 		if(bounds.contains(x, y)){
 			clickAction(x - bounds.x, y - bounds.y);
 		}
-		for(ImageRect iRc : getChildren()){
-			iRc.click(x - this.x, y - this.y);
+		for(int i = 0; i < getChildren().size(); i++){
+			getChildren().get(i).click(x - this.x, y - this.y);
 		}
 	}
 	public boolean contains(int x, int y){
@@ -140,9 +143,18 @@ public class ImageRect  implements Comparable<ImageRect>{
 				children.remove(i);
 		}
 	}
+	public ArrayList<ImageRect> getById(String id){
+		ArrayList<ImageRect> newOne = new ArrayList<>();
+		for(int i = 0; i < children.size(); i++){
+			if(getChildren().get(i).getId().matches(id)){
+				newOne.add(getChildren().get(i));
+			}
+		}
+		return newOne;
+	}
 	public void remove(int x, int y, String id){
 		for(int i = children.size() - 1 ; i >= 0; i-- ){
-			if(children.get(i).contains(x, y) && children.get(i).getId() != null &&children.get(i).getId().equals(id))
+			if(children.get(i).contains(x, y) && children.get(i).getId() != null && children.get(i).getId().matches(id))
 				children.remove(i);
 		}
 	}

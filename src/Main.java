@@ -18,25 +18,44 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      public static long serialVersionUID = 0L;
      static JFrame frame;
      static final int WIDTH = 798, HEIGHT = 600, PIXEL = 6, PixHEIGHT = HEIGHT / PIXEL, PixWIDTH = WIDTH / PIXEL, sideAmount = 1;
-     // level 0 - Main Menu
+	static Timer timer;
+
+	//MENU
+	static Color mainBack = new Color(26, 26, 26);
+
+
+	// LEVEL ONE
+	// level 0 - Main Menu
 	// level 1 - Game
 	// level 2 - Controls
 	// level 3 - Editor
-     static int xoff = 0, level = 0, arrX = 1, arrY = 1, editOffX = 0, editOffXmax = 0, stageLength = 20, lastX, lastY, lastXD, lastYD;
-     static final double gravity = .9;
+	static int xoff = 0, level = 0;
+	static final double gravity = .9;
+	static Player david, diego, jakob, richard;
+	static ArrayList<ImageRect> stage = new ArrayList<>();
+	static ArrayList<ImageRect> stagecut;
+	// 1 - won
+	// 0 - playing
+	// -1 - lost
+	static int winlose = 0;
+	static Color won = new Color(0, 255, 0, 127);
+
+	// EDITOR
+	static int arrX = 1, arrY = 1, editOffX = 0, editOffXmax = 0, stageLength = 20, lastX, lastY, lastXD, lastYD;
+
+	// MISC
      static HashMap<Character, BufferedImage> font = new HashMap<>();
      static HashMap<Character, BufferedImage> fontW = new HashMap<>();
-     static Timer timer;
-     static Player david, diego, jakob, richard;
      static HashMap<String, Player> players = new HashMap<>();
-     static final Color pause = new Color(255, 0, 0, 127), mainBack = new Color(26, 26, 26);
-     static BufferedImage background, ground, topGround, speaker, mute, speakerW;
-     static final Set<Integer> pressed = new HashSet<>();
-     static ArrayList<ImageRect> stage = new ArrayList<>();
-	static ArrayList<ImageRect> stagecut;
+     static final Color pause = new Color(255, 0, 0, 127);
+     static BufferedImage background, ground, topGround, speaker, mute, speakerW, WIN;
 	static Clip sound;
 	static boolean forMute = false;
 	static ImageRect menu, controls, editor, cursor;
+
+	// KEY LISTENER
+     static final Set<Integer> pressed = new HashSet<>();
+
      public void paintComponent(Graphics g){
      	switch(level){
 			case 0: mainMenu(g); break;
@@ -67,13 +86,38 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		if (david.isDead())
 			xoff = diego.getXR() - 1;
 
+		if(winlose > 0){
+			if(winlose == 1){
+				g.setColor(won);
+				g.fillRect(0, 0, WIDTH, HEIGHT);
+				drawStringW(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU WIN");
+				winlose++;
+			}
+			return;
+		} else if(winlose < 0){
+			if(winlose == -1) {
+				winlose--;
+			}
+			else if(winlose == -2){
+				g.setColor(pause);
+				g.fillRect(0, 0, WIDTH, HEIGHT);
+				drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU LOSE");
+				winlose--;
+				return;
+			}
+			else if(winlose == -3){
+				return;
+			}
+		}
+
 		stagecut = get(stage, xoff, xoff + WIDTH / PIXEL);
 		paintBackground(g, xoff);
 		for (Player p : players.values()) {
 			if(timer.isRunning())
 				gravity(p);
-			if(p.isAlive())
+			if(p.isAlive()) {
 				p.draw(g, xoff);
+			}
 		}
 
 		if(timer.isRunning()) {
@@ -81,8 +125,16 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			richard.moveNR(2, 0);
 		}
 
-		for (ImageRect img : stagecut)
+		for (ImageRect img : stagecut) {
 			img.draw(g, xoff);
+		}
+
+		if(david.isAlive() && david.intersectsArray(getById(stagecut, "flag"))){
+			winlose = 1;
+		}
+		if(diego.isAlive() && diego.intersectsArray(getById(stagecut, "flag"))){
+			winlose = 1;
+		}
 
 		david.drawLives(g, 1, 1);
 		diego.drawLives(g, 1, david.getHeart().getHeight() + 2);
@@ -98,11 +150,18 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "PAUSED");
 		}
 
-		if(david.isDead() && diego.isDead()){
-			g.setColor(pause);
-			g.fillRect(0, 0, WIDTH, HEIGHT);
-			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU LOST");
+		if(winlose == 0 && david.isDead() && diego.isDead()){
+			winlose = -1;
 		}
+	}
+	public ArrayList<ImageRect> getById(ArrayList<ImageRect> children, String id){
+		ArrayList<ImageRect> newOne = new ArrayList<>();
+		for(int i = 0; i < children.size(); i++){
+			if(children.get(i).getId().matches(id)){
+				newOne.add(children.get(i));
+			}
+		}
+		return newOne;
 	}
 	public ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
      	ArrayList<ImageRect> newL = new ArrayList<>();
@@ -118,26 +177,38 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		boolean inter = false;
 		ArrayList<ImageRect> partStage = get(stage, p.getXR(), p.getXR() + p.getWidth());
 		for(ImageRect img : partStage) {
+			if(img.getId().matches("flag"))
+				continue;
+
 			Rectangle tr = (Rectangle) p.getBounds().clone();
 			Rectangle ir = img.getBounds();
-			if(tr.y == ir.height + ir.y) {
-				p.setVely(-p.getVely());
-				p.setVely(0);
+			if(p.getVely() < 0){
+				if(tr.y <= ir.height + ir.y && tr.intersects(ir)){
+					p.setVely(0);
+					p.setY(ir.height + ir.y);
+				}
 			}
-			else if(ir.intersects(tr)){
-				p.setY(ir.y - p.getBounds().height);
-				p.setVely(0);
-				inter = true;
+			else{
+				if(tr.intersects(ir)){
+					p.setY(ir.y - p.getBounds().height);
+					p.setVely(0);
+					inter = true;
+				}
 			}
 			tr.y += p.getVely();
-			if(tr.y == ir.height + ir.y) {
-				p.setVely(-p.getVely());
-				p.setY(ir.height + ir.y);
+			double vy = p.getVely();
+			if(p.getVely() <= 0){
+				if(tr.y <= ir.height + ir.y && tr.intersects(ir)){
+					p.setVely(-p.getVely());
+					p.setY(ir.height + ir.y);
+				}
 			}
-			else if(ir.intersects(tr)){
-				p.setY(ir.y - p.getBounds().height);
-				p.setVely(0);
-				inter = true;
+			if(vy >= 0){
+				if(tr.intersects(ir)){
+					p.setY(ir.y - p.getBounds().height);
+					p.setVely(0);
+					inter = true;
+				}
 			}
 		}
 		return inter;
@@ -164,7 +235,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		tr.x += vel;
 		for(ImageRect img : stage) {
 			Rectangle r = img.getBounds();
-			if(r.intersects(tr)) {
+			if(r.intersects(tr) && !img.getId().matches("flag")) {
 				inter[0] = 1;
 				if(vel < 0)
 					inter[1] = r.x + r.width - p.getXR();
@@ -245,6 +316,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			}
 		}
 	}
+
+	//CONSTRUCTOR
      public Main(String title){
           try{
 			//play music
@@ -273,52 +346,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
                //get ground
 			ground = ImageIO.read(new File("res/ground.png"));
 			topGround = copy(ground);
+			WIN = ImageIO.read(new File("res/editor/flag.png"));
 
 			//add blocks
-			BufferedReader in = new BufferedReader(new FileReader("res/levels/second.level"));
-			for(int i = 0; in.ready(); i+=0){
-				StringTokenizer line = new StringTokenizer(in.readLine());
-				int x = 0;
-				int addy = 1;
-				while (line.hasMoreTokens()){
-					int amount = Integer.parseInt(line.nextToken());
-					if(line.hasMoreTokens()) {
-						String mod = line.nextToken();
-						if (mod.matches("_[\\^\\+]*")) {
-							for (int j = 0; j < amount; j++) {
-								stage.add(new ImageRect(x, i, copy(ground)));
-								if(!mod.contains("+"))
-									x += 1;
-								else
-									x += ground.getWidth();
-							}
-							if (mod.contains("^"))
-								addy = Math.max(addy, ground.getHeight());
-						}
-						if(mod.matches("-\\+?")){
-							if(!mod.matches("-\\+"))
-								x += amount;
-							else
-								x += amount * ground.getWidth();
-						}
-					} else {
-						addy = amount;
-					}
-				}
-				i += addy;
-			}
-
-			//sort ground by x
-			Collections.sort(stage);
-
-			//draw top layer
-			for(int i = 0; i < topGround.getWidth(); i++)
-				topGround.setRGB(i, 0, topGround.getRGB(0,0));
-			if(stage.size() > 0)
-				stage.get(0).setImg(copy(topGround));
-			for(int i = 1; i < stage.size(); i++)
-				if(stage.get(i - 1).getX() != stage.get(i).getX())
-					stage.get(i).setImg(copy(topGround));
+			parse("second.level");
 
           } catch(IOException e){
                e.printStackTrace();
@@ -379,7 +410,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 						Main.drawStringW(g, x + this.x, y + this.y, h, text);
 					for(ImageRect iR : children){
 						if(iR != null) {
-							if(iR.getId() != null && iR.getId().equals("ground"))
+							if(iR.getId() != null && iR.getId().matches("ground|flag"))
 								iR.drawOff(g, x + this.x - editOffX, y + this.y);
 							else
 								iR.drawOff(g, x + this.x, y + this.y);
@@ -387,9 +418,22 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 					}
 				}
 			};
-			editor.addChild(new HoverImage(arrX, arrY, ImageIO.read(new File("res/menu/arrow.png"))) {
+			BufferedImage arr = ImageIO.read(new File("res/menu/arrow.png"));
+			editor.addChild(new HoverImage(arrX, arrY, arr) {
 				public void clickAction(int x, int y) {
 					Main.level = 0;
+				}
+			});
+			editor.addChild(new HoverImage(arrX + arr.getWidth() + 1, arrY, ImageIO.read(new File("res/editor/darrow.png"))) {
+				public void clickAction(int x, int y) {
+					try {
+						if(cursor != null)
+							editor.getChildren().remove(0);
+						save("second.level");
+						parse("second.level");
+					} catch(IOException e){
+						e.printStackTrace();
+					}
 				}
 			});
 			BufferedImage img = ImageIO.read(new File("res/editor/drag.png"));
@@ -398,6 +442,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				Rectangle drag = new Rectangle(0, img.getHeight() / 2 - dragW / 2, 6, dragW);
 				boolean out = false;
 				public void clickAction(int x, int y){
+					if(cursor != null)
+						editor.getChildren().remove(0);
 					if(drag.contains(x, y)){
 						if(out) {
 							setX(PixWIDTH - 6);
@@ -409,61 +455,30 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 					}
 				}
 			};
-			editor.addChild(drag.addChild(new ImageRect(10, 4, copy(ground)){
+			int offset = 10;
+			int yff = 4;
+			editor.addChild(drag.addChild(new ImageRect(offset, yff, copy(ground)){
 				public void clickAction(int x, int y){
-					if(Main.cursor == null)
-						Main.setCursor("ground");
+					setCursor("ground");
 				}
-				}).addChild(new ImageRect(10, 4 + ground.getHeight() + 2, copy(mute)){
-					public void clickAction(int x, int y){
-						if(Main.cursor == null)
-							Main.setCursor("erase");
-					}
-					}));
+			}
+			));
+			yff += ground.getWidth();
+			drag.addChild(new ImageRect(offset, yff + 2, copy(mute)){
+				public void clickAction(int x, int y){
+					setCursor("erase");
+				}
+			});
+			yff += 2 + mute.getHeight();
+			drag.addChild(new ImageRect(offset, yff + 2, copy(WIN)){
+				public void clickAction(int x, int y){
+					setCursor("flag");
+				}
+			});
 			BufferedImage img2 = ImageIO.read(new File("res/editor/save.png"));
 			drag.addChild(new HoverImage(8, drag.getHeight() - img2.getHeight() / 2 - 2, img2){
 				public void clickAction(int x, int y) {
-					try {
-						PrintWriter out = new PrintWriter(new FileWriter("res/levels/second.level"));
-						ArrayList<ImageRect> stage2 = ((ArrayList<ImageRect>) editor.getChildren().clone());
-						stage2.sort(new Comparator<ImageRect>() {
-							public int compare(ImageRect r, ImageRect r2) {
-								if (r.y == r2.y)
-									return r.x - r2.x;
-								return r.y - r2.y;
-							}
-						});
-						ImageRect prev = null;
-						boolean hasSeenGround = false;
-						for (int i = 0; i < stage2.size(); i++) {
-							ImageRect r = stage2.get(i);
-							if (r.id == null || !r.getId().equals("ground")) {
-								continue;
-							}
-							if(!hasSeenGround) {
-								out.println(r.getY());
-								out.print("-40 -+ 40 _+ ");
-								out.print(r.getX() + " - ");
-								out.print(1 + " _ ");
-								hasSeenGround = true;
-							}
-							else if (prev != null && prev.getY() != r.y) {
-								out.println();
-								out.println(r.getY() - prev.getY() - 1);
-								out.print(r.getX() + " - ");
-								out.print(1 + " _ ");
-							} else {
-								out.print(r.getX() - prev.getX() - 1 + " - ");
-								out.print(1 + " _ ");
-							}
-							prev = stage2.get(i);
-						}
-						out.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (IndexOutOfBoundsException e) {
-						e.printStackTrace();
-					}
+					save("second.level");
 				}
 			});
 		}catch (IOException e){
@@ -534,9 +549,121 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
           timer.start();
 
      }
+
+     //FOR LEVEL PARSING
+     public void save(String name){
+		try {
+			PrintWriter out = new PrintWriter(new FileWriter("res/levels/"+name));
+			ArrayList<ImageRect> stage2 = ((ArrayList<ImageRect>) editor.getChildren().clone());
+			stage2.sort(new Comparator<ImageRect>() {
+				public int compare(ImageRect r, ImageRect r2) {
+					if (r.y == r2.y)
+						return r.x - r2.x;
+					return r.y - r2.y;
+				}
+			});
+			ImageRect prev = null;
+			boolean hasSeenGround = false;
+			for (int i = 0; i < stage2.size(); i++) {
+				ImageRect r = stage2.get(i);
+				if (r.id == null || !r.getId().matches("ground|flag")) {
+					continue;
+				}
+				String f = r.getId();
+				switch(f){
+					case "ground" : f = "_"; break;
+					case "flag" : f = "f"; break;
+				}
+				if(!hasSeenGround) {
+					out.println(r.getY());
+					out.print("-40 -+ 40 _+ ");
+					out.print(r.getX() + " - ");
+					out.print(1 + " " + f + " ");
+					hasSeenGround = true;
+				}
+				else if (prev != null && prev.getY() != r.y) {
+					out.println();
+					out.println(r.getY() - prev.getY() - 1);
+					out.print(r.getX() + " - ");
+					out.print(1 + " " + f + " ");
+				} else {
+					out.print(r.getX() - prev.getX() - 1 + " - ");
+					out.print(1 + " " + f + " ");
+				}
+				prev = stage2.get(i);
+			}
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+		}
+	}
+     public void parse(String name) throws IOException{
+		BufferedReader in = new BufferedReader(new FileReader("res/levels/"+name));
+		if(stagecut != null)
+			stagecut.clear();
+		stage.clear();
+		for(int i = 0; in.ready(); i+=0){
+			StringTokenizer line = new StringTokenizer(in.readLine());
+			int x = 0;
+			int addy = 1;
+			while (line.hasMoreTokens()){
+				int amount = Integer.parseInt(line.nextToken());
+				if(line.hasMoreTokens()) {
+					String mod = line.nextToken();
+					if (mod.matches("_[\\^\\+]*")) {
+						for (int j = 0; j < amount; j++) {
+							stage.add(new ImageRect(x, i, copy(ground)).setId("ground"));
+							if(!mod.contains("+"))
+								x += 1;
+							else
+								x += ground.getWidth();
+						}
+						if (mod.contains("^"))
+							addy = Math.max(addy, ground.getHeight());
+					}
+					else if(mod.matches("-\\+?")){
+						if(!mod.matches("-\\+"))
+							x += amount;
+						else
+							x += amount * ground.getWidth();
+					}
+					else if(mod.matches("f[\\^\\+]*")){
+						stage.add(new ImageRect(x, i, copy(WIN)).setId("flag"));
+						if(mod.contains("+"))
+							x += WIN.getWidth();
+						if(mod.contains("^"))
+							addy = Math.max(addy, WIN.getHeight());
+					}
+				} else {
+					addy = amount;
+				}
+			}
+			i += addy;
+		}
+
+		//sort ground by x
+		Collections.sort(stage);
+
+		//draw top layer
+		for(int i = 0; i < topGround.getWidth(); i++)
+			topGround.setRGB(i, 0, topGround.getRGB(0,0));
+		if(stage.size() > 0)
+			stage.get(0).setImg(copy(topGround));
+		for(int i = 1; i < stage.size(); i++)
+			if(stage.get(i - 1).getX() != stage.get(i).getX())
+				stage.get(i).setImg(copy(topGround));
+
+		in.close();
+	}
+
+	//USELESS RN
      public Player p(String p){
      	return players.get(p);
 	}
+
+	//KEY METHODS
      public void keyReleased(KeyEvent e){
           if(pressed.remove(e.getKeyCode())){
                int c = e.getKeyCode();
@@ -576,6 +703,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		else if(pressed.contains(KeyEvent.VK_G)){
      		setCursor("ground");
 		}
+		else if(pressed.contains(KeyEvent.VK_F))
+			setCursor("flag");
 		if(pressed.contains(KeyEvent.VK_RIGHT)) {
 			editOffX += 1;
 			editOffXmax = Math.max(editOffX, editOffXmax);
@@ -649,10 +778,14 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			}
 		}
 	}
+
+	//MAIN
      public static void main(String[] a){
      	//Create the Frame and Panel
           new Main("D-Day");
      }
+
+     //GRAPHIC STRING METHODS
      //NO NEW LINES
      public int stringWidth(String str, int h){
      	int w = 0;
@@ -691,50 +824,32 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 	}
      public static void drawStringW(Graphics g, int x, int y, int h, String str) {
-          str = str.toLowerCase();
-          int xi = x;
-          for(int i = 0; i<str.length(); i++){
-               char a = str.charAt(i);
-               if(fontW.containsKey(a)){
-                    BufferedImage img = fontW.get(a);
-                    int w = PIXEL * h * img.getWidth() / img.getHeight();
-                    g.drawImage(img, x * PIXEL, y * PIXEL,  w, h * PIXEL, null);
-                    x += w / PIXEL + 1;
-                    continue;
-               }
-               if( a == ' ' ) {
-                    x += 3;
-                    continue;
-               }
-               if( a == 10){
-                    y+= h + 1;
-                    x = xi;
-                    continue;
-               }
-               System.out.println("Not a valid character - drawString()");
-               System.exit(0);
-          }
+		str = str.toLowerCase();
+		int xi = x;
+		for(int i = 0; i<str.length(); i++){
+			char a = str.charAt(i);
+			if(fontW.containsKey(a)){
+				BufferedImage img = fontW.get(a);
+				int w = PIXEL * h * img.getWidth() / img.getHeight();
+				g.drawImage( img, x, y,  w, h * PIXEL, null);
+				x += w + PIXEL;
+				continue;
+			}
+			if( a == ' ' ) {
+				x += 3 * PIXEL;
+				continue;
+			}
+			if( a == 10){
+				y+= h * PIXEL + PIXEL;
+				x = xi;
+				continue;
+			}
+			System.out.println("Not a valid character - drawString()");
+			System.exit(0);
+		}
      }
-     public void actionPerformed(ActionEvent e){
-          repaint();
-     }
-     public static  BufferedImage reverse(BufferedImage img){
-          BufferedImage rev = copy(img);
-          for(int r = 0; r < img.getHeight(); r++){
-               for(int c = 0; c < img.getWidth(); c++){
-                    int col = img.getRGB(img.getWidth()-1-c, r);
-                    rev.setRGB(c, r, col);
-               }
-          }
-          return rev;
-     }
-     public static BufferedImage copy(BufferedImage source){
-          BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
-          Graphics g = b.getGraphics();
-          g.drawImage(source, 0, 0, null);
-          g.dispose();
-          return b;
-     }
+
+     //MOUSE METHODS
 	public void mouseClicked(MouseEvent e) {
      	int x = e.getX() / PIXEL;
      	int y = e.getY() / PIXEL;
@@ -761,12 +876,22 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 						}.setId("ground").setX(editOffX + cursor.getX()));
 					}
 					else if(cursor.getId().equals("erase")){
-						editor.remove(x + editOffX, y, "ground");
+						editor.remove(x + editOffX, y, ".*");
+					}
+					else if(cursor.getId().equals("flag")){
+						editor.addChild(0, new HoverImage(cursor, ImageIO.read(new File("res/editor/flagRed.png"))) {
+							public void change(int x, int y) {
+								if (bounds.contains(x + editOffX, y) && cursor != null && Main.cursor.getId().equals("erase")) {
+									onTop = true;
+								} else {
+									onTop = false;
+								}
+							}
+						}.setId("flag").setX(editOffX + cursor.getX()));
 					}
 				} catch(IOException ep){
 					ep.printStackTrace();
 				}
-				cursor = null;
 			}
 			editor.click(x, y);
 		}
@@ -806,9 +931,31 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      		cursor = new ImageRect(lastXD, lastYD, ground).setId("ground");
 		}
 		else if(str.equals("erase")){
-     		cursor = new ImageRect(0,0,0,0).setId("erase");
+     		cursor = new ImageRect(lastXD,lastYD,0,0).setId("erase");
+		}
+		else if(str.equals("flag")){
+     		cursor = new ImageRect(lastXD, lastYD, WIN).setId("flag");
 		}
 		return cursor;
+	}
+
+	//IMAGE METHODS
+	public static  BufferedImage reverse(BufferedImage img){
+		BufferedImage rev = copy(img);
+		for(int r = 0; r < img.getHeight(); r++){
+			for(int c = 0; c < img.getWidth(); c++){
+				int col = img.getRGB(img.getWidth()-1-c, r);
+				rev.setRGB(c, r, col);
+			}
+		}
+		return rev;
+	}
+	public static BufferedImage copy(BufferedImage source){
+		BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+		Graphics g = b.getGraphics();
+		g.drawImage(source, 0, 0, null);
+		g.dispose();
+		return b;
 	}
 	public BufferedImage white(BufferedImage img){
      	int black = 0xFF000000;
@@ -821,5 +968,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			}
 		}
 		return img;
+	}
+
+	//ACTION LISTENER
+	public void actionPerformed(ActionEvent e){
+		repaint();
 	}
 }
