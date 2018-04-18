@@ -199,4 +199,18 @@ public class Player {
 		}
 		return false;
 	}
+	public void respawn(){
+		Player oth = Main.other(this);
+		if(oth != null && oth.isAlive() && Main.isTouching(oth)) {
+			setX(oth.getX());
+			setY(oth.getY());
+		}
+		else if (Main.stagecut.size() == 0) {
+			setXR(Main.stage.get(Main.stage.size() - 1).x);
+			setY(Main.stage.get(Main.stage.size() - 1).y - getBounds().height);
+		} else {
+			setXR(Main.stagecut.get(0).x);
+			setY(Main.stagecut.get(0).y - getBounds().height);
+		}
+	}
 }

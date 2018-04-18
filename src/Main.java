@@ -117,6 +117,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				gravity(p);
 			if(p.isAlive()) {
 				p.draw(g, xoff);
+				g.setColor(Color.red);
+				g.drawRect((p.getXR() - xoff) * PIXEL, p.getY() * PIXEL, p.getWidth() * PIXEL, p.getHeight() * PIXEL);
 			}
 		}
 
@@ -163,7 +165,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 		return newOne;
 	}
-	public ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
+	public static ArrayList<ImageRect> get(ArrayList<ImageRect> list, int beg, int end){
      	ArrayList<ImageRect> newL = new ArrayList<>();
      	for(int i = 0; i < list.size(); i++){
      		if(list.get(i).getX() > end)
@@ -214,7 +216,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		return inter;
 	}
 	//Tells if the sprite is touching
-	public boolean isTouching(Player p){
+	public static boolean isTouching(Player p){
 		ArrayList<ImageRect> partStage = get(stage, p.getXR(), p.getXR() + p.getWidth());
 		for(ImageRect img : partStage) {
 			Rectangle tr = (Rectangle) p.getBounds().clone();
@@ -226,21 +228,31 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 		return false;
 	}
-	public int[] touching(Player p, int vel){
+	public static int[] touching(Player p, int vel){
      	// first int is 0 if not intersecting and 1 if
 		// it is touching. If they are touching then
 		// second int is the dist between them
 		int[] inter = { 0, 0 };
 		Rectangle tr = (Rectangle) p.getBounds().clone();
 		tr.x += vel;
+		boolean first = true;
 		for(ImageRect img : stage) {
 			Rectangle r = img.getBounds();
-			if(r.intersects(tr) && !img.getId().matches("flag")) {
+			if(r.intersects(tr)){// && !img.getId().matches("flag")) {
 				inter[0] = 1;
-				if(vel < 0)
-					inter[1] = r.x + r.width - p.getXR();
-				else
-					inter[1] = r.x - p.getXR() - p.getWidth();
+				if(first) {
+					if (vel < 0)
+						inter[1] = r.x + r.width - p.getXR();
+					else
+						inter[1] = r.x - p.getXR() - p.getWidth();
+					first = false;
+				}
+				else{
+					if (vel < 0)
+						inter[1] = Math.max(r.x + r.width - p.getXR(), inter[1]);
+					else
+						inter[1] = Math.min(r.x - p.getXR() - p.getWidth(), inter[1]);
+				}
 			}
 		}
 		return inter;
@@ -253,23 +265,12 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 		if(p.getY() > HEIGHT && !p.equals(richard)) {
 			p.takeLife(1);
-			Player oth = other(p);
-			if(oth != null && oth.isAlive() && isTouching(oth)) {
-				p.setX(oth.getX());
-				p.setY(oth.getY());
-			}
-			else if (stagecut.size() == 0) {
-				p.setXR(stage.get(stage.size() - 1).x);
-				p.setY(stage.get(stage.size() - 1).y - p.getBounds().height);
-			} else {
-				p.setXR(stagecut.get(0).x);
-				p.setY(stagecut.get(0).y - p.getBounds().height);
-			}
+			p.respawn();
 		}
 		p.changeY();
 		p.changeVely(gravity);
 	}
-	public Player other(Player p){
+	public static Player other(Player p){
      	if(p.equals(david))
      		return diego;
      	else if(p.equals(diego))
