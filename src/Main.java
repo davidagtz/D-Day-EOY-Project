@@ -649,11 +649,12 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		//draw top layer
 		for(int i = 0; i < topGround.getWidth(); i++)
 			topGround.setRGB(i, 0, topGround.getRGB(0,0));
-		if(stage.size() > 0)
-			stage.get(0).setImg(copy(topGround));
-		for(int i = 1; i < stage.size(); i++)
-			if(stage.get(i - 1).getX() != stage.get(i).getX())
-				stage.get(i).setImg(copy(topGround));
+		ArrayList<ImageRect> stageg = getById(stage, "ground");
+		if(stageg.size() > 0)
+			stageg.get(0).setImg(copy(topGround));
+		for(int i = 1; i < stageg.size(); i++)
+			if(stageg.get(i - 1).getX() != stageg.get(i).getX())
+				stageg.get(i).setImg(copy(topGround));
 
 		in.close();
 	}
