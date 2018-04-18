@@ -905,7 +905,18 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	}
 	public void mouseExited(MouseEvent e) {
 	}
-	public void mouseDragged(MouseEvent e){}
+	public void mouseDragged(MouseEvent e){
+		int x = e.getX() / PIXEL;
+		int y = e.getY() / PIXEL;
+		lastXD = x;
+		lastYD = y;
+		if(level == 3){
+			if(cursor != null){
+				cursor.setPoint(x, y);
+				mouseClicked(e);
+			}
+		}
+	}
 	public void mouseMoved(MouseEvent e){
      	int x = e.getX() / PIXEL;
      	int y = e.getY() / PIXEL;
