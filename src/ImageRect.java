@@ -20,16 +20,6 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public int getHeight(){
 		return bounds.height;
 	}
-	public ImageRect setX(int x){
-		this.x = x;
-		bounds.x = x;
-		return this;
-	}
-	public ImageRect setY(int y){
-		this.y = y;
-		bounds.y = y;
-		return this;
-	}
 	public BufferedImage getImg() {
 		return img;
 	}
@@ -104,6 +94,16 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public int getY(){
 		return y;
 	}
+	public ImageRect setY(int y){
+		this.y = y;
+		bounds.y = y;
+		return this;
+	}
+	public ImageRect setX(int x){
+		this.x = x;
+		bounds.x = x;
+		return this;
+	}
 	public int getX(){
 		return x;
 	}
@@ -143,6 +143,12 @@ public class ImageRect  implements Comparable<ImageRect>{
 				children.remove(i);
 		}
 	}
+	public void remove(int x, int y, String id){
+		for(int i = children.size() - 1 ; i >= 0; i-- ){
+			if(children.get(i).contains(x, y) && children.get(i).getId() != null && children.get(i).getId().matches(id))
+				children.remove(i);
+		}
+	}
 	public ArrayList<ImageRect> getById(String id){
 		ArrayList<ImageRect> newOne = new ArrayList<>();
 		for(int i = 0; i < children.size(); i++){
@@ -151,12 +157,6 @@ public class ImageRect  implements Comparable<ImageRect>{
 			}
 		}
 		return newOne;
-	}
-	public void remove(int x, int y, String id){
-		for(int i = children.size() - 1 ; i >= 0; i-- ){
-			if(children.get(i).contains(x, y) && children.get(i).getId() != null && children.get(i).getId().matches(id))
-				children.remove(i);
-		}
 	}
 	public String toString() {
 		return x + " " + y;

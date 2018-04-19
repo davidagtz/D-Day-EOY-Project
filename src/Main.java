@@ -422,13 +422,15 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			BufferedImage arr = ImageIO.read(new File("res/menu/arrow.png"));
 			editor.addChild(new HoverImage(arrX, arrY, arr) {
 				public void clickAction(int x, int y) {
+					if(cursor != null && !cursor.getId().matches("erase"))
+						editor.getChildren().remove(0);
 					Main.level = 0;
 				}
 			});
 			editor.addChild(new HoverImage(arrX + arr.getWidth() + 1, arrY, ImageIO.read(new File("res/editor/darrow.png"))) {
 				public void clickAction(int x, int y) {
 					try {
-						if(cursor != null)
+						if(cursor != null && !cursor.getId().matches("erase"))
 							editor.getChildren().remove(0);
 						save("second.level");
 						parse("second.level");
@@ -443,7 +445,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				Rectangle drag = new Rectangle(0, img.getHeight() / 2 - dragW / 2, 6, dragW);
 				boolean out = false;
 				public void clickAction(int x, int y){
-					if(cursor != null)
+					if(cursor != null && !cursor.getId().matches("erase"))
 						editor.getChildren().remove(0);
 					if(drag.contains(x, y)){
 						if(out) {
@@ -474,6 +476,23 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			drag.addChild(new ImageRect(offset, yff + 2, copy(WIN)){
 				public void clickAction(int x, int y){
 					setCursor("flag");
+				}
+			});
+			yff += WIN.getHeight() + 4;
+			drag.addChild(new ImageRect(offset, yff, david.getWidth(), david.getHeight()){
+				public void drawOff(Graphics g, int x, int y){
+					g.setColor(Color.RED);
+					g.fillRect((this.x + x) * PIXEL, (y + this.y) * PIXEL, PIXEL, david.getHeight() * PIXEL);
+					g.fillRect((this.x + x + david.getWidth()) * PIXEL, (y + this.y) * PIXEL, PIXEL, PIXEL * david.getHeight());
+					g.fillRect((this.x + x) * PIXEL, ((y + this.y) + david.getHeight() - 1) * PIXEL, PIXEL * david.getWidth(), PIXEL);
+					g.fillRect((this.x + x) * PIXEL, (y + this.y) * PIXEL, PIXEL * david.getWidth(), PIXEL);
+					for(ImageRect iR : children){
+						if(iR != null)
+							iR.drawOff(g, x + this.x, y + this.y);
+					}
+				}
+				public void clickAction(int x, int y){
+					setCursor("boundary");
 				}
 			});
 			BufferedImage img2 = ImageIO.read(new File("res/editor/save.png"));
@@ -707,6 +726,9 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 		else if(pressed.contains(KeyEvent.VK_F))
 			setCursor("flag");
+     	else if(pressed.contains(KeyEvent.VK_B)){
+     		setCursor("boundary");
+		}
 		if(pressed.contains(KeyEvent.VK_RIGHT)) {
 			editOffX += 1;
 			editOffXmax = Math.max(editOffX, editOffXmax);
@@ -878,7 +900,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 						}.setId("ground").setX(editOffX + cursor.getX()));
 					}
 					else if(cursor.getId().equals("erase")){
-						editor.remove(x + editOffX, y, ".*");
+						editor.remove(x + editOffX, y, ".{1,}");
 					}
 					else if(cursor.getId().equals("flag")){
 						editor.addChild(0, new HoverImage(cursor, ImageIO.read(new File("res/editor/flagRed.png"))) {
@@ -890,6 +912,21 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 								}
 							}
 						}.setId("flag").setX(editOffX + cursor.getX()));
+					}
+					else if(cursor.getId().matches("boundary")){
+						editor.addChild(0, new ImageRect(lastXD, lastYD, david.getWidth(), david.getHeight()){
+							public void drawOff(Graphics g, int x, int y){
+								g.setColor(Color.RED);
+								g.fillRect((this.x + x) * PIXEL, (y + this.y) * PIXEL, PIXEL, david.getHeight() * PIXEL);
+								g.fillRect((this.x + x + david.getWidth()) * PIXEL, (y + this.y) * PIXEL, PIXEL, PIXEL * david.getHeight());
+								g.fillRect((this.x + x) * PIXEL, ((y + this.y) + david.getHeight() - 1) * PIXEL, PIXEL * david.getWidth(), PIXEL);
+								g.fillRect((this.x + x) * PIXEL, (y + this.y) * PIXEL, PIXEL * david.getWidth(), PIXEL);
+								for(ImageRect iR : children){
+									if(iR != null)
+										iR.drawOff(g, x + this.x, y + this.y);
+								}
+							}
+						}.setId("boundary"));
 					}
 				} catch(IOException ep){
 					ep.printStackTrace();
@@ -948,6 +985,21 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 		else if(str.equals("flag")){
      		cursor = new ImageRect(lastXD, lastYD, WIN).setId("flag");
+		}
+		else if(str.equals("boundary")){
+     		cursor = new ImageRect(lastXD, lastYD, david.getWidth(), david.getHeight()){
+				public void drawOff(Graphics g, int x, int y){
+					g.setColor(Color.RED);
+					g.fillRect((this.x + x) * PIXEL, (y + this.y) * PIXEL, PIXEL, david.getHeight() * PIXEL);
+					g.fillRect((this.x + x + david.getWidth()) * PIXEL, (y + this.y) * PIXEL, PIXEL, PIXEL * david.getHeight());
+					g.fillRect((this.x + x) * PIXEL, ((y + this.y) + david.getHeight() - 1) * PIXEL, PIXEL * david.getWidth(), PIXEL);
+					g.fillRect((this.x + x) * PIXEL, (y + this.y) * PIXEL, PIXEL * david.getWidth(), PIXEL);
+					for(ImageRect iR : children){
+						if(iR != null)
+							iR.drawOff(g, x + this.x, y + this.y);
+					}
+				}
+			}.setId("boundary");
 		}
 		return cursor;
 	}

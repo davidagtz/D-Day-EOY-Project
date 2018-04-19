@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e44f34c-ffc5-42ea-95a8-fe5c6b5e1d69" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/out/production/EOYCS3/Main.class" afterPath="$PROJECT_DIR$/out/production/EOYCS3/Main.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/EOYCS3/Player.class" afterPath="$PROJECT_DIR$/out/production/EOYCS3/Player.class" />
       <change beforePath="$PROJECT_DIR$/res/levels/second.level" afterPath="$PROJECT_DIR$/res/levels/second.level" />
+      <change beforePath="$PROJECT_DIR$/src/ImageRect.java" afterPath="$PROJECT_DIR$/src/ImageRect.java" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
-      <change beforePath="$PROJECT_DIR$/src/Player.java" afterPath="$PROJECT_DIR$/src/Player.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,8 +19,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="246" column="51" lean-forward="false" selection-start-line="246" selection-start-column="51" selection-end-line="246" selection-end-column="51" />
+            <state relative-caret-position="699">
+              <caret line="876" column="44" lean-forward="false" selection-start-line="876" selection-start-column="44" selection-end-line="876" selection-end-column="44" />
               <folding>
                 <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
                 <element signature="method#mainMenu#0;class#Main#0" expanded="false" />
@@ -32,6 +29,7 @@
                 <element signature="method#get#0;class#Main#0" expanded="false" />
                 <element signature="method#touching#0;class#Main#0" expanded="false" />
                 <element signature="method#isTouching#0;class#Main#0" expanded="false" />
+                <element signature="method#touching#1;class#Main#0" expanded="false" />
                 <element signature="e#6699#6745#0" expanded="false" />
                 <element signature="method#gravity#0;class#Main#0" expanded="false" />
                 <element signature="method#other#0;class#Main#0" expanded="false" />
@@ -48,16 +46,18 @@
                 <element signature="e#11521#11522#0" expanded="true" />
                 <element signature="e#11659#11660#0" expanded="true" />
                 <element signature="e#11686#11687#0" expanded="true" />
-                <element signature="class#12641:12746" expanded="false" />
-                <element signature="e#13809#13810#0" expanded="true" />
-                <element signature="e#13841#13842#0" expanded="true" />
-                <element signature="e#13986#13987#0" expanded="true" />
-                <element signature="e#14017#14018#0" expanded="true" />
-                <element signature="e#14159#14160#0" expanded="true" />
-                <element signature="e#14189#14190#0" expanded="true" />
-                <element signature="e#14398#14399#0" expanded="true" />
-                <element signature="e#14431#14432#0" expanded="true" />
-                <element signature="class#15235:15379" expanded="false" />
+                <element signature="class#12870:13250" expanded="false" />
+                <element signature="e#13979#13980#0" expanded="true" />
+                <element signature="e#14011#14012#0" expanded="true" />
+                <element signature="e#14156#14157#0" expanded="true" />
+                <element signature="e#14187#14188#0" expanded="true" />
+                <element signature="e#14329#14330#0" expanded="true" />
+                <element signature="e#14359#14360#0" expanded="true" />
+                <element signature="e#15139#15140#0" expanded="true" />
+                <element signature="e#15173#15174#0" expanded="true" />
+                <element signature="e#15382#15383#0" expanded="true" />
+                <element signature="e#15415#15416#0" expanded="true" />
+                <element signature="class#16219:16363" expanded="false" />
                 <element signature="method#save#0;class#Main#0" expanded="false" />
                 <element signature="method#parse#0;class#Main#0" expanded="false" />
                 <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
@@ -70,9 +70,9 @@
                 <element signature="method#drawString#0;class#Main#0" expanded="false" />
                 <element signature="method#drawStringW#0;class#Main#0" expanded="false" />
                 <element signature="method#mouseClicked#0;class#Main#0" expanded="false" />
-                <element signature="class#25905:26215" expanded="false" />
-                <element signature="method#change#0;class#25905:26215" expanded="false" />
-                <element signature="class#26443:26751" expanded="false" />
+                <element signature="class#26971:27281" expanded="false" />
+                <element signature="method#change#0;class#26971:27281" expanded="false" />
+                <element signature="class#27512:27820" expanded="false" />
                 <element signature="method#mousePressed#0;class#Main#0" expanded="false" />
                 <element signature="method#mouseReleased#0;class#Main#0" expanded="false" />
                 <element signature="method#mouseEntered#0;class#Main#0" expanded="false" />
@@ -80,11 +80,39 @@
                 <element signature="method#mouseDragged#0;class#Main#0" expanded="false" />
                 <element signature="method#mouseMoved#0;class#Main#0" expanded="false" />
                 <element signature="method#setCursor#0;class#Main#0" expanded="false" />
+                <element signature="class#30040:30725" expanded="false" />
                 <element signature="method#reverse#0;class#Main#0" expanded="false" />
                 <element signature="method#copy#0;class#Main#0" expanded="false" />
                 <element signature="method#white#0;class#Main#0" expanded="false" />
-                <element signature="e#29032#29033#0" expanded="true" />
-                <element signature="e#29048#29049#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImageRect.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ImageRect.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="98">
+              <caret line="15" column="6" lean-forward="false" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
+              <folding>
+                <element signature="method#ImageRect#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#setId#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#setPoint#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#addChild#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#addChild#1;class#ImageRect#0" expanded="false" />
+                <element signature="method#ImageRect#1;class#ImageRect#0" expanded="false" />
+                <element signature="method#drawOff#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#setText#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#inside#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#compareTo#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#setY#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#setX#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#hover#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#click#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#contains#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#remove#0;class#ImageRect#0" expanded="false" />
+                <element signature="method#remove#1;class#ImageRect#0" expanded="false" />
+                <element signature="method#getById#0;class#ImageRect#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -96,34 +124,6 @@
             <state relative-caret-position="0">
               <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ImageRect.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ImageRect.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="64" column="24" lean-forward="false" selection-start-line="64" selection-start-column="24" selection-end-line="64" selection-end-column="24" />
-              <folding>
-                <element signature="method#ImageRect#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#setX#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#setY#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#setId#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#setPoint#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#addChild#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#addChild#1;class#ImageRect#0" expanded="false" />
-                <element signature="method#ImageRect#1;class#ImageRect#0" expanded="false" />
-                <element signature="method#drawOff#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#setText#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#inside#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#compareTo#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#hover#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#click#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#contains#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#remove#0;class#ImageRect#0" expanded="false" />
-                <element signature="method#remove#1;class#ImageRect#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -189,6 +189,8 @@
       <find>&quot;(ground</find>
       <find>ground</find>
       <find>Sys</find>
+      <find>DARR</find>
+      <find>darrow</find>
       <find>grounf</find>
     </findStrings>
     <replaceStrings>
@@ -213,8 +215,8 @@
         <option value="$PROJECT_DIR$/res/levels/first.level" />
         <option value="$PROJECT_DIR$/src/Clickable.java" />
         <option value="$PROJECT_DIR$/src/HoverImage.java" />
-        <option value="$PROJECT_DIR$/src/ImageRect.java" />
         <option value="$PROJECT_DIR$/src/Player.java" />
+        <option value="$PROJECT_DIR$/src/ImageRect.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
       </list>
     </option>
@@ -520,7 +522,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="56" />
+      <option name="time" value="57" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -548,32 +550,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ImageRect.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="64" column="24" lean-forward="false" selection-start-line="64" selection-start-column="24" selection-end-line="64" selection-end-column="24" />
-          <folding>
-            <element signature="method#ImageRect#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#setX#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#setY#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#setId#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#setPoint#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#addChild#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#addChild#1;class#ImageRect#0" expanded="false" />
-            <element signature="method#ImageRect#1;class#ImageRect#0" expanded="false" />
-            <element signature="method#drawOff#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#setText#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#inside#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#compareTo#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#hover#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#click#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#contains#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#remove#0;class#ImageRect#0" expanded="false" />
-            <element signature="method#remove#1;class#ImageRect#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/HoverImage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -586,14 +562,6 @@
             <element signature="method#drawOff#0;class#HoverImage#0" expanded="false" />
             <element signature="method#change#0;class#HoverImage#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/levels/first.level">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -615,10 +583,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/awt/event/MouseMotionListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="538">
+          <caret line="72" column="16" lean-forward="false" selection-start-line="72" selection-start-column="16" selection-end-line="72" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/levels/first.level">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ImageRect.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="15" column="6" lean-forward="false" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
+          <folding>
+            <element signature="method#ImageRect#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#setId#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#setPoint#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#addChild#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#addChild#1;class#ImageRect#0" expanded="false" />
+            <element signature="method#ImageRect#1;class#ImageRect#0" expanded="false" />
+            <element signature="method#drawOff#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#setText#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#inside#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#compareTo#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#setY#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#setX#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#hover#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#click#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#contains#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#remove#0;class#ImageRect#0" expanded="false" />
+            <element signature="method#remove#1;class#ImageRect#0" expanded="false" />
+            <element signature="method#getById#0;class#ImageRect#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="246" column="51" lean-forward="false" selection-start-line="246" selection-start-column="51" selection-end-line="246" selection-end-column="51" />
+        <state relative-caret-position="699">
+          <caret line="876" column="44" lean-forward="false" selection-start-line="876" selection-start-column="44" selection-end-line="876" selection-end-column="44" />
           <folding>
             <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
             <element signature="method#mainMenu#0;class#Main#0" expanded="false" />
@@ -627,6 +638,7 @@
             <element signature="method#get#0;class#Main#0" expanded="false" />
             <element signature="method#touching#0;class#Main#0" expanded="false" />
             <element signature="method#isTouching#0;class#Main#0" expanded="false" />
+            <element signature="method#touching#1;class#Main#0" expanded="false" />
             <element signature="e#6699#6745#0" expanded="false" />
             <element signature="method#gravity#0;class#Main#0" expanded="false" />
             <element signature="method#other#0;class#Main#0" expanded="false" />
@@ -643,16 +655,18 @@
             <element signature="e#11521#11522#0" expanded="true" />
             <element signature="e#11659#11660#0" expanded="true" />
             <element signature="e#11686#11687#0" expanded="true" />
-            <element signature="class#12641:12746" expanded="false" />
-            <element signature="e#13809#13810#0" expanded="true" />
-            <element signature="e#13841#13842#0" expanded="true" />
-            <element signature="e#13986#13987#0" expanded="true" />
-            <element signature="e#14017#14018#0" expanded="true" />
-            <element signature="e#14159#14160#0" expanded="true" />
-            <element signature="e#14189#14190#0" expanded="true" />
-            <element signature="e#14398#14399#0" expanded="true" />
-            <element signature="e#14431#14432#0" expanded="true" />
-            <element signature="class#15235:15379" expanded="false" />
+            <element signature="class#12870:13250" expanded="false" />
+            <element signature="e#13979#13980#0" expanded="true" />
+            <element signature="e#14011#14012#0" expanded="true" />
+            <element signature="e#14156#14157#0" expanded="true" />
+            <element signature="e#14187#14188#0" expanded="true" />
+            <element signature="e#14329#14330#0" expanded="true" />
+            <element signature="e#14359#14360#0" expanded="true" />
+            <element signature="e#15139#15140#0" expanded="true" />
+            <element signature="e#15173#15174#0" expanded="true" />
+            <element signature="e#15382#15383#0" expanded="true" />
+            <element signature="e#15415#15416#0" expanded="true" />
+            <element signature="class#16219:16363" expanded="false" />
             <element signature="method#save#0;class#Main#0" expanded="false" />
             <element signature="method#parse#0;class#Main#0" expanded="false" />
             <element signature="method#keyReleased#0;class#Main#0" expanded="false" />
@@ -665,9 +679,9 @@
             <element signature="method#drawString#0;class#Main#0" expanded="false" />
             <element signature="method#drawStringW#0;class#Main#0" expanded="false" />
             <element signature="method#mouseClicked#0;class#Main#0" expanded="false" />
-            <element signature="class#25905:26215" expanded="false" />
-            <element signature="method#change#0;class#25905:26215" expanded="false" />
-            <element signature="class#26443:26751" expanded="false" />
+            <element signature="class#26971:27281" expanded="false" />
+            <element signature="method#change#0;class#26971:27281" expanded="false" />
+            <element signature="class#27512:27820" expanded="false" />
             <element signature="method#mousePressed#0;class#Main#0" expanded="false" />
             <element signature="method#mouseReleased#0;class#Main#0" expanded="false" />
             <element signature="method#mouseEntered#0;class#Main#0" expanded="false" />
@@ -675,11 +689,10 @@
             <element signature="method#mouseDragged#0;class#Main#0" expanded="false" />
             <element signature="method#mouseMoved#0;class#Main#0" expanded="false" />
             <element signature="method#setCursor#0;class#Main#0" expanded="false" />
+            <element signature="class#30040:30725" expanded="false" />
             <element signature="method#reverse#0;class#Main#0" expanded="false" />
             <element signature="method#copy#0;class#Main#0" expanded="false" />
             <element signature="method#white#0;class#Main#0" expanded="false" />
-            <element signature="e#29032#29033#0" expanded="true" />
-            <element signature="e#29048#29049#0" expanded="true" />
           </folding>
         </state>
       </provider>
