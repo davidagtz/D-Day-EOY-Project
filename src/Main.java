@@ -1,3 +1,4 @@
+import com.sun.javaws.util.JfxHelper;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import javax.imageio.ImageIO;
@@ -5,6 +6,7 @@ import javax.sound.midi.SysexMessage;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.Timer;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -39,6 +41,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	// -1 - lost
 	static int winlose = 0;
 	static Color won = new Color(0, 255, 0, 127);
+	static String levelName = "res/levels/second.level";
 
 	// EDITOR
 	static int arrX = 1, arrY = 1, editOffX = 0, editOffXmax = 0, stageLength = 20, lastX, lastY, lastXD, lastYD;
@@ -117,8 +120,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				gravity(p);
 			if(p.isAlive()) {
 				p.draw(g, xoff);
-				g.setColor(Color.red);
-				g.drawRect((p.getXR() - xoff) * PIXEL, p.getY() * PIXEL, p.getWidth() * PIXEL, p.getHeight() * PIXEL);
+//				g.setColor(Color.red);
+//				g.drawRect((p.getXR() - xoff) * PIXEL, p.getY() * PIXEL, p.getWidth() * PIXEL, p.getHeight() * PIXEL);
 			}
 		}
 
@@ -350,7 +353,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			WIN = ImageIO.read(new File("res/editor/flag.png"));
 
 			//add blocks
-			parse("second.level");
+			parse("res/levels/second.level");
 
           } catch(IOException e){
                e.printStackTrace();
@@ -432,9 +435,64 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 					try {
 						if(cursor != null && !cursor.getId().matches("erase"))
 							editor.getChildren().remove(0);
-						save("second.level");
-						parse("second.level");
+						save("res/levels/second.level");
+						parse("res/levels/second.level");
 					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+			});
+			editor.addChild(new HoverImage(arrX + arr.getWidth() + 10 + 2, arrY, ImageIO.read(new File("res/editor/open.png"))) {
+				public void clickAction(int x, int y) {
+					if(cursor != null && !cursor.getId().matches("erase"))
+						editor.getChildren().remove(0);
+					JFileChooser f = new JFileChooser("res/levels");
+					f.setFileFilter(new FileFilter() {
+						public boolean accept(File f) {
+							if(f.isDirectory())
+								return true;
+							if(f.getName().endsWith(".level"))
+								return true;
+							return false;
+						}
+						public String getDescription() {
+							return "Accepts Level Files";
+						}
+					});
+					int res = f.showOpenDialog(frame);
+					try {
+						if (res == JFileChooser.APPROVE_OPTION) {
+							parse(f.getSelectedFile().getAbsolutePath());
+							levelName = f.getSelectedFile().getAbsolutePath();
+							ArrayList<ImageRect> iRarr = new ArrayList<>();
+							parse(f.getSelectedFile().getAbsolutePath(), iRarr);
+							for(int i = 0; i < iRarr.size(); i++){
+								if(iRarr.get(i).getId().equals("ground")){
+									iRarr.set(i, new HoverImage(iRarr.get(i), ImageIO.read(new File("res/editor/groundRed.png"))) {
+										public void change(int x, int y) {
+											if (bounds.contains(x + editOffX, y) && cursor != null && Main.cursor.getId().equals("erase")) {
+												onTop = true;
+											} else {
+												onTop = false;
+											}
+										}
+									}.setId("ground"));
+								}
+								else if(iRarr.get(i).getId().equals("flag")){
+									iRarr.set(i, new HoverImage(cursor, ImageIO.read(new File("res/editor/flagRed.png"))) {
+										public void change(int x, int y) {
+											if (bounds.contains(x + editOffX, y) && cursor != null && Main.cursor.getId().equals("erase")) {
+												onTop = true;
+											} else {
+												onTop = false;
+											}
+										}
+									}.setId("flag"));
+								}
+							}
+							editor.getChildren().addAll(0, iRarr);
+						}
+					} catch (IOException e){
 						e.printStackTrace();
 					}
 				}
@@ -498,7 +556,29 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			BufferedImage img2 = ImageIO.read(new File("res/editor/save.png"));
 			drag.addChild(new HoverImage(8, drag.getHeight() - img2.getHeight() / 2 - 2, img2){
 				public void clickAction(int x, int y) {
-					save("second.level");
+					JFileChooser f = new JFileChooser("res/levels");
+					f.setApproveButtonText("Save As");
+					f.setSelectedFile(new File(levelName));
+					f.setFileFilter(new FileFilter() {
+						public boolean accept(File f) {
+							if(f.isDirectory())
+								return true;
+							if(f.getName().endsWith(".level"))
+								return true;
+							return false;
+						}
+						public String getDescription() {
+							return "Accepts Level Files";
+						}
+					});
+					int res = f.showOpenDialog(frame);
+					if (res == JFileChooser.APPROVE_OPTION){
+						String s = f.getSelectedFile().getAbsolutePath();
+						if (!s.endsWith(".level"))
+							s += ".level";
+						levelName = s;
+						save(s);
+					}
 				}
 			});
 		}catch (IOException e){
@@ -573,7 +653,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      //FOR LEVEL PARSING
      public void save(String name){
 		try {
-			PrintWriter out = new PrintWriter(new FileWriter("res/levels/"+name));
+			PrintWriter out = new PrintWriter(new FileWriter(name));
 			ArrayList<ImageRect> stage2 = ((ArrayList<ImageRect>) editor.getChildren().clone());
 			stage2.sort(new Comparator<ImageRect>() {
 				public int compare(ImageRect r, ImageRect r2) {
@@ -620,10 +700,13 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 	}
      public void parse(String name) throws IOException{
-		BufferedReader in = new BufferedReader(new FileReader("res/levels/"+name));
 		if(stagecut != null)
 			stagecut.clear();
-		stage.clear();
+		parse(name, stage);
+	}
+	public void parse(String name, ArrayList<ImageRect> stg) throws IOException{
+		BufferedReader in = new BufferedReader(new FileReader(name));
+		stg.clear();
 		for(int i = 0; in.ready(); i+=0){
 			StringTokenizer line = new StringTokenizer(in.readLine());
 			int x = 0;
@@ -634,7 +717,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 					String mod = line.nextToken();
 					if (mod.matches("_[\\^\\+]*")) {
 						for (int j = 0; j < amount; j++) {
-							stage.add(new ImageRect(x, i, copy(ground)).setId("ground"));
+							stg.add(new ImageRect(x, i, copy(ground)).setId("ground"));
 							if(!mod.contains("+"))
 								x += 1;
 							else
@@ -664,12 +747,12 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 
 		//sort ground by x
-		Collections.sort(stage);
+		Collections.sort(stg);
 
 		//draw top layer
 		for(int i = 0; i < topGround.getWidth(); i++)
 			topGround.setRGB(i, 0, topGround.getRGB(0,0));
-		ArrayList<ImageRect> stageg = getById(stage, "ground");
+		ArrayList<ImageRect> stageg = getById(stg, "ground");
 		if(stageg.size() > 0)
 			stageg.get(0).setImg(copy(topGround));
 		for(int i = 1; i < stageg.size(); i++)
