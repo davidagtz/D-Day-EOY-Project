@@ -25,12 +25,16 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	//MENU
 	static Color mainBack = new Color(26, 26, 26);
 
+	//STORY
+	static ArrayList<ImageRect> storyboards = new ArrayList<>();
+	static int currBoard = 0;
 
 	// LEVEL ONE
 	// level 0 - Main Menu
 	// level 1 - Game
 	// level 2 - Controls
 	// level 3 - Editor
+	// level 4 - story
 	static int xoff = 0, level = 0;
 	static final double gravity = .9;
 	static Player david, diego, jakob, richard;
@@ -65,9 +69,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			case 1: levelOne(g); break;
 			case 2: showControls(g); break;
 			case 3: paintEditor(g); break;
+			case 4: paintStory(g); break;
 		}
 		if (sound != null) {
-     		if(level == 1 || level == 3)
+     		if(level == 1 || level == 3 || level ==4)
 				g.drawImage(speaker, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
 			else
 				g.drawImage(speakerW, WIDTH - (speaker.getWidth() + 1) * PIXEL, PIXEL, speaker.getWidth() * PIXEL, speaker.getHeight() * PIXEL, null);
@@ -158,6 +163,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		if(winlose == 0 && david.isDead() && diego.isDead()){
 			winlose = -1;
 		}
+	}
+	public void paintStory(Graphics g){
+     	super.paintComponent(g);
+		storyboards.get(currBoard).draw(g);
 	}
 	public ArrayList<ImageRect> getById(ArrayList<ImageRect> children, String id){
 		ArrayList<ImageRect> newOne = new ArrayList<>();
@@ -293,7 +302,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	}
 	public void paintBackground(Graphics g, int xoff){
 		g.setColor(Color.CYAN);
-		g.fillRect( 0, 0, WIDTH, HEIGHT);
+		BufferedImage bi = background.getSubimage(xoff, 0, PixWIDTH * background.getHeight() / PixHEIGHT, background.getHeight());
+		g.drawImage(bi, 0, 0, WIDTH, HEIGHT, null);
 	}
 	public void showControls(Graphics g){
      	g.setColor(mainBack);
@@ -345,7 +355,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 
     		try{
 			//get Backgrounds
-//               background = ImageIO.read(new File("res/background.png"));	tr
+               background = ImageIO.read(new File("res/background.png"));
 //               menu = ImageIO.read(new File("res/Menu/menu.png"));
                //get ground
 			ground = ImageIO.read(new File("res/ground.png"));
@@ -389,7 +399,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			});
 			menu.addChild(new HoverImage(46, 29, ImageIO.read(new File("res/menu/start.png"))){
 				public void clickAction(int x, int y){
-					Main.level = 1;
+					Main.level = 4;
 				}
 			});
 			menu.addChild(new HoverImage(35, 65, ImageIO.read(new File("res/menu/editor.png"))){
@@ -600,7 +610,28 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
                System.exit(0);
           }
 
-          //Controls
+          // Story
+		try{
+			for(int i = 1;; i++){
+				BufferedImage timg = reverse(ImageIO.read(new File("res/menu/arrow.png")));
+				storyboards.add(new ImageRect(0, 0, ImageIO.read(new File("res/boards/board" + i + ".png"))).addChild(
+					   new HoverImage(PixWIDTH - timg.getWidth() - 1, PixHEIGHT - timg.getHeight() / 2 - 1, copy(timg)){
+ 						   public void clickAction(int x, int y){
+							   if(currBoard >= storyboards.size() - 1){
+								level = 1;
+								currBoard = 0;
+								return;
+							   }
+							   currBoard++;
+						   }
+					   }
+				));
+			}
+		}catch(IOException e){
+			System.out.println("No more boards.");
+		}
+
+          // Controls
 		try {
 			controls = new ImageRect(0, 0, WIDTH, HEIGHT);
 			controls.addChild(new HoverImage(arrX, arrY, ImageIO.read(new File("res/menu/arrow.png"))){
@@ -1017,6 +1048,9 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			}
 			editor.click(x, y);
 		}
+		else if(level == 4){
+     		storyboards.get(currBoard).click(x , y);
+		}
 	}
 	public void mousePressed(MouseEvent e) {
 	}
@@ -1053,6 +1087,9 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			editor.hover(x, y);
 			if(cursor != null)
 				cursor.setPoint(x, y);
+		}
+		else if(level == 4){
+			storyboards.get(currBoard).hover(x , y);
 		}
 	}
 	public static ImageRect setCursor(String str){
