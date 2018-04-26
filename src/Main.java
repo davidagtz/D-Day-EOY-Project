@@ -49,6 +49,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 
 	// EDITOR
 	static int arrX = 1, arrY = 1, editOffX = 0, editOffXmax = 0, stageLength = 20, lastX, lastY, lastXD, lastYD;
+	static boolean gridMode = false;
 
 	// MISC
      static HashMap<Character, BufferedImage> font = new HashMap<>();
@@ -314,9 +315,16 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		controls.draw(g);
 	}
 	public void paintEditor(Graphics g){
-     	g.setColor(Color.CYAN);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+     	paintBackground(g, xoff);
 		g.setColor(Color.DARK_GRAY);
+		if(gridMode){
+			for(int c = ground.getWidth(); c < PixWIDTH; c += ground.getWidth()){
+				g.drawLine(0, c * PIXEL, WIDTH, c * PIXEL);
+			}
+			for(int r = ground.getHeight(); r < PixHEIGHT; r += ground.getHeight()){
+				g.drawLine(r * PIXEL, 0, r * PIXEL, HEIGHT);
+			}
+		}
 		stageLength = Math.max(5 * editOffXmax / PixWIDTH + 1, stageLength);
 		g.fillRect((PixWIDTH / 2 - stageLength / 2) * PIXEL, 3 * PIXEL,  stageLength * PIXEL, PIXEL);
 		g.setColor(Color.red);
@@ -399,7 +407,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			});
 			menu.addChild(new HoverImage(46, 29, ImageIO.read(new File("res/menu/start.png"))){
 				public void clickAction(int x, int y){
-					Main.level = 4;
+					if(storyboards.isEmpty())
+						Main.level = 1;
+					else
+						Main.level = 4;
 				}
 			});
 			menu.addChild(new HoverImage(35, 65, ImageIO.read(new File("res/menu/editor.png"))){
@@ -630,6 +641,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}catch(IOException e){
 			System.out.println("No more boards.");
 		}
+		storyboards.clear();
 
           // Controls
 		try {
@@ -836,7 +848,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      		setCursor("erase");
 		}
 		else if(pressed.contains(KeyEvent.VK_G)){
-     		setCursor("ground");
+     		if(pressed.contains(KeyEvent.VK_CONTROL))
+     			gridMode = !gridMode;
+     		else
+     			setCursor("ground");
 		}
 		else if(pressed.contains(KeyEvent.VK_F))
 			setCursor("flag");
@@ -1066,6 +1081,12 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		lastXD = x;
 		lastYD = y;
 		if(level == 3){
+			if(gridMode && cursor != null && cursor.getId().equals("ground")){
+				x /= ground.getWidth();
+				y /= ground.getHeight();
+				x *= ground.getWidth();
+				y *= ground.getHeight();
+			}
 			if(cursor != null){
 				cursor.setPoint(x, y);
 				mouseClicked(e);
@@ -1085,6 +1106,12 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 		else if(level == 3){
 			editor.hover(x, y);
+			if(gridMode && cursor != null && cursor.getId().equals("ground")){
+				x /= ground.getWidth();
+				y /= ground.getHeight();
+				x *= ground.getWidth();
+				y *= ground.getHeight();
+			}
 			if(cursor != null)
 				cursor.setPoint(x, y);
 		}
