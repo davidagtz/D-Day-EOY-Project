@@ -315,13 +315,13 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		controls.draw(g);
 	}
 	public void paintEditor(Graphics g){
-     	paintBackground(g, xoff);
+     	paintBackground(g, editOffX);
 		g.setColor(Color.DARK_GRAY);
 		if(gridMode){
-			for(int c = ground.getWidth(); c < PixWIDTH; c += ground.getWidth()){
+			for(int c = ground.getWidth(); c < PixHEIGHT; c += ground.getWidth()){
 				g.drawLine(0, c * PIXEL, WIDTH, c * PIXEL);
 			}
-			for(int r = ground.getHeight(); r < PixHEIGHT; r += ground.getHeight()){
+			for(int r = ground.getHeight(); r < PixWIDTH; r += ground.getHeight()){
 				g.drawLine(r * PIXEL, 0, r * PIXEL, HEIGHT);
 			}
 		}
@@ -623,25 +623,31 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 
           // Story
 		try{
+			BufferedImage timg = reverse(ImageIO.read(new File("res/menu/arrow.png")));
 			for(int i = 1;; i++){
-				BufferedImage timg = reverse(ImageIO.read(new File("res/menu/arrow.png")));
-				storyboards.add(new ImageRect(0, 0, ImageIO.read(new File("res/boards/board" + i + ".png"))).addChild(
-					   new HoverImage(PixWIDTH - timg.getWidth() - 1, PixHEIGHT - timg.getHeight() / 2 - 1, copy(timg)){
- 						   public void clickAction(int x, int y){
-							   if(currBoard >= storyboards.size() - 1){
-								level = 1;
-								currBoard = 0;
-								return;
+				File dir = new File("res/boards/board" + i);
+				if(dir.exists() && dir.isDirectory()){
+					int j = 1;
+				}
+				else {
+					storyboards.add(new ImageRect(0, 0, ImageIO.read(new File("res/boards/board" + i + ".png"))).addChild(
+						   new HoverImage(PixWIDTH - timg.getWidth() - 1, PixHEIGHT - timg.getHeight() / 2 - 1, copy(timg)) {
+							   public void clickAction(int x, int y) {
+								   if (currBoard >= storyboards.size() - 1) {
+									   level = 1;
+									   currBoard = 0;
+									   return;
+								   }
+								   currBoard++;
 							   }
-							   currBoard++;
 						   }
-					   }
-				));
+					));
+				}
 			}
 		}catch(IOException e){
 			System.out.println("No more boards.");
 		}
-		storyboards.clear();
+//		storyboards.clear();
 
           // Controls
 		try {
@@ -859,11 +865,26 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      		setCursor("boundary");
 		}
 		if(pressed.contains(KeyEvent.VK_RIGHT)) {
-			editOffX += 1;
+     		if(gridMode) {
+				if(editOffX + PixWIDTH + ground.getWidth() <= background.getWidth() * PixHEIGHT / background.getHeight())
+     				editOffX += ground.getWidth();
+//				else
+					editOffX = background.getWidth() * PixHEIGHT / background.getHeight();
+			}
+			else
+				editOffX += 1;
 			editOffXmax = Math.max(editOffX, editOffXmax);
      	}
-     	if(pressed.contains(KeyEvent.VK_LEFT) && editOffX > 0)
-     		editOffX -= 1;
+     	if(pressed.contains(KeyEvent.VK_LEFT)) {
+			if(gridMode) {
+				if(ground.getWidth() <= editOffX)
+					editOffX -= ground.getWidth();
+				else
+					editOffX = 0;
+			}
+			else if(editOffX > 0)
+     			editOffX -= 1;
+		}
      	editor.hover(lastXD, lastYD);
 	}
      public void keyLevelOne(KeyEvent e){
@@ -978,7 +999,9 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	}
      public static void drawStringW(Graphics g, int x, int y, int h, String str) {
 		str = str.toLowerCase();
+		x *= PIXEL;
 		int xi = x;
+		y *= PIXEL;
 		for(int i = 0; i<str.length(); i++){
 			char a = str.charAt(i);
 			if(fontW.containsKey(a)){
