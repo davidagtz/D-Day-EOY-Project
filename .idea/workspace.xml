@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6e44f34c-ffc5-42ea-95a8-fe5c6b5e1d69" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/res/boards/GIMP Images/board2.xcf" afterPath="$PROJECT_DIR$/res/boards/GIMP Images/board2.xcf" />
-      <change beforePath="$PROJECT_DIR$/src/GifRect.java" afterPath="$PROJECT_DIR$/src/GifRect.java" />
-      <change beforePath="$PROJECT_DIR$/src/ImageRect.java" afterPath="$PROJECT_DIR$/src/ImageRect.java" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,8 +18,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-499">
-              <caret line="342" column="30" lean-forward="false" selection-start-line="342" selection-start-column="30" selection-end-line="342" selection-end-column="30" />
+            <state relative-caret-position="205">
+              <caret line="318" column="32" lean-forward="true" selection-start-line="318" selection-start-column="32" selection-end-line="319" selection-end-column="41" />
               <folding>
                 <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
                 <element signature="method#mainMenu#0;class#Main#0" expanded="false" />
@@ -39,42 +37,43 @@
                 <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
                 <element signature="method#paintBackground#1;class#Main#0" expanded="false" />
                 <element signature="method#showControls#0;class#Main#0" expanded="false" />
-                <element signature="method#paintEditor#0;class#Main#0" expanded="false" />
+                <element signature="method#getOff#0;class#Main#0" expanded="false" />
+                <element signature="method#getOffWGround#0;class#Main#0" expanded="false" />
                 <element signature="method#Main#0;class#Main#0" expanded="false" />
-                <element signature="class#12015:12158" expanded="false" />
-                <element signature="e#12125#12126#0" expanded="true" />
-                <element signature="e#12152#12153#0" expanded="true" />
-                <element signature="class#12182:12386" expanded="false" />
-                <element signature="class#12410:12551" expanded="false" />
-                <element signature="e#12518#12519#0" expanded="true" />
-                <element signature="e#12545#12546#0" expanded="true" />
-                <element signature="class#13500:13703" expanded="false" />
-                <element signature="class#13729:14131" expanded="false" />
-                <element signature="method#clickAction#0;class#14157:16155" expanded="false" />
-                <element signature="class#14476:14759" expanded="false" />
-                <element signature="e#14706#14707#0" expanded="true" />
-                <element signature="e#14751#14752#0" expanded="true" />
-                <element signature="class#15210:15550" expanded="false" />
-                <element signature="class#15659:15991" expanded="false" />
-                <element signature="class#16252:16730" expanded="false" />
-                <element signature="class#16805:16922" expanded="false" />
-                <element signature="e#16884#16885#0" expanded="true" />
-                <element signature="e#16916#16917#0" expanded="true" />
-                <element signature="class#16980:17098" expanded="false" />
-                <element signature="e#17061#17062#0" expanded="true" />
-                <element signature="e#17092#17093#0" expanded="true" />
-                <element signature="class#17154:17270" expanded="false" />
-                <element signature="e#17234#17235#0" expanded="true" />
-                <element signature="e#17264#17265#0" expanded="true" />
-                <element signature="class#17325:18084" expanded="false" />
-                <element signature="e#18044#18045#0" expanded="true" />
-                <element signature="e#18078#18079#0" expanded="true" />
-                <element signature="class#18179:18989" expanded="false" />
-                <element signature="class#18453:18736" expanded="false" />
-                <element signature="e#18683#18684#0" expanded="true" />
-                <element signature="e#18728#18729#0" expanded="true" />
-                <element signature="e#21538#21539#0" expanded="true" />
-                <element signature="e#21565#21566#0" expanded="true" />
+                <element signature="class#12394:12537" expanded="false" />
+                <element signature="e#12504#12505#0" expanded="true" />
+                <element signature="e#12531#12532#0" expanded="true" />
+                <element signature="class#12561:12765" expanded="false" />
+                <element signature="class#12789:12930" expanded="false" />
+                <element signature="e#12897#12898#0" expanded="true" />
+                <element signature="e#12924#12925#0" expanded="true" />
+                <element signature="class#13879:14082" expanded="false" />
+                <element signature="class#14108:14510" expanded="false" />
+                <element signature="method#clickAction#0;class#14536:16534" expanded="false" />
+                <element signature="class#14855:15138" expanded="false" />
+                <element signature="e#15085#15086#0" expanded="true" />
+                <element signature="e#15130#15131#0" expanded="true" />
+                <element signature="class#15589:15929" expanded="false" />
+                <element signature="class#16038:16370" expanded="false" />
+                <element signature="class#16631:17109" expanded="false" />
+                <element signature="class#17184:17301" expanded="false" />
+                <element signature="e#17263#17264#0" expanded="true" />
+                <element signature="e#17295#17296#0" expanded="true" />
+                <element signature="class#17359:17477" expanded="false" />
+                <element signature="e#17440#17441#0" expanded="true" />
+                <element signature="e#17471#17472#0" expanded="true" />
+                <element signature="class#17533:17649" expanded="false" />
+                <element signature="e#17613#17614#0" expanded="true" />
+                <element signature="e#17643#17644#0" expanded="true" />
+                <element signature="class#17704:18463" expanded="false" />
+                <element signature="e#18423#18424#0" expanded="true" />
+                <element signature="e#18457#18458#0" expanded="true" />
+                <element signature="class#18558:19368" expanded="false" />
+                <element signature="class#18832:19115" expanded="false" />
+                <element signature="e#19062#19063#0" expanded="true" />
+                <element signature="e#19107#19108#0" expanded="true" />
+                <element signature="e#21917#21918#0" expanded="true" />
+                <element signature="e#21944#21945#0" expanded="true" />
                 <element signature="method#save#0;class#Main#0" expanded="false" />
                 <element signature="method#parse#0;class#Main#0" expanded="false" />
                 <element signature="method#parse#1;class#Main#0" expanded="false" />
@@ -88,8 +87,8 @@
                 <element signature="method#drawString#0;class#Main#0" expanded="false" />
                 <element signature="method#drawStringW#0;class#Main#0" expanded="false" />
                 <element signature="method#mouseClicked#0;class#Main#0" expanded="false" />
-                <element signature="class#33355:33663" expanded="false" />
-                <element signature="class#33797:34518" expanded="false" />
+                <element signature="class#33793:34101" expanded="false" />
+                <element signature="class#34235:34956" expanded="false" />
                 <element signature="method#mousePressed#0;class#Main#0" expanded="false" />
                 <element signature="method#mouseReleased#0;class#Main#0" expanded="false" />
                 <element signature="method#mouseEntered#0;class#Main#0" expanded="false" />
@@ -97,12 +96,12 @@
                 <element signature="method#mouseDragged#0;class#Main#0" expanded="false" />
                 <element signature="method#mouseMoved#0;class#Main#0" expanded="false" />
                 <element signature="method#setCursor#0;class#Main#0" expanded="false" />
-                <element signature="class#36407:37092" expanded="false" />
+                <element signature="class#36879:37564" expanded="false" />
                 <element signature="method#reverse#0;class#Main#0" expanded="false" />
                 <element signature="method#copy#0;class#Main#0" expanded="false" />
                 <element signature="method#white#0;class#Main#0" expanded="false" />
-                <element signature="e#38060#38061#0" expanded="true" />
-                <element signature="e#38076#38077#0" expanded="true" />
+                <element signature="e#38532#38533#0" expanded="true" />
+                <element signature="e#38548#38549#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -263,8 +262,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="234" />
-    <option name="y" value="-24" />
+    <option name="x" value="676" />
     <option name="width" value="697" />
     <option name="height" value="735" />
   </component>
@@ -542,7 +540,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="66" />
+      <option name="time" value="69" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -578,42 +576,43 @@
             <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#1;class#Main#0" expanded="false" />
             <element signature="method#showControls#0;class#Main#0" expanded="false" />
-            <element signature="method#paintEditor#0;class#Main#0" expanded="false" />
+            <element signature="method#getOff#0;class#Main#0" expanded="false" />
+            <element signature="method#getOffWGround#0;class#Main#0" expanded="false" />
             <element signature="method#Main#0;class#Main#0" expanded="false" />
-            <element signature="class#12015:12158" expanded="false" />
-            <element signature="e#12125#12126#0" expanded="true" />
-            <element signature="e#12152#12153#0" expanded="true" />
-            <element signature="class#12182:12386" expanded="false" />
-            <element signature="class#12410:12551" expanded="false" />
-            <element signature="e#12518#12519#0" expanded="true" />
-            <element signature="e#12545#12546#0" expanded="true" />
-            <element signature="class#13500:13703" expanded="false" />
-            <element signature="class#13729:14131" expanded="false" />
-            <element signature="method#clickAction#0;class#14157:16155" expanded="false" />
-            <element signature="class#14476:14759" expanded="false" />
-            <element signature="e#14706#14707#0" expanded="true" />
-            <element signature="e#14751#14752#0" expanded="true" />
-            <element signature="class#15210:15550" expanded="false" />
-            <element signature="class#15659:15991" expanded="false" />
-            <element signature="class#16252:16730" expanded="false" />
-            <element signature="class#16805:16922" expanded="false" />
-            <element signature="e#16884#16885#0" expanded="true" />
-            <element signature="e#16916#16917#0" expanded="true" />
-            <element signature="class#16980:17098" expanded="false" />
-            <element signature="e#17061#17062#0" expanded="true" />
-            <element signature="e#17092#17093#0" expanded="true" />
-            <element signature="class#17154:17270" expanded="false" />
-            <element signature="e#17234#17235#0" expanded="true" />
-            <element signature="e#17264#17265#0" expanded="true" />
-            <element signature="class#17325:18084" expanded="false" />
-            <element signature="e#18044#18045#0" expanded="true" />
-            <element signature="e#18078#18079#0" expanded="true" />
-            <element signature="class#18179:18989" expanded="false" />
-            <element signature="class#18453:18736" expanded="false" />
-            <element signature="e#18683#18684#0" expanded="true" />
-            <element signature="e#18728#18729#0" expanded="true" />
-            <element signature="e#21538#21539#0" expanded="true" />
-            <element signature="e#21565#21566#0" expanded="true" />
+            <element signature="class#12394:12537" expanded="false" />
+            <element signature="e#12504#12505#0" expanded="true" />
+            <element signature="e#12531#12532#0" expanded="true" />
+            <element signature="class#12561:12765" expanded="false" />
+            <element signature="class#12789:12930" expanded="false" />
+            <element signature="e#12897#12898#0" expanded="true" />
+            <element signature="e#12924#12925#0" expanded="true" />
+            <element signature="class#13879:14082" expanded="false" />
+            <element signature="class#14108:14510" expanded="false" />
+            <element signature="method#clickAction#0;class#14536:16534" expanded="false" />
+            <element signature="class#14855:15138" expanded="false" />
+            <element signature="e#15085#15086#0" expanded="true" />
+            <element signature="e#15130#15131#0" expanded="true" />
+            <element signature="class#15589:15929" expanded="false" />
+            <element signature="class#16038:16370" expanded="false" />
+            <element signature="class#16631:17109" expanded="false" />
+            <element signature="class#17184:17301" expanded="false" />
+            <element signature="e#17263#17264#0" expanded="true" />
+            <element signature="e#17295#17296#0" expanded="true" />
+            <element signature="class#17359:17477" expanded="false" />
+            <element signature="e#17440#17441#0" expanded="true" />
+            <element signature="e#17471#17472#0" expanded="true" />
+            <element signature="class#17533:17649" expanded="false" />
+            <element signature="e#17613#17614#0" expanded="true" />
+            <element signature="e#17643#17644#0" expanded="true" />
+            <element signature="class#17704:18463" expanded="false" />
+            <element signature="e#18423#18424#0" expanded="true" />
+            <element signature="e#18457#18458#0" expanded="true" />
+            <element signature="class#18558:19368" expanded="false" />
+            <element signature="class#18832:19115" expanded="false" />
+            <element signature="e#19062#19063#0" expanded="true" />
+            <element signature="e#19107#19108#0" expanded="true" />
+            <element signature="e#21917#21918#0" expanded="true" />
+            <element signature="e#21944#21945#0" expanded="true" />
             <element signature="method#save#0;class#Main#0" expanded="false" />
             <element signature="method#parse#0;class#Main#0" expanded="false" />
             <element signature="method#parse#1;class#Main#0" expanded="false" />
@@ -627,8 +626,8 @@
             <element signature="method#drawString#0;class#Main#0" expanded="false" />
             <element signature="method#drawStringW#0;class#Main#0" expanded="false" />
             <element signature="method#mouseClicked#0;class#Main#0" expanded="false" />
-            <element signature="class#33355:33663" expanded="false" />
-            <element signature="class#33797:34518" expanded="false" />
+            <element signature="class#33793:34101" expanded="false" />
+            <element signature="class#34235:34956" expanded="false" />
             <element signature="method#mousePressed#0;class#Main#0" expanded="false" />
             <element signature="method#mouseReleased#0;class#Main#0" expanded="false" />
             <element signature="method#mouseEntered#0;class#Main#0" expanded="false" />
@@ -636,12 +635,12 @@
             <element signature="method#mouseDragged#0;class#Main#0" expanded="false" />
             <element signature="method#mouseMoved#0;class#Main#0" expanded="false" />
             <element signature="method#setCursor#0;class#Main#0" expanded="false" />
-            <element signature="class#36407:37092" expanded="false" />
+            <element signature="class#36879:37564" expanded="false" />
             <element signature="method#reverse#0;class#Main#0" expanded="false" />
             <element signature="method#copy#0;class#Main#0" expanded="false" />
             <element signature="method#white#0;class#Main#0" expanded="false" />
-            <element signature="e#38060#38061#0" expanded="true" />
-            <element signature="e#38076#38077#0" expanded="true" />
+            <element signature="e#38532#38533#0" expanded="true" />
+            <element signature="e#38548#38549#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -741,42 +740,43 @@
             <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#1;class#Main#0" expanded="false" />
             <element signature="method#showControls#0;class#Main#0" expanded="false" />
-            <element signature="method#paintEditor#0;class#Main#0" expanded="false" />
+            <element signature="method#getOff#0;class#Main#0" expanded="false" />
+            <element signature="method#getOffWGround#0;class#Main#0" expanded="false" />
             <element signature="method#Main#0;class#Main#0" expanded="false" />
-            <element signature="class#12015:12158" expanded="false" />
-            <element signature="e#12125#12126#0" expanded="true" />
-            <element signature="e#12152#12153#0" expanded="true" />
-            <element signature="class#12182:12386" expanded="false" />
-            <element signature="class#12410:12551" expanded="false" />
-            <element signature="e#12518#12519#0" expanded="true" />
-            <element signature="e#12545#12546#0" expanded="true" />
-            <element signature="class#13500:13703" expanded="false" />
-            <element signature="class#13729:14131" expanded="false" />
-            <element signature="method#clickAction#0;class#14157:16155" expanded="false" />
-            <element signature="class#14476:14759" expanded="false" />
-            <element signature="e#14706#14707#0" expanded="true" />
-            <element signature="e#14751#14752#0" expanded="true" />
-            <element signature="class#15210:15550" expanded="false" />
-            <element signature="class#15659:15991" expanded="false" />
-            <element signature="class#16252:16730" expanded="false" />
-            <element signature="class#16805:16922" expanded="false" />
-            <element signature="e#16884#16885#0" expanded="true" />
-            <element signature="e#16916#16917#0" expanded="true" />
-            <element signature="class#16980:17098" expanded="false" />
-            <element signature="e#17061#17062#0" expanded="true" />
-            <element signature="e#17092#17093#0" expanded="true" />
-            <element signature="class#17154:17270" expanded="false" />
-            <element signature="e#17234#17235#0" expanded="true" />
-            <element signature="e#17264#17265#0" expanded="true" />
-            <element signature="class#17325:18084" expanded="false" />
-            <element signature="e#18044#18045#0" expanded="true" />
-            <element signature="e#18078#18079#0" expanded="true" />
-            <element signature="class#18179:18989" expanded="false" />
-            <element signature="class#18453:18736" expanded="false" />
-            <element signature="e#18683#18684#0" expanded="true" />
-            <element signature="e#18728#18729#0" expanded="true" />
-            <element signature="e#21538#21539#0" expanded="true" />
-            <element signature="e#21565#21566#0" expanded="true" />
+            <element signature="class#12394:12537" expanded="false" />
+            <element signature="e#12504#12505#0" expanded="true" />
+            <element signature="e#12531#12532#0" expanded="true" />
+            <element signature="class#12561:12765" expanded="false" />
+            <element signature="class#12789:12930" expanded="false" />
+            <element signature="e#12897#12898#0" expanded="true" />
+            <element signature="e#12924#12925#0" expanded="true" />
+            <element signature="class#13879:14082" expanded="false" />
+            <element signature="class#14108:14510" expanded="false" />
+            <element signature="method#clickAction#0;class#14536:16534" expanded="false" />
+            <element signature="class#14855:15138" expanded="false" />
+            <element signature="e#15085#15086#0" expanded="true" />
+            <element signature="e#15130#15131#0" expanded="true" />
+            <element signature="class#15589:15929" expanded="false" />
+            <element signature="class#16038:16370" expanded="false" />
+            <element signature="class#16631:17109" expanded="false" />
+            <element signature="class#17184:17301" expanded="false" />
+            <element signature="e#17263#17264#0" expanded="true" />
+            <element signature="e#17295#17296#0" expanded="true" />
+            <element signature="class#17359:17477" expanded="false" />
+            <element signature="e#17440#17441#0" expanded="true" />
+            <element signature="e#17471#17472#0" expanded="true" />
+            <element signature="class#17533:17649" expanded="false" />
+            <element signature="e#17613#17614#0" expanded="true" />
+            <element signature="e#17643#17644#0" expanded="true" />
+            <element signature="class#17704:18463" expanded="false" />
+            <element signature="e#18423#18424#0" expanded="true" />
+            <element signature="e#18457#18458#0" expanded="true" />
+            <element signature="class#18558:19368" expanded="false" />
+            <element signature="class#18832:19115" expanded="false" />
+            <element signature="e#19062#19063#0" expanded="true" />
+            <element signature="e#19107#19108#0" expanded="true" />
+            <element signature="e#21917#21918#0" expanded="true" />
+            <element signature="e#21944#21945#0" expanded="true" />
             <element signature="method#save#0;class#Main#0" expanded="false" />
             <element signature="method#parse#0;class#Main#0" expanded="false" />
             <element signature="method#parse#1;class#Main#0" expanded="false" />
@@ -790,8 +790,8 @@
             <element signature="method#drawString#0;class#Main#0" expanded="false" />
             <element signature="method#drawStringW#0;class#Main#0" expanded="false" />
             <element signature="method#mouseClicked#0;class#Main#0" expanded="false" />
-            <element signature="class#33355:33663" expanded="false" />
-            <element signature="class#33797:34518" expanded="false" />
+            <element signature="class#33793:34101" expanded="false" />
+            <element signature="class#34235:34956" expanded="false" />
             <element signature="method#mousePressed#0;class#Main#0" expanded="false" />
             <element signature="method#mouseReleased#0;class#Main#0" expanded="false" />
             <element signature="method#mouseEntered#0;class#Main#0" expanded="false" />
@@ -799,12 +799,12 @@
             <element signature="method#mouseDragged#0;class#Main#0" expanded="false" />
             <element signature="method#mouseMoved#0;class#Main#0" expanded="false" />
             <element signature="method#setCursor#0;class#Main#0" expanded="false" />
-            <element signature="class#36407:37092" expanded="false" />
+            <element signature="class#36879:37564" expanded="false" />
             <element signature="method#reverse#0;class#Main#0" expanded="false" />
             <element signature="method#copy#0;class#Main#0" expanded="false" />
             <element signature="method#white#0;class#Main#0" expanded="false" />
-            <element signature="e#38060#38061#0" expanded="true" />
-            <element signature="e#38076#38077#0" expanded="true" />
+            <element signature="e#38532#38533#0" expanded="true" />
+            <element signature="e#38548#38549#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -986,8 +986,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-499">
-          <caret line="342" column="30" lean-forward="false" selection-start-line="342" selection-start-column="30" selection-end-line="342" selection-end-column="30" />
+        <state relative-caret-position="205">
+          <caret line="318" column="32" lean-forward="true" selection-start-line="318" selection-start-column="32" selection-end-line="319" selection-end-column="41" />
           <folding>
             <element signature="method#paintComponent#0;class#Main#0" expanded="false" />
             <element signature="method#mainMenu#0;class#Main#0" expanded="false" />
@@ -1005,42 +1005,43 @@
             <element signature="method#paintBackground#0;class#Main#0" expanded="false" />
             <element signature="method#paintBackground#1;class#Main#0" expanded="false" />
             <element signature="method#showControls#0;class#Main#0" expanded="false" />
-            <element signature="method#paintEditor#0;class#Main#0" expanded="false" />
+            <element signature="method#getOff#0;class#Main#0" expanded="false" />
+            <element signature="method#getOffWGround#0;class#Main#0" expanded="false" />
             <element signature="method#Main#0;class#Main#0" expanded="false" />
-            <element signature="class#12015:12158" expanded="false" />
-            <element signature="e#12125#12126#0" expanded="true" />
-            <element signature="e#12152#12153#0" expanded="true" />
-            <element signature="class#12182:12386" expanded="false" />
-            <element signature="class#12410:12551" expanded="false" />
-            <element signature="e#12518#12519#0" expanded="true" />
-            <element signature="e#12545#12546#0" expanded="true" />
-            <element signature="class#13500:13703" expanded="false" />
-            <element signature="class#13729:14131" expanded="false" />
-            <element signature="method#clickAction#0;class#14157:16155" expanded="false" />
-            <element signature="class#14476:14759" expanded="false" />
-            <element signature="e#14706#14707#0" expanded="true" />
-            <element signature="e#14751#14752#0" expanded="true" />
-            <element signature="class#15210:15550" expanded="false" />
-            <element signature="class#15659:15991" expanded="false" />
-            <element signature="class#16252:16730" expanded="false" />
-            <element signature="class#16805:16922" expanded="false" />
-            <element signature="e#16884#16885#0" expanded="true" />
-            <element signature="e#16916#16917#0" expanded="true" />
-            <element signature="class#16980:17098" expanded="false" />
-            <element signature="e#17061#17062#0" expanded="true" />
-            <element signature="e#17092#17093#0" expanded="true" />
-            <element signature="class#17154:17270" expanded="false" />
-            <element signature="e#17234#17235#0" expanded="true" />
-            <element signature="e#17264#17265#0" expanded="true" />
-            <element signature="class#17325:18084" expanded="false" />
-            <element signature="e#18044#18045#0" expanded="true" />
-            <element signature="e#18078#18079#0" expanded="true" />
-            <element signature="class#18179:18989" expanded="false" />
-            <element signature="class#18453:18736" expanded="false" />
-            <element signature="e#18683#18684#0" expanded="true" />
-            <element signature="e#18728#18729#0" expanded="true" />
-            <element signature="e#21538#21539#0" expanded="true" />
-            <element signature="e#21565#21566#0" expanded="true" />
+            <element signature="class#12394:12537" expanded="false" />
+            <element signature="e#12504#12505#0" expanded="true" />
+            <element signature="e#12531#12532#0" expanded="true" />
+            <element signature="class#12561:12765" expanded="false" />
+            <element signature="class#12789:12930" expanded="false" />
+            <element signature="e#12897#12898#0" expanded="true" />
+            <element signature="e#12924#12925#0" expanded="true" />
+            <element signature="class#13879:14082" expanded="false" />
+            <element signature="class#14108:14510" expanded="false" />
+            <element signature="method#clickAction#0;class#14536:16534" expanded="false" />
+            <element signature="class#14855:15138" expanded="false" />
+            <element signature="e#15085#15086#0" expanded="true" />
+            <element signature="e#15130#15131#0" expanded="true" />
+            <element signature="class#15589:15929" expanded="false" />
+            <element signature="class#16038:16370" expanded="false" />
+            <element signature="class#16631:17109" expanded="false" />
+            <element signature="class#17184:17301" expanded="false" />
+            <element signature="e#17263#17264#0" expanded="true" />
+            <element signature="e#17295#17296#0" expanded="true" />
+            <element signature="class#17359:17477" expanded="false" />
+            <element signature="e#17440#17441#0" expanded="true" />
+            <element signature="e#17471#17472#0" expanded="true" />
+            <element signature="class#17533:17649" expanded="false" />
+            <element signature="e#17613#17614#0" expanded="true" />
+            <element signature="e#17643#17644#0" expanded="true" />
+            <element signature="class#17704:18463" expanded="false" />
+            <element signature="e#18423#18424#0" expanded="true" />
+            <element signature="e#18457#18458#0" expanded="true" />
+            <element signature="class#18558:19368" expanded="false" />
+            <element signature="class#18832:19115" expanded="false" />
+            <element signature="e#19062#19063#0" expanded="true" />
+            <element signature="e#19107#19108#0" expanded="true" />
+            <element signature="e#21917#21918#0" expanded="true" />
+            <element signature="e#21944#21945#0" expanded="true" />
             <element signature="method#save#0;class#Main#0" expanded="false" />
             <element signature="method#parse#0;class#Main#0" expanded="false" />
             <element signature="method#parse#1;class#Main#0" expanded="false" />
@@ -1054,8 +1055,8 @@
             <element signature="method#drawString#0;class#Main#0" expanded="false" />
             <element signature="method#drawStringW#0;class#Main#0" expanded="false" />
             <element signature="method#mouseClicked#0;class#Main#0" expanded="false" />
-            <element signature="class#33355:33663" expanded="false" />
-            <element signature="class#33797:34518" expanded="false" />
+            <element signature="class#33793:34101" expanded="false" />
+            <element signature="class#34235:34956" expanded="false" />
             <element signature="method#mousePressed#0;class#Main#0" expanded="false" />
             <element signature="method#mouseReleased#0;class#Main#0" expanded="false" />
             <element signature="method#mouseEntered#0;class#Main#0" expanded="false" />
@@ -1063,12 +1064,12 @@
             <element signature="method#mouseDragged#0;class#Main#0" expanded="false" />
             <element signature="method#mouseMoved#0;class#Main#0" expanded="false" />
             <element signature="method#setCursor#0;class#Main#0" expanded="false" />
-            <element signature="class#36407:37092" expanded="false" />
+            <element signature="class#36879:37564" expanded="false" />
             <element signature="method#reverse#0;class#Main#0" expanded="false" />
             <element signature="method#copy#0;class#Main#0" expanded="false" />
             <element signature="method#white#0;class#Main#0" expanded="false" />
-            <element signature="e#38060#38061#0" expanded="true" />
-            <element signature="e#38076#38077#0" expanded="true" />
+            <element signature="e#38532#38533#0" expanded="true" />
+            <element signature="e#38548#38549#0" expanded="true" />
           </folding>
         </state>
       </provider>

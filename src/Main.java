@@ -316,12 +316,15 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	}
 	public void paintEditor(Graphics g){
      	paintBackground(g, editOffX);
+//     	g.setColor(Color.RED);
+//     	g.drawLine(ground.getWidth() * PIXEL * PIXEL, 0, ground.getWidth() * PIXEL * PIXEL, HEIGHT);
 		g.setColor(Color.DARK_GRAY);
+		int off = getOff();
 		if(gridMode){
-			for(int c = ground.getWidth(); c < PixHEIGHT; c += ground.getWidth()){
+			for(int c = 0; c < PixHEIGHT; c += ground.getWidth()){
 				g.drawLine(0, c * PIXEL, WIDTH, c * PIXEL);
 			}
-			for(int r = ground.getHeight(); r < PixWIDTH; r += ground.getHeight()){
+			for(int r = -off; r < PixWIDTH; r += ground.getHeight()){
 				g.drawLine(r * PIXEL, 0, r * PIXEL, HEIGHT);
 			}
 		}
@@ -337,6 +340,18 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				g.fillRect(lastXD * PIXEL, lastYD * PIXEL, PIXEL, PIXEL);
 			}
 		}
+	}
+	public int getOff(){
+		int off = editOffX % WIDTH;
+		off %= ground.getWidth();
+		return off;
+	}
+	public int getOffWGround(int mouse){
+		int x = mouse / PIXEL + getOff();
+		x /= ground.getWidth();
+		x *= ground.getWidth();
+		x -= getOff();
+		return x;
 	}
 
 	//CONSTRUCTOR
@@ -883,25 +898,27 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      	else if(pressed.contains(KeyEvent.VK_B)){
      		setCursor("boundary");
 		}
+		System.out.println(getOff());
+
 		if(pressed.contains(KeyEvent.VK_RIGHT)) {
-     		if(gridMode) {
-				if(editOffX + PixWIDTH + ground.getWidth() <= background.getWidth() * PixHEIGHT / background.getHeight())
-     				editOffX += ground.getWidth();
+//     		if(gridMode) {
+//				if(editOffX + PixWIDTH + ground.getWidth() <= background.getWidth() * PixHEIGHT / background.getHeight())
+//     				editOffX += ground.getWidth();
 //				else
-					editOffX = background.getWidth() * PixHEIGHT / background.getHeight();
-			}
-			else
+//					editOffX = background.getWidth() * PixHEIGHT / background.getHeight();
+//			}
+//			else
 				editOffX += 1;
 			editOffXmax = Math.max(editOffX, editOffXmax);
      	}
      	if(pressed.contains(KeyEvent.VK_LEFT)) {
-			if(gridMode) {
-				if(ground.getWidth() <= editOffX)
-					editOffX -= ground.getWidth();
-				else
-					editOffX = 0;
-			}
-			else if(editOffX > 0)
+//			if(gridMode) {
+//				if(ground.getWidth() <= editOffX)
+//					editOffX -= ground.getWidth();
+//				else
+//					editOffX = 0;
+//			}
+//			else if(editOffX > 0)
      			editOffX -= 1;
 		}
      	editor.hover(lastXD, lastYD);
@@ -1105,7 +1122,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 					ep.printStackTrace();
 				}
 			}
-			editor.click(x, y);
+			editor.click(x - editOffX, y);
 		}
 		else if(level == 4){
      		storyboards.get(currBoard).click(x , y);
@@ -1124,6 +1141,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		int y = e.getY() / PIXEL;
 		lastXD = x;
 		lastYD = y;
+		int off = getOff();
 		if(level == 3){
 			if(gridMode && cursor != null && cursor.getId().equals("ground")){
 				x /= ground.getWidth();
@@ -1132,7 +1150,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				y *= ground.getHeight();
 			}
 			if(cursor != null){
-				cursor.setPoint(x, y);
+				cursor.setPoint(x - off, y);
 				mouseClicked(e);
 			}
 		}
@@ -1148,16 +1166,16 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		else if(level == 2){
 			controls.hover(x, y);
 		}
-		else if(level == 3){
+		else if(level == 3) {
 			editor.hover(x, y);
-			if(gridMode && cursor != null && cursor.getId().equals("ground")){
-				x /= ground.getWidth();
-				y /= ground.getHeight();
-				x *= ground.getWidth();
-				y *= ground.getHeight();
+			if (cursor != null) {
+				if (gridMode && cursor.getId().equals("ground")) {
+					x = getOffWGround(e.getX());
+					cursor.setPoint(x, y / ground.getWidth() * ground.getWidth());
+				}else{
+					cursor.setPoint(x, y);
+				}
 			}
-			if(cursor != null)
-				cursor.setPoint(x, y);
 		}
 		else if(level == 4){
 			storyboards.get(currBoard).hover(x , y);
