@@ -99,7 +99,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			if(winlose == 1){
 				g.setColor(won);
 				g.fillRect(0, 0, WIDTH, HEIGHT);
-				drawStringW(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU WIN");
+				drawStringW(g, 3, PixHEIGHT - 7, 5, "YOU WIN");
 				winlose++;
 			}
 			return;
@@ -110,7 +110,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			else if(winlose == -2){
 				g.setColor(pause);
 				g.fillRect(0, 0, WIDTH, HEIGHT);
-				drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "YOU LOSE");
+				drawString(g, 3, PixHEIGHT - 7, 5, "YOU LOSE");
 				winlose--;
 				return;
 			}
@@ -158,7 +158,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		if(!timer.isRunning()){
 			g.setColor(pause);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
-			drawString(g, 3 * PIXEL, HEIGHT - 7 * PIXEL, 5, "PAUSED");
+			drawString(g, 3, PixHEIGHT - 7, 5, "PAUSED");
 		}
 
 		if(winlose == 0 && david.isDead() && diego.isDead()){
@@ -627,7 +627,27 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 			for(int i = 1;; i++){
 				File dir = new File("res/boards/board" + i);
 				if(dir.exists() && dir.isDirectory()){
-					int j = 1;
+					GifRect board = (GifRect) new GifRect(0, 0, WIDTH, HEIGHT, 1000).addChild(
+						   new HoverImage(PixWIDTH - timg.getWidth() - 1, PixHEIGHT - timg.getHeight() / 2 - 1, copy(timg)) {
+							   public void clickAction(int x, int y) {
+								   if (currBoard >= storyboards.size() - 1) {
+									   level = 1;
+									   currBoard = 0;
+									   return;
+								   }
+								   currBoard++;
+							   }
+						   }
+					);
+					try{
+						for(int j = 1;; j++){
+							board.addFrame(ImageIO.read(new File(dir.getPath() + "/board" + j+".png")));
+						}
+					}catch(IOException e){
+						System.out.println("Out of boards for gif " + i);
+						board.addChild(new ImageRect((PixWIDTH - stringWidth("SWOLE", 10)) / 2, 10, stringWidth("SWOLE", 10), 10).setText("SWOLE", 10, ImageRect.BLACK));
+						storyboards.add(board);
+					}
 				}
 				else {
 					storyboards.add(new ImageRect(0, 0, ImageIO.read(new File("res/boards/board" + i + ".png"))).addChild(
@@ -696,7 +716,6 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
           //Timer setup for repaint()
           timer = new Timer(30, this);
           timer.start();
-
      }
 
      //FOR LEVEL PARSING
@@ -972,15 +991,17 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 		return w;
 	}
-	public void drawString(Graphics g, int x, int y, int h, String str) {
+	public static void drawString(Graphics g, int x, int y, int h, String str) {
 		str = str.toLowerCase();
+		x *= PIXEL;
 		int xi = x;
+		y *= PIXEL;
 		for(int i = 0; i<str.length(); i++){
 			char a = str.charAt(i);
 			if(font.containsKey(a)){
 				BufferedImage img = font.get(a);
 				int w = PIXEL * h * img.getWidth() / img.getHeight();
-				g.drawImage( img, x, y,  w, h * PIXEL, this);
+				g.drawImage( img, x, y,  w, h * PIXEL, null);
 				x += w + PIXEL;
 				continue;
 			}

@@ -6,6 +6,9 @@ public class ImageRect  implements Comparable<ImageRect>{
 	BufferedImage img;
 	String text, id;
 	int x, y, h;
+	protected boolean isBlack = false;
+	static final int BLACK = 1;
+	static final int WHITE = 0;
 	final int PIXEL = Main.PIXEL;
 	Rectangle bounds;
 	ArrayList<ImageRect> children = new ArrayList<>();
@@ -54,6 +57,15 @@ public class ImageRect  implements Comparable<ImageRect>{
 	public ImageRect setText(String t, int i){
 		text = t;
 		h = i;
+		return this;
+	}
+	public ImageRect setText(String t, int i, int color){
+		text = t;
+		h = i;
+		if(color == BLACK)
+			isBlack = true;
+		else
+			isBlack = false;
 		return this;
 	}
 	public int getY(){
@@ -114,8 +126,12 @@ public class ImageRect  implements Comparable<ImageRect>{
 	protected void drawOff(Graphics g, int x, int y){
 		if(img != null)
 			g.drawImage(img, (x + this.x) * PIXEL, (y + this.y) * PIXEL, img.getWidth() * PIXEL, img.getHeight() * PIXEL, null);
-		if(text != null)
-			Main.drawStringW(g, x + this.x, y + this.y, h, text);
+		if(text != null) {
+			if(isBlack)
+				Main.drawString(g, x + this.x, y + this.y, h, text);
+			else
+				Main.drawStringW(g, x + this.x, y + this.y, h, text);
+		}
 		for(ImageRect iR : children){
 			if(iR != null)
 				iR.drawOff(g, x + this.x, y + this.y);
