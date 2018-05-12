@@ -49,7 +49,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 
 	// EDITOR
 	static int arrX = 1, arrY = 1, editOffX = 0, editOffXmax = 0, stageLength = 20, lastX, lastY, lastXD, lastYD;
-	static boolean gridMode = false;
+	static boolean gridMode = false, mouseDown = false;
 
 	// MISC
      static HashMap<Character, BufferedImage> font = new HashMap<>();
@@ -535,7 +535,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				}
 			});
 			BufferedImage img = ImageIO.read(new File("res/editor/drag.png"));
-			ImageRect drag = new ImageRect(PixWIDTH - 6, 2, img){
+			ImageRect drag = new ImageRect(PixWIDTH - 6, 0, img){
 				int dragW = 20;
 				Rectangle drag = new Rectangle(0, img.getHeight() / 2 - dragW / 2, 6, dragW);
 				boolean out = false;
@@ -916,6 +916,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		if(pressed.contains(KeyEvent.VK_R))
 			frame.setResizable(!frame.isResizable());
      	editor.hover(lastXD, lastYD);
+     	if(mouseDown) {
+			editorClick(lastXD, lastYD);
+		}else
+     		editorMove(lastXD, lastYD);
 	}
      public void keyLevelOne(KeyEvent e){
 		int close = Math.abs(diego.getXR() - david.getXR()) + diego.getWidth();
@@ -1123,8 +1127,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		}
 	}
 	public void mousePressed(MouseEvent e) {
+     	mouseDown = true;
 	}
 	public void mouseReleased(MouseEvent e) {
+     	mouseDown = false;
 	}
 	public void mouseEntered(MouseEvent e) {
 	}
@@ -1174,6 +1180,66 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 		else if(level == 4){
 			storyboards.get(currBoard).hover(x , y);
 		}
+	}
+	public void editorMove(int x, int y){
+		editor.hover(x, y);
+		if (cursor != null) {
+			if (gridMode && cursor.getId().equals("ground")) {
+				x = getOffWGround(x * PIXEL);
+				cursor.setPoint(x, y / ground.getWidth() * ground.getWidth());
+			}else{
+				cursor.setPoint(x, y);
+			}
+		}
+	}
+	public void editorClick(int x, int y){
+		if(cursor != null){
+			try {
+				if(cursor.getId().equals("ground")) {
+					editor.addChild(0, new HoverImage(cursor, ImageIO.read(new File("res/editor/groundRed.png"))) {
+						public void change(int x, int y) {
+							if (bounds.contains(x + editOffX, y) && cursor != null && Main.cursor.getId().equals("erase")) {
+								onTop = true;
+							} else {
+								onTop = false;
+							}
+						}
+					}.setId("ground").setX(editOffX + cursor.getX()));
+				}
+				else if(cursor.getId().equals("erase")){
+					editor.remove(x + editOffX, y, ".{1,}");
+				}
+				else if(cursor.getId().equals("flag")){
+					editor.addChild(0, new HoverImage(cursor, ImageIO.read(new File("res/editor/flagRed.png"))) {
+						public void change(int x, int y) {
+							if (bounds.contains(x + editOffX, y) && cursor != null && Main.cursor.getId().equals("erase")) {
+								onTop = true;
+							} else {
+								onTop = false;
+							}
+						}
+					}.setId("flag").setX(editOffX + cursor.getX()));
+				}
+				else if(cursor.getId().matches("boundary")){
+					editor.addChild(0, new ImageRect(lastXD, lastYD, david.getWidth(), david.getHeight()){
+						public void drawOff(Graphics g, int x, int y){
+							g.setColor(Color.RED);
+							g.fillRect((this.x + x) * PIXEL, (y + this.y) * PIXEL, PIXEL, david.getHeight() * PIXEL);
+							g.fillRect((this.x + x + david.getWidth()) * PIXEL, (y + this.y) * PIXEL, PIXEL, PIXEL * david.getHeight());
+							g.fillRect((this.x + x) * PIXEL, ((y + this.y) + david.getHeight() - 1) * PIXEL, PIXEL * david.getWidth(), PIXEL);
+							g.fillRect((this.x + x) * PIXEL, (y + this.y) * PIXEL, PIXEL * david.getWidth(), PIXEL);
+							for(ImageRect iR : children){
+								if(iR != null)
+									iR.drawOff(g, x + this.x, y + this.y);
+							}
+						}
+					}.setId("boundary"));
+				}
+			} catch(IOException ep){
+				ep.printStackTrace();
+			}
+		}
+		editor.click(x - editOffX, y);
 	}
 	public static ImageRect setCursor(String str){
      	str = str.toLowerCase();
