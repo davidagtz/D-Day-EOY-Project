@@ -65,6 +65,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      static final Set<Integer> pressed = new HashSet<>();
 
      public void paintComponent(Graphics g){
+     	super.paintComponent(g);
      	switch(level){
 			case 0: mainMenu(g); break;
 			case 1: levelOne(g); break;
@@ -303,8 +304,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 	}
 	public void paintBackground(Graphics g, int xoff){
 		g.setColor(Color.CYAN);
-		BufferedImage bi = background.getSubimage(xoff, 0, PixWIDTH * background.getHeight() / PixHEIGHT, background.getHeight());
-		g.drawImage(bi, 0, 0, WIDTH, HEIGHT, null);
+		BufferedImage bi = background.getSubimage(xoff, 0, PixWIDTH, background.getHeight());
+		g.drawImage(bi, 0, 0, PIXEL * bi.getWidth(), HEIGHT, null);
 	}
 	public void showControls(Graphics g){
      	g.setColor(mainBack);
@@ -534,7 +535,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
 				}
 			});
 			BufferedImage img = ImageIO.read(new File("res/editor/drag.png"));
-			ImageRect drag = new ImageRect(PixWIDTH - 6, 0, img){
+			ImageRect drag = new ImageRect(PixWIDTH - 6, 2, img){
 				int dragW = 20;
 				Rectangle drag = new Rectangle(0, img.getHeight() / 2 - dragW / 2, 6, dragW);
 				boolean out = false;
@@ -898,29 +899,22 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseLi
      	else if(pressed.contains(KeyEvent.VK_B)){
      		setCursor("boundary");
 		}
-		System.out.println(getOff());
-
+		int vel = 10;
 		if(pressed.contains(KeyEvent.VK_RIGHT)) {
-//     		if(gridMode) {
-//				if(editOffX + PixWIDTH + ground.getWidth() <= background.getWidth() * PixHEIGHT / background.getHeight())
-//     				editOffX += ground.getWidth();
-//				else
-//					editOffX = background.getWidth() * PixHEIGHT / background.getHeight();
-//			}
-//			else
-				editOffX += 1;
+			if(editOffX + PixWIDTH + vel < background.getWidth())
+				editOffX += vel;
+			else
+				editOffX = background.getWidth() - PixWIDTH;
 			editOffXmax = Math.max(editOffX, editOffXmax);
      	}
      	if(pressed.contains(KeyEvent.VK_LEFT)) {
-//			if(gridMode) {
-//				if(ground.getWidth() <= editOffX)
-//					editOffX -= ground.getWidth();
-//				else
-//					editOffX = 0;
-//			}
-//			else if(editOffX > 0)
-     			editOffX -= 1;
+			if(editOffX - vel > 0)
+     			editOffX -= vel;
+			else
+				editOffX = 0;
 		}
+		if(pressed.contains(KeyEvent.VK_R))
+			frame.setResizable(!frame.isResizable());
      	editor.hover(lastXD, lastYD);
 	}
      public void keyLevelOne(KeyEvent e){
